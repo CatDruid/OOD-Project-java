@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = 'OOD-Project-java'
-include('main')
+include('app')
