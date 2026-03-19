@@ -21,7 +21,11 @@ feature/category/name
 ```
 type/category/date/name
 ```
-
+#### Other branches:
+```
+devolpment -- Preparation and integration before releases
+docs -- Branch for documentation
+```
 
 ## Requirements
 
