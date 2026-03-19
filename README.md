@@ -2,8 +2,8 @@
 
 Sustainable Product and Recycling Managenent System - SPaRMS
 
-SPaRMS Gives users the ability to manage products with a focus on enviormental sustainability.
-It calculates and gives tips on recycleing for both single and mixed material products and gives an estimated calculation of the enviormental impact. 
+SPaRMS gives users the ability to manage products with a focus on environmental sustainability.
+It calculates and gives tips on recycling for both single and mixed material products and gives an estimated calculation of the environmental impact. 
 
 ## Roles
 Dag Sandström - Product management dev 
@@ -12,7 +12,7 @@ David Charlier - Material management dev
 
 Alessandro Antonio Pretti Marin - Environmental impact dev 
 
-Shared - Recycleing / Repo management / Docs / UI / Design
+Shared - Recycling / Repo management / Docs / UI / Design
 
 ## Branch naming
 
