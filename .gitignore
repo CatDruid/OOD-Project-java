@@ -23,3 +23,8 @@ gradle-app.setting
 .env
 .vscode
 .idea
+# Ignore Gradle build output directory
+build
+
+# Ignore Kotlin plugin data
+.kotlin
