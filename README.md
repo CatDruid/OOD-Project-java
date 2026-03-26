@@ -58,7 +58,7 @@ docs -- Branch for documentation
     - Handle mixed-material products in a reasonable and documented way
 8. Product and Material registry (seperated)
     - Hold Products / Material
-9. Product and Material
+9. Product and Material storage
     - Store Products and Materials long term
 ---
 
