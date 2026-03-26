@@ -34,21 +34,32 @@ docs -- Branch for documentation
 
 ### Functional requirements
 
-1. Product management
-    - Attributes: name, category, estimated lifespan, and one or more materials
-    - List registered products
-    - View detailed product information
-2. Material management
-    - Attributes: name, environmental impact value, and recycling category/instruction
+1. Product
+    - Attributes: name, ,lifespan, materials, category, environental impact
+    - Calculate its own Environmental impact with different formulas
+    - Get list of materials
+2. Material
+    - Attributes: name, environmental impact value, category
     - Materials must be reusable across multiple products
-3. Environmental impact calculation
+3. Product management
+    - List all products
+    - View detailed product information
+    - Add, delete, manipulate products
+4. Material management
+    - List all materials (?)
+    - View detailed material information (?)
+    - Add, delete, manipulate products
+6. Environmental impact calculation
     - Calculate total environmental impact for a product based on its materials
     - Implement at least two calculation strategies
     - The strategy must be replaceable without modifying the Product class (Strategy pattern required)
-4. Recycling guidance
+7. Recycling guidance
     - Provide recycling guidance based on the product’s material composition
     - Handle mixed-material products in a reasonable and documented way
-
+8. Product and Material registry (seperated)
+    - Hold Products / Material
+9. Product and Material
+    - Store Products and Materials long term
 ---
 
 ### Non-functional requirements
