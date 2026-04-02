@@ -1,0 +1,8 @@
+package org.ood;
+
+public class UI {
+    private EnvironmentalUI environmentalUI;
+    private RecyclingUI recyclingUI;
+    private UICRUDInterface<MaterialGRUDUI> materialCRUDUI;
+    private UICRUDInterface<ProductCRUIDUI> ProductCRUDUI;
+}
