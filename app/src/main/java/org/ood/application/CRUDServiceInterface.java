@@ -1,4 +1,4 @@
-package org.ood;
+package org.ood.application;
 
 public interface CRUDServiceInterface<T> {
 }

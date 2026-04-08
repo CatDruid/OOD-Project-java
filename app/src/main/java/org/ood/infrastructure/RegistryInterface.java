@@ -1,4 +1,4 @@
-package org.ood;
+package org.ood.infrastructure;
 
 public interface RegistryInterface<T> {
 }

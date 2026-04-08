@@ -1,4 +1,4 @@
-package org.ood;
+package org.ood.domain;
 
 public class ProductEntity {
     private int productID;

@@ -1,4 +1,4 @@
-package org.ood;
+package org.ood.domain;
 
 public class MaterialEntity {
     private int materialID;

@@ -1,4 +1,6 @@
-package org.ood;
+package org.ood.application;
+
+import org.ood.presentation.UI;
 
 public class Controller {
     private UI userInterface;
