@@ -2,10 +2,10 @@ package org.ood.domain;
 
 import java.util.List;
 
-public interface RepositoryInterface<T> {
-    boolean Add(T t);
+public interface RegistryInterface<T> {
+    boolean Add(List<String> parameters);
     List<T> RetrieveAll();
     T RetrieveByID(int id);
-    boolean Update(T t);
+    boolean Update(List<T> parameters);
     boolean Delete(int id);
 }
