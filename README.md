@@ -5,6 +5,8 @@ Sustainable Product and Recycling Managenent System - SPaRMS
 SPaRMS gives users the ability to manage products with a focus on environmental sustainability.
 It calculates and gives tips on recycling for both single and mixed material products and gives an estimated calculation of the environmental impact. 
 
+Build for Java 25.
+
 ## Roles
 Dag Sandström - Product management dev 
 
@@ -13,6 +15,10 @@ David Charlier - Material management dev
 Alessandro Antonio Pretti Marin - Environmental impact dev 
 
 Shared - Recycling / Repo management / Docs / UI / Design
+
+## Project structure
+The project is structured into 4 layers. The presentation layer, the application layer, the domain layer and the infrastructure layer. The presentation layer is responsible for formatting outputs and getting inputs from the user in the form of a menu. Where as the services inside the application layer function as a manager for the domain entities and a bridge between the presentation and business logic inside the domain. The domain will be the host for the core logic of the project such as the materials and products as well as the impact calculation strategies. Lastly, the infrastructure layer is responsible for mainly saving and loading data to and from a database or files for example.
+
 
 ## Branch naming
 
