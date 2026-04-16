@@ -8,4 +8,8 @@ public class UI {
     private RecyclingUI recyclingUI;
     private UICRUDInterface<MaterialCRUDUI> materialCRUDUI;
     private UICRUDInterface<ProductCRUIDUI> ProductCRUDUI;
+
+    public int getIntegerInput() {
+        return 0;
+    }
 }
