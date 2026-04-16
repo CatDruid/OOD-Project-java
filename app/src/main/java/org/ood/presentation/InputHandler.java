@@ -7,6 +7,11 @@ public class InputHandler {
     private Scanner scanner;
     private OutputFormatter outputFormatter;
 
+    public InputHandler(Scanner scanner, OutputFormatter outputFormatter) {
+        this.scanner = scanner;
+        this.outputFormatter = outputFormatter;
+    }
+
     public boolean AskYesNo() {
         outputFormatter.DisplayMessage("Are you sure? N/y");
         return switch (GetInput(String.class).toLowerCase()) {
