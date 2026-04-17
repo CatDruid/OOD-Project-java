@@ -1,16 +1,22 @@
 package org.ood.application;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.ood.domain.ImpactCalculationStrategy;
 import org.ood.domain.RegistryInterface;
 import org.ood.infrastructure.ProductRegistry;
+import org.ood.presentation.records.results.ImpactResult;
 
 public class EnvironmentalImpactService {
     private RegistryInterface<ProductRegistry> productRegistry;
     private List<ImpactCalculationStrategy> strategies;
 
-    public float CalculateImpact(int productId, int strategyIndex) {
-        return 0.0f;
+    public ImpactResult CalculateImpact(int productId, int strategyIndex) {
+        return new ImpactResult();
+    }
+
+    public List<String> GetStringStrategies() {
+        return new LinkedList<>();
     }
 }
