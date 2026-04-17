@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class InputHandler {
-    private Scanner scanner;
-    private OutputFormatter outputFormatter;
+    private final Scanner scanner;
+    private final OutputFormatter outputFormatter;
 
     public InputHandler(Scanner scanner, OutputFormatter outputFormatter) {
         this.scanner = scanner;
