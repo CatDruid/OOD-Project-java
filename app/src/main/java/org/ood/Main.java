@@ -3,12 +3,20 @@
  */
 package org.ood;
 
-public class Main {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import org.ood.presentation.*;
 
-    static void main(String[] args) {
-        System.out.println(new Main().getGreeting());
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        OutputFormatter outputFormatter = new OutputFormatter();
+        EnvironmentalUI environmentalUI = new EnvironmentalUI();
+        MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI();
+        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI();
+        InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
+        UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
+
+        ui.MenuLoop();
     }
 }
