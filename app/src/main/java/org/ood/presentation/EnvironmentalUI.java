@@ -1,5 +1,6 @@
 package org.ood.presentation;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,6 +22,27 @@ public class EnvironmentalUI implements UIInterface {
         this.environmentalImpactService = environmentalImpactService;
         this.recyclingGuidanceService = recyclingGuidanceService;
     }
+
+    public void MenuLoop() {
+        List<String> options = Arrays.asList(new String[]{
+            "Calculate environmental impact", 
+            "Get recycling guidance", 
+            "Exit"
+        });
+        int choice;
+
+        do {
+            choice = inputHandler.SelectfromRange(options);
+            switch (choice) {
+                case 1:
+                    ImpactCalculation();
+                    break;
+                case 2:
+                    RequestGuidance();
+            }
+        } while (!options.get(choice).equals("Exit"));
+    }
+
 
     public void ImpactCalculation() {
         // TODO error handling?
