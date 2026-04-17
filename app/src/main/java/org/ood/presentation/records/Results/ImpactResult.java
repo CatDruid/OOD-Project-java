@@ -1,6 +1,7 @@
 package org.ood.presentation.records.results;
 
-public record ProductCUDSuccessfully(
+public record ImpactResult(
     int id,
-    String name
+    String name,
+    float impact
 ) {}
