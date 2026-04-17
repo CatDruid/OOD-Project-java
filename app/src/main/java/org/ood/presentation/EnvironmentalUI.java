@@ -2,21 +2,18 @@ package org.ood.presentation;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.RecyclingGuidanceService;
 import org.ood.presentation.records.results.ImpactResult;
 
 public class EnvironmentalUI implements UIInterface {
-    private Scanner scanner;
     private InputHandler inputHandler;
     private OutputFormatter outputFormatter;
     private EnvironmentalImpactService environmentalImpactService;
     private RecyclingGuidanceService recyclingGuidanceService;
 
-    public EnvironmentalUI(Scanner scanner, InputHandler inputHandler, OutputFormatter outputFormatter, EnvironmentalImpactService environmentalImpactService, RecyclingGuidanceService recyclingGuidanceService) {
-        this.scanner = scanner;
+    public EnvironmentalUI(InputHandler inputHandler, OutputFormatter outputFormatter, EnvironmentalImpactService environmentalImpactService, RecyclingGuidanceService recyclingGuidanceService) {
         this.inputHandler = inputHandler;
         this.outputFormatter = outputFormatter;
         this.environmentalImpactService = environmentalImpactService;

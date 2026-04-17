@@ -20,7 +20,7 @@ public class Main {
         EnvironmentalImpactService environmentalImpactService = new EnvironmentalImpactService();
         RecyclingGuidanceService recyclingGuidanceService = new RecyclingGuidanceService();
 
-        EnvironmentalUI environmentalUI = new EnvironmentalUI(scanner, inputHandler, outputFormatter, environmentalImpactService, recyclingGuidanceService);
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, environmentalImpactService, recyclingGuidanceService);
 
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
