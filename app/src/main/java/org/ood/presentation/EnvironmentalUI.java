@@ -7,7 +7,7 @@ import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.RecyclingGuidanceService;
 import org.ood.presentation.records.results.ImpactResult;
 
-public class EnvironmentalUI {
+public class EnvironmentalUI implements UIInterface {
     private Scanner scanner;
     private InputHandler inputHandler;
     private OutputFormatter outputFormatter;
