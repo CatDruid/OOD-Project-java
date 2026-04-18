@@ -3,6 +3,8 @@
  */
 package org.ood;
 
+import org.ood.application.EnvironmentalImpactService;
+import org.ood.application.RecyclingGuidanceService;
 import org.ood.presentation.*;
 
 import java.util.Scanner;
@@ -10,11 +12,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        OutputFormatter outputFormatter = new OutputFormatter();
-        EnvironmentalUI environmentalUI = new EnvironmentalUI();
+        OutputFormatter outputFormatter = new OutputFormatter();   
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI();
         ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI();
         InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
+        
+        EnvironmentalImpactService environmentalImpactService = new EnvironmentalImpactService();
+        RecyclingGuidanceService recyclingGuidanceService = new RecyclingGuidanceService();
+
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, environmentalImpactService, recyclingGuidanceService);
+
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
         ui.MenuLoop();
