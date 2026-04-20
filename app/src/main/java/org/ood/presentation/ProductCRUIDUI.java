@@ -1,7 +1,6 @@
 package org.ood.presentation;
 
 import org.ood.application.ProductService;
-import org.ood.domain.MaterialEntity;
 import org.ood.domain.ProductCategory;
 import org.ood.domain.ProductEntity;
 import org.ood.presentation.records.MaterialSelection;
@@ -37,7 +36,7 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
             //TODO handle materials
             List<MaterialSelection> materialEntities = null;
             outputFormatter.DisplayMessage("Is everything correct?");
-            if(inputHandler.AskYesNo()) {productService.Create(new ProductRequest(name,productCategory,estimatedLifespan,materialEntities))}
+            if(inputHandler.AskYesNo()) {productService.Create(new ProductRequest(name,productCategory,estimatedLifespan,materialEntities));}
         }
     }
 
@@ -65,7 +64,8 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
         String name = productEntity.GetName();
         ProductCategory category = productEntity.GetCategory();
         float estimatedLifespan = productEntity.GetEstimatedLifeSpan();
-        List<MaterialEntity> materials = productEntity.getMaterial();
+        //TODO Missmatch
+        List<MaterialSelection> materials = productEntity.getMaterial();
         List<String> choices = Arrays.asList(new String[]{"Name", "Category", "EstimatedLifespan","Add Material by ID", "Finish"});
         boolean loop = true;
         while(loop){
@@ -79,7 +79,10 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
                     outputFormatter.DisplayMessage("Fetching material list.");
 
                 }
-                case 4 -> {if(inputHandler.AskYesNo()) {loop = false;}}
+                case 4 -> {if(inputHandler.AskYesNo()) {
+                    productService.Update(new ProductRequest(name, category, estimatedLifespan, materials));
+                    loop = false;
+                }}
 
             }
 
