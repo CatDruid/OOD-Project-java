@@ -25,7 +25,9 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
 
     @Override
     public ProductCUDSuccessfully Create(ProductRequest createRequest) throws Exception {
-        if(this.productRepository.Add(new ProductEntity()))
+        //This will probably be different for an update but it is simply for it to work right now until a proper service implementation.
+        ProductEntity createdEntity = new ProductEntity(createRequest.name(), createRequest.category(), createRequest.estimatedLifespan(), createRequest.materials());
+        if(this.productRepository.Add(createdEntity))
             return new ProductCUDSuccessfully(1, "Create worked!!");
         else
             throw new Exception("Ooops, something went wrong");
@@ -43,7 +45,9 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
 
     @Override
     public ProductCUDSuccessfully Update(ProductRequest updateRequest, int id)  throws Exception {
-        if(this.productRepository.Update(new ProductEntity()))
+        //This will probably be different for an update but it is simply for it to work right now until a proper service implementation.
+        ProductEntity updatedEntity = new ProductEntity(updateRequest.name(), updateRequest.category(), updateRequest.estimatedLifespan(), updateRequest.materials(), id);
+        if(this.productRepository.Update(updatedEntity))
             return new ProductCUDSuccessfully(id, "Update worked!");
         else
             throw new Exception("Ooops, something went wrong");

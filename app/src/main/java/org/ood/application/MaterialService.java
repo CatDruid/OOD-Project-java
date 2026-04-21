@@ -1,5 +1,6 @@
 package org.ood.application;
 
+import org.ood.domain.RecyclingCategory;
 import org.ood.domain.RepositoryInterface;
 import org.ood.domain.MaterialEntity;
 import org.ood.domain.RegistryInterface;
@@ -23,7 +24,8 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Create(MaterialRequest createRequest) throws Exception {
-        if(this.materialRepository.Add(new MaterialEntity()))
+        MaterialEntity createdEntity = new MaterialEntity(createRequest.name(), createRequest.environmentalImpactValue(), createRequest.category())
+        if(this.materialRepository.Add(createdEntity))
             return new MaterialCUDSuccessfully(1, "Create worked!!");
         else
             throw new Exception("Ooops, something went wrong");
@@ -41,7 +43,8 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Update(MaterialRequest material, int id) throws Exception {
-        if(this.materialRepository.Update(new MaterialEntity()))
+        MaterialEntity updatedEntity = new MaterialEntity(material.name(), material.environmentalImpactValue(), material.category(), id);
+        if(this.materialRepository.Update(updatedEntity))
             return new MaterialCUDSuccessfully(id, "Update worked!");
         else
             throw new Exception("Ooops, something went wrong");
