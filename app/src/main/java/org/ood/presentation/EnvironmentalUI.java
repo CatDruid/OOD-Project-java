@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.RecyclingGuidanceService;
-import org.ood.presentation.records.results.ImpactResult;
+import org.ood.presentation.records.Results.ImpactResult;
 
 public class EnvironmentalUI implements UIInterface {
     private InputHandler inputHandler;
@@ -31,11 +31,14 @@ public class EnvironmentalUI implements UIInterface {
         do {
             choice = inputHandler.SelectfromRange(options);
             switch (choice) {
-                case 1:
+                case 0:
                     ImpactCalculation();
                     break;
-                case 2:
+                case 1:
                     RequestGuidance();
+                    break;
+                default:
+                    break;
             }
         } while (!options.get(choice).equals("Exit"));
     }
