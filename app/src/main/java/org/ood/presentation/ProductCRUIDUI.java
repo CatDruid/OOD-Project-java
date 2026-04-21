@@ -54,7 +54,7 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
         outputFormatter.DisplayMessage("Do you want to print the IDs before choosing?");
         if(inputHandler.AskYesNo()) {RetrieveAll();}
         outputFormatter.DisplayMessage("What Product would you like to retrieve(ID)?");
-        int id = inputHandler.GetInput(int.class);
+        int id = inputHandler.GetInput(Integer.class);
         outputFormatter.PrintProduct(productService.RetrieveByID(id));
     }
 
@@ -98,7 +98,7 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
         outputFormatter.DisplayMessage("Do you want to print the IDs before choosing?");
         if(inputHandler.AskYesNo()) {RetrieveAll();}
         outputFormatter.DisplayMessage("What product would you like to delete(ID):");
-        int id = inputHandler.GetInput(int.class);
+        int id = inputHandler.GetInput(Integer.class);
         outputFormatter.DisplayMessage("You are about to delete " + productService.RetrieveByID(id).GetName());
         outputFormatter.DisplayWarningMessage("This action is irreversible!");
         if(inputHandler.AskYesNo()) {

@@ -1,10 +1,12 @@
 package org.ood.presentation;
 
 import org.ood.application.CRUDServiceInterface;
+import org.ood.application.MaterialService;
 import org.ood.domain.MaterialEntity;
 import org.ood.domain.RecyclingCategory;
 import org.ood.presentation.records.Results.MaterialCUDSuccessfully;
 import org.ood.presentation.records.requests.MaterialRequest;
+import org.ood.presentation.records.requests.ProductRequest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +27,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     private final InputHandler inputHandler;
     private final OutputFormatter outputFormatter;
     private final CRUDServiceInterface<MaterialEntity, MaterialRequest, MaterialCUDSuccessfully> materialService;
-    private final List<String> menuOptions = Arrays.asList(new String[]{"Get all materials", "Get a material by ID", "Create New Material", "Delete Material", "Exit"});
+    private final List<String> menuOptions = Arrays.asList(new String[]{"Get all materials", "Get a material by ID", "Create New Material", "Update Material", "Delete Material", "Exit"});
     private boolean looping = true;
 
 
@@ -70,21 +72,43 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         outputFormatter.DisplayMessage("Do you want to print the IDs before choosing?");
         if(inputHandler.AskYesNo())
             RetrieveAll();
-        this.outputFormatter.DisplayMessage("Which material do you want to edit?");
+
+        this.outputFormatter.DisplayMessage("Which ID do you want to edit?");
         int id = inputHandler.GetInput(Integer.class);
-        this.outputFormatter.DisplayMessage("What is the material's name?");
-        String name = inputHandler.GetInput(String.class);
-        this.outputFormatter.DisplayMessage("What is the material's impact value?");
-        Float value = inputHandler.GetInput(Float.class);
-        this.outputFormatter.DisplayMessage("What is the material's category?");
-        int categoryIndex = this.inputHandler.SelectfromRange(
-                Arrays.stream(RecyclingCategory.values())
-                        .map(Enum::name)
-                        .collect(Collectors.toList()));
-        RecyclingCategory category = RecyclingCategory.values()[categoryIndex];
-        try {
-            MaterialCUDSuccessfully successMessage = materialService.Update(new MaterialRequest(name, value, category), id);
-            outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
+        try{
+            MaterialEntity material = this.materialService.RetrieveByID(id);
+            String name = material.GetName();
+            Float impactValue = material.GetEnvironmentalImpactValue();
+            RecyclingCategory category = material.GetRecyclingCategory();
+            List<String> choices = Arrays.asList("Name", "Category", "Impact Value", "Finish");
+            boolean loop = true;
+            while(loop){
+                switch (inputHandler.SelectfromRange(choices)){
+                    case 0:
+                        this.outputFormatter.DisplayMessage("What is the material's new name?");
+                        name = inputHandler.GetInput(String.class);
+                        break;
+                    case 1:
+                        this.outputFormatter.DisplayMessage("What is the material's new category?");
+                        int categoryIndex = this.inputHandler.SelectfromRange(
+                                Arrays.stream(RecyclingCategory.values())
+                                        .map(Enum::name)
+                                        .collect(Collectors.toList()));
+                        category = RecyclingCategory.values()[categoryIndex];
+                        break;
+                    case 2:
+                        this.outputFormatter.DisplayMessage("What is the material's new impact value?");
+                        impactValue = inputHandler.GetInput(Float.class);
+                        break;
+                    case 3: {
+                        if(inputHandler.AskYesNo()){
+                            loop = false;
+                            MaterialCUDSuccessfully successMessage = materialService.Update(new MaterialRequest(name, impactValue, category), id);
+                            outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
+                        }
+                    }
+                }
+            }
         } catch (Exception e) {
             outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
         }
