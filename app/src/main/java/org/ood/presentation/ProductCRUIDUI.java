@@ -111,6 +111,7 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
     }
 
     public void MenuLoop() {
+        menuLoop = true;
         outputFormatter.DisplayMessage("This is the Product menu. What would you like to do?");
         while(menuLoop) {
             switch(inputHandler.SelectfromRange(menuOptions)) {

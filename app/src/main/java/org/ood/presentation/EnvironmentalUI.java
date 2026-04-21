@@ -31,11 +31,14 @@ public class EnvironmentalUI implements UIInterface {
         do {
             choice = inputHandler.SelectfromRange(options);
             switch (choice) {
-                case 1:
+                case 0:
                     ImpactCalculation();
                     break;
-                case 2:
+                case 1:
                     RequestGuidance();
+                    break;
+                default:
+                    break;
             }
         } while (!options.get(choice).equals("Exit"));
     }
@@ -49,7 +52,7 @@ public class EnvironmentalUI implements UIInterface {
 
         // Get the products id
         outputFormatter.DisplayMessage("Enter the product id: ");
-        int productId = inputHandler.GetInput(int.class);
+        int productId = inputHandler.GetInput(Integer.class);
 
         // Get the desired strategie to be used for calculation
         int strategyIndex = inputHandler.SelectfromRange(strategies);
