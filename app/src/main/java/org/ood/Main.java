@@ -3,6 +3,9 @@
  */
 package org.ood;
 
+import org.ood.application.MaterialService;
+import org.ood.infrastructure.MaterialRegistry;
+import org.ood.infrastructure.MaterialRepository;
 import org.ood.presentation.*;
 
 import java.util.Scanner;
@@ -12,9 +15,12 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         OutputFormatter outputFormatter = new OutputFormatter();
         EnvironmentalUI environmentalUI = new EnvironmentalUI();
-        MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI();
         ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI();
         InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
+        MaterialRepository materialRepository = new MaterialRepository();
+        MaterialRegistry materialRegistry = new MaterialRegistry();
+        MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
+        MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
         ui.MenuLoop();
