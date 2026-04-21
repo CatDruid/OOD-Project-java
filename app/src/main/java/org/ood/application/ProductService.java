@@ -6,7 +6,6 @@ import org.ood.domain.RepositoryInterface;
 import org.ood.domain.ProductEntity;
 import org.ood.infrastructure.ProductRepository;
 import org.ood.domain.RegistryInterface;
-import org.ood.presentation.records.Results.MaterialCUDSuccessfully;
 import org.ood.presentation.records.Results.ProductCUDSuccessfully;
 import org.ood.presentation.records.requests.ProductRequest;
 

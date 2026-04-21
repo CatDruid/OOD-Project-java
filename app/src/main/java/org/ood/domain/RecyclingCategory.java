@@ -1,5 +1,6 @@
 package org.ood.domain;
 
 public enum RecyclingCategory {
-    Test
+    Test,
+    Test2
 }

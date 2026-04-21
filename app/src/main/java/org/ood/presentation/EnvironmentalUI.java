@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.RecyclingGuidanceService;
-import org.ood.presentation.records.results.ImpactResult;
+import org.ood.presentation.records.Results.ImpactResult;
 
 public class EnvironmentalUI implements UIInterface {
     private InputHandler inputHandler;
@@ -64,7 +64,7 @@ public class EnvironmentalUI implements UIInterface {
     public void RequestGuidance() {
         // Get the products id
         outputFormatter.DisplayMessage("Enter the products id: ");
-        int productId = inputHandler.GetInput(int.class);
+        int productId = inputHandler.GetInput(Integer.class);
 
         // Get the respective guidance from the service
         String guidance = recyclingGuidanceService.UtilizeDefaultStrategy(productId);

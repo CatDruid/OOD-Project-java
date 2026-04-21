@@ -7,6 +7,10 @@ import org.ood.presentation.records.MaterialSelection;
 
 import java.util.List;
 
+import org.ood.domain.MaterialEntity;
+
+import java.util.List;
+
 public class OutputFormatter {
     public void DisplayMessage(String message) {
         System.out.println(message);
@@ -38,5 +42,20 @@ public class OutputFormatter {
         for(ProductEntity productEntity : productEntityList) {
             System.out.println("(" + productEntity.GetProductID() + ")  " + productEntity.GetName());
         }
+    }
+
+    public void DisplayMaterials(List<MaterialEntity> materialEntityList){
+        System.out.println("Materials:");
+        for(MaterialEntity entity : materialEntityList){
+            System.out.println("(" + entity.GetMaterialID() + ")  " + entity.GetName());
+        }
+    }
+
+    public void DisplayMaterial(MaterialEntity material){
+        System.out.println(material.GetName() + ":\n"
+                + "ID: " + material.GetMaterialID() + "\n"
+                + "Category: " + material.GetRecyclingCategory() + "\n"
+                + "Impact Value: " + material.GetEnvironmentalImpactValue() + "\n"
+        );
     }
 }

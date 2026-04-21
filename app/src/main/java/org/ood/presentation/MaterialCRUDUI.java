@@ -8,6 +8,7 @@ import org.ood.presentation.records.requests.MaterialRequest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     /**Dependency injections for initialization.
@@ -24,64 +25,95 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     private final InputHandler inputHandler;
     private final OutputFormatter outputFormatter;
     private final CRUDServiceInterface<MaterialEntity, MaterialRequest, MaterialCUDSuccessfully> materialService;
-    private final List<String> menuOptions = Arrays.asList(new String[]{"Get all products", "Get a product by ID", "Create New Product", "Update Product", "Delete Product", "Exit"});
+    private final List<String> menuOptions = Arrays.asList(new String[]{"Get all materials", "Get a material by ID", "Create New Material", "Delete Material", "Exit"});
     private boolean looping = true;
 
 
-    public void RetrieveAll() {
+    protected void RetrieveAll() {
+        this.outputFormatter.DisplayMessage("Displaying all materials");
         try {
-            this.outputFormatter.DisplayMessage("Displaying all materials");
             List<MaterialEntity> materials = this.materialService.RetrieveAll();
-
+            outputFormatter.DisplayMaterials(materials);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    public void RetrieveByID() {
+    protected void RetrieveByID() {
+        this.outputFormatter.DisplayMessage("Which ID does the material have?");
+        int id = inputHandler.GetInput(Integer.class);
         try {
-            int id = inputHandler.GetInput(Integer.class);
-            this.materialService.RetrieveByID(id);
+            MaterialEntity material = this.materialService.RetrieveByID(id);
+            outputFormatter.DisplayMaterial(material);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
         }
     }
-    public void Create() {
+    protected void Create() {
+        this.outputFormatter.DisplayMessage("What is the material's name?");
+        String name = inputHandler.GetInput(String.class);
+        this.outputFormatter.DisplayMessage("What is the material's impact value?");
+        Float value = inputHandler.GetInput(Float.class);
+        this.outputFormatter.DisplayMessage("What is the material's category?");
+        int categoryIndex = this.inputHandler.SelectfromRange(
+                Arrays.stream(RecyclingCategory.values())
+                        .map(Enum::name)
+                        .collect(Collectors.toList()));
+        RecyclingCategory category = RecyclingCategory.values()[categoryIndex];
         try {
-
-            String name = "";
-            Float value = (float) 0;
-            RecyclingCategory category = RecyclingCategory.Test;
-            this.materialService.Create(new MaterialRequest(name, value, category));
+            MaterialCUDSuccessfully successMessage = this.materialService.Create(new MaterialRequest(name, value, category));
+            outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
         }
     }
-    public void Update() {
+    protected void Update() {
+        outputFormatter.DisplayMessage("Do you want to print the IDs before choosing?");
+        if(inputHandler.AskYesNo())
+            RetrieveAll();
+        this.outputFormatter.DisplayMessage("Which material do you want to edit?");
+        int id = inputHandler.GetInput(Integer.class);
+        this.outputFormatter.DisplayMessage("What is the material's name?");
+        String name = inputHandler.GetInput(String.class);
+        this.outputFormatter.DisplayMessage("What is the material's impact value?");
+        Float value = inputHandler.GetInput(Float.class);
+        this.outputFormatter.DisplayMessage("What is the material's category?");
+        int categoryIndex = this.inputHandler.SelectfromRange(
+                Arrays.stream(RecyclingCategory.values())
+                        .map(Enum::name)
+                        .collect(Collectors.toList()));
+        RecyclingCategory category = RecyclingCategory.values()[categoryIndex];
         try {
-            String name = "";
-            Float value = (float) 0;
-            RecyclingCategory category = RecyclingCategory.Test;
-            int id = 0;
-            this.materialService.Update(new MaterialRequest(name, value, category), 0);
+            MaterialCUDSuccessfully successMessage = materialService.Update(new MaterialRequest(name, value, category), id);
+            outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
         }
     }
-    public void Delete() {
-        try {
-            int id = 0;
-            this.materialService.Delete(id);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    protected void Delete() {
+        outputFormatter.DisplayMessage("Do you want to print the IDs before choosing?");
+        if(inputHandler.AskYesNo())
+            RetrieveAll();
+        this.outputFormatter.DisplayMessage("Which material do you want to delete?");
+        int id = inputHandler.GetInput(Integer.class);
+        outputFormatter.DisplayMessage("You are about to delete " + materialService.RetrieveByID(id).GetName());
+        outputFormatter.DisplayWarningMessage("This action is irreversible!");
+        if(inputHandler.AskYesNo()) {
+            try {
+                MaterialCUDSuccessfully successMessage = materialService.Delete(id);
+                outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
+            } catch (Exception e) {
+                outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
+            }
         }
     }
     public void MenuLoop() {
+        looping = true;
         while(looping){
             int selectedOption = inputHandler.SelectfromRange(menuOptions);
             OptionsHandler(selectedOption);
         }
     }
-    /**Handles the user choice depending on the option chosen. Each option redirects to a differnetm enu.
+    /**Handles the user choice depending on the option chosen. Each option redirects to a different menu.
      * @param option The user-selected option.
      * */
     private void OptionsHandler(int option){
