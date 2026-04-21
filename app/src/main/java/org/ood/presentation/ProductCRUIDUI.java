@@ -1,6 +1,8 @@
 package org.ood.presentation;
 
+import org.jspecify.annotations.NonNull;
 import org.ood.application.ProductService;
+import org.ood.domain.MaterialEntity;
 import org.ood.domain.ProductCategory;
 import org.ood.domain.ProductEntity;
 import org.ood.presentation.records.MaterialSelection;
@@ -16,6 +18,7 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
     private final ProductService productService;
     private final List<String> menuOptions = Arrays.asList("Create", "Retrieve All", "Retrieve by ID", "Update", "Delete", "Quit menu");
     private boolean menuLoop = true;
+
 
     public ProductCRUIDUI(InputHandler inputHandler, OutputFormatter outputFormatter, ProductService productService) {
         this.inputHandler = inputHandler;
@@ -34,17 +37,17 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
             ProductCategory productCategory = null;
             float estimatedLifespan = inputHandler.GetInput(Float.class);
             //TODO handle materials
-            List<MaterialSelection> materialEntities = null;
+            List<MaterialEntity> materialEntities = null;
             outputFormatter.DisplayMessage("Is everything correct?");
-            if(inputHandler.AskYesNo()) {productService.Create(new ProductRequest(name,productCategory,estimatedLifespan,materialEntities));}
+            if(inputHandler.AskYesNo()) {try {productService.Create(new ProductRequest(name,productCategory,estimatedLifespan,materialEntities));} catch( Exception e) { outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());};}
         }
     }
 
     public void RetrieveAll() {
         List<ProductEntity> productList = productService.RetrieveAll();
-        for(int i = 0; i < productList.size(); i++) {
-            outputFormatter.PrintProducts(productService.RetrieveAll());
-        }
+        if(productList != null){
+        outputFormatter.PrintProducts(productList);
+        } else {outputFormatter.DisplayWarningMessage("The productlist is empty.");}
     }
 
     public void RetrieveByID() {
@@ -65,8 +68,8 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
         ProductCategory category = productEntity.GetCategory();
         float estimatedLifespan = productEntity.GetEstimatedLifeSpan();
         //TODO Missmatch
-        List<MaterialSelection> materials = productEntity.getMaterial();
-        List<String> choices = Arrays.asList(new String[]{"Name", "Category", "EstimatedLifespan","Add Material by ID", "Finish"});
+        List<MaterialEntity> materials = productEntity.getMaterial();
+        List<String> choices = Arrays.asList("Name", "Category", "EstimatedLifespan","Add Material by ID", "Finish");
         boolean loop = true;
         while(loop){
             switch (inputHandler.SelectfromRange(choices)){
@@ -80,7 +83,9 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
 
                 }
                 case 4 -> {if(inputHandler.AskYesNo()) {
-                    productService.Update(new ProductRequest(name, category, estimatedLifespan, materials));
+                    try {
+                    productService.Update(new ProductRequest(name, category, estimatedLifespan, materials), productEntity.GetProductID());
+                    } catch (Exception e) {outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}
                     loop = false;
                 }}
 
@@ -96,7 +101,13 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
         int id = inputHandler.GetInput(int.class);
         outputFormatter.DisplayMessage("You are about to delete " + productService.RetrieveByID(id).GetName());
         outputFormatter.DisplayWarningMessage("This action is irreversible!");
-        if(inputHandler.AskYesNo()) {productService.Delete(id);}
+        if(inputHandler.AskYesNo()) {
+            try {
+                productService.Delete(id);
+            } catch (Exception e) {
+                outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
+            }
+        }
     }
 
     public void MenuLoop() {
