@@ -49,7 +49,7 @@ public class EnvironmentalUI implements UIInterface {
 
         // Get the products id
         outputFormatter.DisplayMessage("Enter the product id: ");
-        int productId = inputHandler.GetInput(int.class);
+        int productId = inputHandler.GetInput(Integer.class);
 
         // Get the desired strategie to be used for calculation
         int strategyIndex = inputHandler.SelectfromRange(strategies);
@@ -64,7 +64,7 @@ public class EnvironmentalUI implements UIInterface {
     public void RequestGuidance() {
         // Get the products id
         outputFormatter.DisplayMessage("Enter the products id: ");
-        int productId = inputHandler.GetInput(int.class);
+        int productId = inputHandler.GetInput(Integer.class);
 
         // Get the respective guidance from the service
         String guidance = recyclingGuidanceService.UtilizeDefaultStrategy(productId);
