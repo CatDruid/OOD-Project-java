@@ -1,5 +1,6 @@
 package org.ood.presentation;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,7 +31,7 @@ public class InputHandler {
             outputFormatter.DisplayMessage(i + ". " + range.get(i - 1));
         }
         while(true) {
-            int choice = GetInput(int.class);
+            int choice = GetInput(Integer.class);
             if (choice > 0 && choice <= range.size()) {
                 return choice - 1;
             } else {
@@ -39,15 +40,23 @@ public class InputHandler {
         }
     }
 
-    public <T> T GetInput(Class<T> t){
-        while(true) {
+    public <T> T GetInput(Class<T> t) {
+        while (true) {
             try {
-                String line = scanner.nextLine();
-                return t.getConstructor(String.class).newInstance(line);
+                String line = scanner.nextLine().trim();
+
+                // Try constructor with String
+                try {
+                    Constructor<T> ctor = t.getConstructor(String.class);
+                    return ctor.newInstance(line);
+                } catch (NoSuchMethodException e) {
+                    // Fallback: try valueOf / parse static method, etc. (more code)
+                    throw new IllegalArgumentException("Class " + t.getName() +
+                            " does not have a public String constructor");
+                }
             } catch (Exception e) {
-                outputFormatter.DisplayErrorMessage(e.getMessage(), e.hashCode());
+                outputFormatter.DisplayErrorMessage("Failed to create " + t.getSimpleName() + ": " + e.getMessage(), e.hashCode());
             }
         }
     }
-
 }

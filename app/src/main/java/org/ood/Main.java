@@ -3,8 +3,14 @@
  */
 package org.ood;
 
+<<<<<<< feature/UI/ProductCRUDUI
+import org.ood.application.MaterialService;
+import org.ood.infrastructure.MaterialRegistry;
+import org.ood.infrastructure.MaterialRepository;
+=======
 import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.RecyclingGuidanceService;
+>>>>>>> feature/UI/UI
 import org.ood.presentation.*;
 
 import java.util.Scanner;
@@ -12,6 +18,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+<<<<<<< feature/UI/ProductCRUDUI
+        OutputFormatter outputFormatter = new OutputFormatter();
+        EnvironmentalUI environmentalUI = new EnvironmentalUI();
+        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI();
+        InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
+        MaterialRepository materialRepository = new MaterialRepository();
+        MaterialRegistry materialRegistry = new MaterialRegistry();
+        MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
+        MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
+=======
         OutputFormatter outputFormatter = new OutputFormatter();   
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI();
         ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI();
@@ -22,6 +38,7 @@ public class Main {
 
         EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, environmentalImpactService, recyclingGuidanceService);
 
+>>>>>>> feature/UI/UI
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
         ui.MenuLoop();
