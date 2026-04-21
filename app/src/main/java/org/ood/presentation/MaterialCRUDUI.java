@@ -2,6 +2,7 @@ package org.ood.presentation;
 
 import org.ood.application.CRUDServiceInterface;
 import org.ood.domain.MaterialEntity;
+import org.ood.domain.RecyclingCategory;
 import org.ood.presentation.records.Results.MaterialCUDSuccessfully;
 import org.ood.presentation.records.requests.MaterialRequest;
 
@@ -47,14 +48,21 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     public void Create() {
         try {
 
-            this.materialService.Create(new MaterialRequest());
+            String name = "";
+            Float value = (float) 0;
+            RecyclingCategory category = RecyclingCategory.Test;
+            this.materialService.Create(new MaterialRequest(name, value, category));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
     public void Update() {
         try {
-            this.materialService.Update(new MaterialRequest());
+            String name = "";
+            Float value = (float) 0;
+            RecyclingCategory category = RecyclingCategory.Test;
+            int id = 0;
+            this.materialService.Update(new MaterialRequest(name, value, category), 0);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
