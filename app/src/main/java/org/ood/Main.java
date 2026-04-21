@@ -3,9 +3,14 @@
  */
 package org.ood;
 
+import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.MaterialService;
+import org.ood.application.ProductService;
+import org.ood.application.RecyclingGuidanceService;
 import org.ood.infrastructure.MaterialRegistry;
 import org.ood.infrastructure.MaterialRepository;
+import org.ood.infrastructure.ProductRegistry;
+import org.ood.infrastructure.ProductRepository;
 import org.ood.presentation.*;
 
 import java.util.Scanner;
@@ -14,15 +19,23 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         OutputFormatter outputFormatter = new OutputFormatter();
-        EnvironmentalUI environmentalUI = new EnvironmentalUI();
-        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI();
-        InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
+        InputHandler inputHandler = new InputHandler(scanner ,outputFormatter);
+
+
+        EnvironmentalImpactService environmentalImpactService = new EnvironmentalImpactService();
+        RecyclingGuidanceService recyclingGuidanceService = new RecyclingGuidanceService();
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, environmentalImpactService, recyclingGuidanceService);
+
+        ProductRegistry productRegistry = new ProductRegistry();
+        ProductRepository productRepository = new ProductRepository();
+        ProductService productService = new ProductService(productRegistry, productRepository);
+        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService);
+
         MaterialRepository materialRepository = new MaterialRepository();
         MaterialRegistry materialRegistry = new MaterialRegistry();
         MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
-        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI();
-        InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
+
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
         ui.MenuLoop();
