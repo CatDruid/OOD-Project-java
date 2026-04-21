@@ -18,7 +18,6 @@ public class OutputFormatter {
 
     public void DisplayErrorMessage(String message, int errorcode) {
         System.out.println("\u001B[31m" + "ERROR " + errorcode + ": " + message + "\u001B[37m");
-<<<<<<< feature/UI/ProductCRUDUI
     }
 
     public void PrintProduct(ProductEntity productEntity) {
@@ -39,7 +38,5 @@ public class OutputFormatter {
         for(ProductEntity productEntity : productEntityList) {
             System.out.println("(" + productEntity.GetProductID() + ")  " + productEntity.GetName());
         }
-=======
->>>>>>> feature/UI/UI
     }
 }
