@@ -24,7 +24,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Create(MaterialRequest createRequest) throws Exception {
-        MaterialEntity createdEntity = new MaterialEntity(createRequest.name(), createRequest.environmentalImpactValue(), createRequest.category())
+        MaterialEntity createdEntity = new MaterialEntity(createRequest.name(), createRequest.environmentalImpactValue(), createRequest.category());
         if(this.materialRepository.Add(createdEntity))
             return new MaterialCUDSuccessfully(1, "Create worked!!");
         else
