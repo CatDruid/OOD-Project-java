@@ -1,5 +1,6 @@
 package org.ood.presentation;
 
+import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
 import org.ood.domain.MaterialEntity;
 import org.ood.domain.ProductCategory;
@@ -14,13 +15,15 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
     private final InputHandler inputHandler;
     private final OutputFormatter outputFormatter;
     private final ProductService productService;
+    private final MaterialService materialService;
     private final List<String> menuOptions = Arrays.asList("Create", "Retrieve All", "Retrieve by ID", "Update", "Delete", "Quit menu");
 
 
-    public ProductCRUIDUI(InputHandler inputHandler, OutputFormatter outputFormatter, ProductService productService) {
+    public ProductCRUIDUI(InputHandler inputHandler, OutputFormatter outputFormatter, ProductService productService, MaterialService materialService) {
         this.inputHandler = inputHandler;
         this.outputFormatter = outputFormatter;
         this.productService = productService;
+        this.materialService = materialService;
     }
 
     public void Create() {
@@ -30,10 +33,22 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
             String name = inputHandler.GetInput(String.class, "What's the products name?");
             ProductCategory productCategory = inputHandler.categoryPicker(ProductCategory.class);
             float estimatedLifespan = inputHandler.GetInput(Float.class, "What is the estimated lifepan of the product?");
-            //TODO handle materials
             List<MaterialEntity> materialEntities = null;
-            outputFormatter.DisplayMessage("Is everything correct?");
-            if(inputHandler.AskYesNo()) {try {productService.Create(new ProductRequest(name,productCategory,estimatedLifespan,materialEntities));} catch( Exception e) { outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());};}
+            outputFormatter.DisplayMaterials(materialService.RetrieveAll());
+            outputFormatter.DisplayMessage("Choose the ID of the desired products materials. Choose again to remove. Type 404 to exit");
+            while(true) {
+                int choice = inputHandler.GetInput(Integer.class);
+                if(choice == 404){break;} else {
+                    try{
+                        MaterialEntity materialEntity = materialService.RetrieveByID(choice);
+                        if(materialEntity != null) {
+                            if (materialEntities.contains(materialEntity)) {materialEntities.remove(materialEntity);
+                            } else {materialEntities.add(materialEntity);}
+                        }
+                    } catch(Exception e){outputFormatter.DisplayWarningMessage("Unkown Material");}
+                }
+            }
+            if(inputHandler.AskYesNo("Is everything correct?")) {try {productService.Create(new ProductRequest(name,productCategory,estimatedLifespan,materialEntities));} catch( Exception e) { outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}}
         }
     }
 
