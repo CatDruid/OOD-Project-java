@@ -15,11 +15,11 @@ public class EnvironmentalImpactService {
 
     public EnvironmentalImpactService(ProductRegistry productRegistry) {
         this.productRegistry = productRegistry;
-        StringStrategies = GenerateStringStrategies();
         strategies = Arrays.asList(new ImpactCalculationStrategy[]{
                 new SimpleSumStrategy(),
                 new WeightedByLifespanStrategy()
         });
+        StringStrategies = GenerateStringStrategies();
     }
 
     public ImpactResult CalculateImpact(int productId, int strategyIndex) {
