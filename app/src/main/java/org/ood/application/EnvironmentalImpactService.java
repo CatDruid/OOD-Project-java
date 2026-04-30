@@ -1,22 +1,50 @@
 package org.ood.application;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.ood.domain.ImpactCalculationStrategy;
-import org.ood.domain.RegistryInterface;
+import org.ood.domain.*;
 import org.ood.infrastructure.ProductRegistry;
 import org.ood.presentation.records.Results.ImpactResult;
 
 public class EnvironmentalImpactService {
-    private RegistryInterface<ProductRegistry> productRegistry;
-    private List<ImpactCalculationStrategy> strategies;
+    private final RegistryInterface<ProductEntity> productRegistry;
+    private final List<ImpactCalculationStrategy> strategies;
+    private final List<String> StringStrategies;
+
+    public EnvironmentalImpactService(ProductRegistry productRegistry) {
+        this.productRegistry = productRegistry;
+        strategies = Arrays.asList(new ImpactCalculationStrategy[]{
+                new SimpleSumStrategy(),
+                new WeightedByLifespanStrategy()
+        });
+        StringStrategies = GenerateStringStrategies();
+    }
 
     public ImpactResult CalculateImpact(int productId, int strategyIndex) {
-        return new ImpactResult(1, "test", (float)0);
+        // Get the correct strategy
+        ImpactCalculationStrategy strategy = strategies.get(strategyIndex);
+
+        // Get the product
+        ProductEntity product = productRegistry.RetrieveByID(productId);
+
+        // return the result record with calculated environmental impact and name and id
+        return new ImpactResult(productId, product.GetName(), strategy.CalculateImpact(product));
     }
 
-    public List<String> GetStringStrategies() {
-        return new LinkedList<>();
+    private List<String> GenerateStringStrategies() {
+        // If there are no strategies return null
+        if (strategies == null || strategies.isEmpty()) {return new ArrayList<>();}
+
+        // Get the simple name from all the strategies and add them to the list
+        List<String> StringStrategies = new ArrayList<>();
+        for (ImpactCalculationStrategy strategy : strategies) {
+            StringStrategies.add(strategy.getClass().getSimpleName());
+        }
+
+        return StringStrategies;
     }
+
+    public List<String> GetStringStrategies() {return StringStrategies;}
 }
