@@ -9,8 +9,19 @@ public class ProductEntity {
     private float estimatedLifespan;
     private List<MaterialEntity> material;
 
-    public ProductEntity() {
+    public ProductEntity(String name, ProductCategory category, float estimatedLifespan, List<MaterialEntity> material) {
+        this.name = name;
+        this.category = category;
+        this.estimatedLifespan = estimatedLifespan;
+        this.material = material;
+    }
 
+    public ProductEntity(String name, ProductCategory category, float estimatedLifespan, List<MaterialEntity> material, int productID) {
+        this.productID = productID;
+        this.name = name;
+        this.category = category;
+        this.estimatedLifespan = estimatedLifespan;
+        this.material = material;
     }
 
     //Set Methods

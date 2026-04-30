@@ -6,11 +6,18 @@ public class MaterialEntity {
     private float environmentalImpactValue;
     private RecyclingCategory recyclingCategory;
 
-    public MaterialEntity() {
-        
+    public MaterialEntity(String name, float environmentalImpactValue, RecyclingCategory recyclingCategory) {
+        this.name = name;
+        this.environmentalImpactValue = environmentalImpactValue;
+        this.recyclingCategory = recyclingCategory;
     }
 
-
+    public MaterialEntity(String name, float environmentalImpactValue, RecyclingCategory recyclingCategory, int materialID) {
+        this.materialID = materialID;
+        this.name = name;
+        this.environmentalImpactValue = environmentalImpactValue;
+        this.recyclingCategory = recyclingCategory;
+    }
     //Set Methods
     public void SetMaterialID(int materialID) {this.materialID = materialID;}
     public void SetName(String name) {this.name = name;}
