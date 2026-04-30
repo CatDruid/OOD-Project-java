@@ -1,11 +1,8 @@
 package org.ood.application;
 
-import org.ood.domain.MaterialEntity;
+import org.ood.domain.*;
 import org.ood.infrastructure.ProductRegistry;
-import org.ood.domain.RepositoryInterface;
-import org.ood.domain.ProductEntity;
 import org.ood.infrastructure.ProductRepository;
-import org.ood.domain.RegistryInterface;
 import org.ood.presentation.records.Results.ProductCUDSuccessfully;
 import org.ood.presentation.records.requests.ProductRequest;
 
@@ -60,4 +57,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
         else
             throw new Exception("Ooops, something went wrong");
     }
+
+
+    public Class<ProductCategory> GetCategory() {return ProductCategory.class;}
 }

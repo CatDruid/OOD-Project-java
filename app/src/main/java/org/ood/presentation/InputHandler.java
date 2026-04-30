@@ -1,8 +1,12 @@
 package org.ood.presentation;
 
+import org.ood.domain.RecyclingCategory;
+
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class InputHandler {
     private final Scanner scanner;
@@ -71,5 +75,36 @@ public class InputHandler {
                 outputFormatter.DisplayErrorMessage("Failed to create " + t.getSimpleName() + ": " + e.getMessage(), e.hashCode());
             }
         }
+    }
+
+    public <T> T GetInput(Class<T> t, String question) {
+        while (true) {
+            outputFormatter.DisplayMessage(question);
+            try {
+                String line = scanner.nextLine().trim();
+
+                // Try constructor with String
+                try {
+                    Constructor<T> ctor = t.getConstructor(String.class);
+                    return ctor.newInstance(line);
+                } catch (NoSuchMethodException e) {
+                    // Fallback: try valueOf / parse static method, etc. (more code)
+                    throw new IllegalArgumentException("Class " + t.getName() +
+                            " does not have a public String constructor");
+                }
+            } catch (Exception e) {
+                outputFormatter.DisplayErrorMessage("Failed to create " + t.getSimpleName() + ": " + e.getMessage(), e.hashCode());
+            }
+        }
+    }
+
+    public <T extends Enum<T>> T categoryPicker(Class<T> enumClass) {
+        T[] values = enumClass.getEnumConstants();
+        this.outputFormatter.DisplayMessage("What is the category?");
+        int categoryIndex = SelectfromRange(
+                Arrays.stream(values)
+                        .map(Enum::name)
+                        .collect(Collectors.toList()));
+        return values[categoryIndex];
     }
 }
