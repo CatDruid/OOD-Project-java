@@ -1,6 +1,9 @@
 package org.ood.application;
 
 import org.ood.domain.*;
+import org.ood.domain.impactStrategy.ImpactCalculationStrategy;
+import org.ood.domain.impactStrategy.SimpleSumStrategy;
+import org.ood.domain.impactStrategy.WeightedByLifespanStrategy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
