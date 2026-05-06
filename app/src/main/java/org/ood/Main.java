@@ -23,11 +23,11 @@ public class Main {
         ProductRegistry productRegistry = new ProductRegistry();
         ProductRepository productRepository = new ProductRepository();
         ProductService productService = new ProductService(productRegistry, productRepository);
-        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService);
         MaterialRepository materialRepository = new MaterialRepository();
         MaterialRegistry materialRegistry = new MaterialRegistry();
         MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
+        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
         EnvironmentalImpactService environmentalImpactService = new EnvironmentalImpactService();
         RecyclingGuidanceService recyclingGuidanceService = new RecyclingGuidanceService();
         EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, environmentalImpactService, recyclingGuidanceService);
