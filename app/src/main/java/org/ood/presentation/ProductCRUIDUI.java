@@ -31,23 +31,24 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
         if(inputHandler.AskYesNo("Do you want to print the IDs before choosing?")) {RetrieveAll();}
         if(inputHandler.AskYesNo("Are you sure the product is not present?")) {
             outputFormatter.DisplayMessage("You are about to be asked questions about the product. \n If you mistype anything just go though the rest and say no to the last question.");
-            String name = inputHandler.GetInput(String.class, "What's the products name?");
+            String name = inputHandler.GetInput(String.class, "What's the product's name?");
             ProductCategory productCategory = inputHandler.categoryPicker(ProductCategory.class);
-            float estimatedLifespan = inputHandler.GetInput(Float.class, "What is the estimated lifepan of the product?");
-            List<MaterialEntity> materialEntities = new ArrayList<>();
+            float estimatedLifespan = inputHandler.GetInput(Float.class, "What is the estimated lifespan of the product?");
+            List<MaterialEntity> materialEntities = null;
+            outputFormatter.DisplayMaterials(materialService.RetrieveAll());
             outputFormatter.DisplayMessage("Choose the ID of the desired products materials. Choose again to remove. Type -1 to exit");
-            List<MaterialEntity> allMaterial = materialService.RetrieveAll();
-            while(true){
-                outputFormatter.DisplayMaterials(allMaterial, materialEntities);
-                int selectedID = inputHandler.GetInput(Integer.class, "Choose the id to toggle material(-1 to exit)");
-                if(selectedID == -1) {break;}
-                try{
-                    MaterialEntity toggledMaterial = materialService.RetrieveByID(selectedID);
-                    if(materialEntities.contains(toggledMaterial)){materialEntities.remove(toggledMaterial);
-                    } else {
-                        materialEntities.add(toggledMaterial);
-                    }
-                } catch (Exception e) {outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}
+            while(true) {
+                int choice = inputHandler.GetInput(Integer.class);
+                if(choice == -1){break;} else {
+                    try{
+                        MaterialEntity materialEntity = materialService.RetrieveByID(choice);
+                        if(materialEntity != null) {
+                            if (materialEntities.contains(materialEntity)) {materialEntities.remove(materialEntity);
+                            } else {materialEntities.add(materialEntity);}
+                        } else
+                            outputFormatter.DisplayWarningMessage("No material with that ID exists");
+                    } catch(Exception e){outputFormatter.DisplayWarningMessage("Unknown Material");}
+                }
             }
             if(inputHandler.AskYesNo("Is everything correct?")) {try {productService.Create(new ProductRequest(name,productCategory,estimatedLifespan,materialEntities));} catch( Exception e) { outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}}
         }
@@ -84,20 +85,7 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
                 case 1 -> category = inputHandler.categoryPicker(productService.GetCategory());
                 case 2 -> estimatedLifespan = inputHandler.GetInput(Float.class);
                 case 3 -> {
-                    List<MaterialEntity> allMaterial = materialService.RetrieveAll();
-                    List<MaterialEntity> currentMaterials = productEntity.getMaterial();
-                    while(true){
-                        outputFormatter.DisplayMaterials(allMaterial, currentMaterials);
-                        int selectedID = inputHandler.GetInput(Integer.class, "Choose the id to toggle material(-1 to exit)");
-                        if(selectedID == -1) {break;}
-                        try{
-                            MaterialEntity toggledMaterial = materialService.RetrieveByID(selectedID);
-                            if(currentMaterials.contains(toggledMaterial)){currentMaterials.remove(toggledMaterial);
-                            } else {
-                                currentMaterials.add(toggledMaterial);
-                            }
-                        } catch (Exception e) {outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}
-                    }
+                    outputFormatter.DisplayMessage("Fetching material list.");
                 }
                 case 4 -> {if(inputHandler.AskYesNo()) {
                     try {

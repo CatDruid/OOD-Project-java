@@ -57,23 +57,60 @@ public class InputHandler {
             }
     }
 
-    public <T> T GetInput(Class<T> t) {
+    public <T> T GetInput(Class<T> clazz) {
         while (true) {
-            try {
-                String line = scanner.nextLine().trim();
+            // Get the input with the right class
+            T input = GetInputLogic(clazz);
 
-                // Try constructor with String
-                try {
-                    Constructor<T> ctor = t.getConstructor(String.class);
-                    return ctor.newInstance(line);
-                } catch (NoSuchMethodException e) {
-                    // Fallback: try valueOf / parse static method, etc. (more code)
-                    throw new IllegalArgumentException("Class " + t.getName() +
-                            " does not have a public String constructor");
-                }
-            } catch (Exception e) {
-                outputFormatter.DisplayErrorMessage("Failed to create " + t.getSimpleName() + ": " + e.getMessage(), e.hashCode());
+            // If an error occurred, skip to the next iteration and try again
+            if(input == null) {continue;}
+
+            return input;
+        }
+    }
+
+    public <T> T GetInput(Class<T> clazz, String prompt) {
+        while (true) {
+            // Display the prompt
+            outputFormatter.DisplayMessage(prompt);
+
+            // Get the input with the right class
+            T input = GetInputLogic(clazz);
+
+            // If an error occurred, skip to the next iteration and try again
+            if (input == null) {continue;}
+
+            return input;
+        }
+    }
+
+    private <T> T GetInputLogic(Class<T> clazz) {
+        try {
+            String line = scanner.nextLine().trim();
+
+            // Try constructor with String
+            try {
+                Constructor<T> ctor = clazz.getConstructor(String.class);
+                return ctor.newInstance(line);
+            } catch (NoSuchMethodException e) {
+                // Fallback: try valueOf / parse static method, etc. (more code)
+                throw new IllegalArgumentException("Class " + clazz.getName() +
+                        " does not have a public String constructor");
             }
+        } catch (Exception e) {
+            outputFormatter.DisplayErrorMessage("Failed to create " + clazz.getSimpleName() + ": " + e.getMessage(), e.hashCode());
+            return null;
+        }
+    }
+
+    public int GetId(String prompt, CRUDServiceInterface<?,?,?> service) {
+        int id;
+        while(true) {
+            id = GetInput(Integer.class, prompt);
+            if((id >= 0 && service.IdExists(id)) || id == -1) {
+                return id;
+            }
+            outputFormatter.DisplayMessage("That is not a valid id. Please try again or enter -1 to exit.");
         }
     }
 

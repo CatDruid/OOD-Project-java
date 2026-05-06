@@ -3,29 +3,27 @@ package org.ood.presentation;
 import java.util.Arrays;
 import java.util.List;
 
+import org.ood.application.EnvironmentalFactory;
 import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.RecyclingGuidanceService;
 import org.ood.presentation.records.Results.ImpactResult;
 
 public class EnvironmentalUI implements UIInterface {
-    private InputHandler inputHandler;
-    private OutputFormatter outputFormatter;
-    private EnvironmentalImpactService environmentalImpactService;
-    private RecyclingGuidanceService recyclingGuidanceService;
+    private final InputHandler inputHandler;
+    private final OutputFormatter outputFormatter;
+    private final RecyclingGuidanceService recyclingGuidanceService;
 
-    public EnvironmentalUI(InputHandler inputHandler, OutputFormatter outputFormatter, EnvironmentalImpactService environmentalImpactService, RecyclingGuidanceService recyclingGuidanceService) {
+    public EnvironmentalUI(InputHandler inputHandler, OutputFormatter outputFormatter, RecyclingGuidanceService recyclingGuidanceService) {
         this.inputHandler = inputHandler;
         this.outputFormatter = outputFormatter;
-        this.environmentalImpactService = environmentalImpactService;
         this.recyclingGuidanceService = recyclingGuidanceService;
     }
 
     public void MenuLoop() {
-        List<String> options = Arrays.asList(new String[]{
-            "Calculate environmental impact", 
-            "Get recycling guidance", 
-            "Exit"
-        });
+        List<String> options = Arrays.asList(
+                "Calculate environmental impact",
+                "Get recycling guidance",
+                "Exit");
         int choice;
 
         do {
@@ -48,15 +46,17 @@ public class EnvironmentalUI implements UIInterface {
         // TODO error handling?
 
         // Get the list of available strategies
-        List<String> strategies = environmentalImpactService.GetStringStrategies();
+        List<String> strategies = EnvironmentalFactory.GetStringStrategies();
 
         // Get the products id
         outputFormatter.DisplayMessage("Enter the product id: ");
         int productId = inputHandler.GetInput(Integer.class);
 
-        // Get the desired strategie to be used for calculation
+        // Get the desired strategy to be used for calculation
         int strategyIndex = inputHandler.SelectfromRange(strategies);
 
+        //Initialize service
+        EnvironmentalImpactService environmentalImpactService = EnvironmentalFactory.create(strategyIndex);
         // Get result from service
         ImpactResult res = environmentalImpactService.CalculateImpact(productId, strategyIndex);
 
