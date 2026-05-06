@@ -27,9 +27,7 @@ public class MaterialRepository implements RepositoryInterface<MaterialEntity> {
     public List<MaterialEntity> RetrieveAll() {
         return mockMaterials;
     }
-    public MaterialEntity RetrieveByID(int id) {
-        return mockMaterial;
-    }
+    public MaterialEntity RetrieveByID(int id) {return mockMaterials.get(id-1);}
     public boolean Update(MaterialEntity materialEntity) {
         return true;
     }
