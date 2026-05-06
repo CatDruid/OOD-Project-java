@@ -1,8 +1,6 @@
 package org.ood.application;
 
 import org.ood.domain.*;
-import org.ood.infrastructure.ProductRegistry;
-import org.ood.infrastructure.ProductRepository;
 import org.ood.presentation.records.Results.ProductCUDSuccessfully;
 import org.ood.presentation.records.requests.ProductRequest;
 
@@ -58,6 +56,10 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
             throw new Exception("Ooops, something went wrong");
     }
 
+    @Override
+    public boolean IdExists(int id) {
+        return this.productRepository.RetrieveByID(id) != null;
+    }
 
     public Class<ProductCategory> GetCategory() {return ProductCategory.class;}
 }
