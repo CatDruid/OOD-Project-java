@@ -51,6 +51,15 @@ public class OutputFormatter {
         }
     }
 
+    public void DisplayMaterials(List<MaterialEntity> materialEntityList, List<MaterialEntity> currentMaterialList){
+        System.out.println("Materials(x means selected.):");
+        for(MaterialEntity entity : materialEntityList){
+            String brackets;
+            if(currentMaterialList.contains(entity)) {brackets = "(x)";} else {brackets = "()";}
+            System.out.println(brackets + "    (" + entity.GetMaterialID() + ")  " + entity.GetName());
+        }
+    }
+
     public void DisplayMaterial(MaterialEntity material){
         System.out.println(material.GetName() + ":\n"
                 + "ID: " + material.GetMaterialID() + "\n"

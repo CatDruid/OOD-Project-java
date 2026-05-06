@@ -7,6 +7,7 @@ import org.ood.domain.ProductCategory;
 import org.ood.domain.ProductEntity;
 import org.ood.presentation.records.requests.ProductRequest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -83,7 +84,6 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
                 case 0 -> name = inputHandler.GetInput(String.class);
                 case 1 -> category = inputHandler.categoryPicker(productService.GetCategory());
                 case 2 -> estimatedLifespan = inputHandler.GetInput(Float.class);
-                //TODO implement material picking
                 case 3 -> {
                     outputFormatter.DisplayMessage("Fetching material list.");
                 }
