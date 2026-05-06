@@ -1,6 +1,6 @@
 package org.ood.application;
 
-import org.ood.domain.GuidanceStrategy;
+import org.ood.domain.recyclingStrategy.GuidanceStrategy;
 import org.ood.domain.RepositoryInterface;
 import org.ood.infrastructure.ProductRepository;
 
