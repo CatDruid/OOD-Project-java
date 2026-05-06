@@ -15,4 +15,5 @@ public abstract class CRUDServiceAbstract<T, CUDRequest extends Record, CUDRespo
     public T RetrieveByID(int id) { return null;}
     public abstract CUDResponse Update(CUDRequest updateRequest, int id) throws Exception;
     public abstract CUDResponse Delete(int id) throws Exception;
+    public abstract boolean IdExists(int id);
 }

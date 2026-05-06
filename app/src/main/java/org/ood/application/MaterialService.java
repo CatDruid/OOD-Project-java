@@ -1,6 +1,4 @@
 package org.ood.application;
-
-import org.ood.domain.RecyclingCategory;
 import org.ood.domain.RepositoryInterface;
 import org.ood.domain.MaterialEntity;
 import org.ood.domain.RegistryInterface;
@@ -56,5 +54,10 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
             return new MaterialCUDSuccessfully(id, "Delete worked!");
         else
             throw new Exception("Ooops, something went wrong");
+    }
+
+    @Override
+    public boolean IdExists(int id) {
+        return this.materialRepository.RetrieveByID(id) != null;
     }
 }

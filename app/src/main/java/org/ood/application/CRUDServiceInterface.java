@@ -8,4 +8,5 @@ public interface CRUDServiceInterface<T, CUDRequest extends Record, CUDResponse 
     T RetrieveByID(int id);
     CUDResponse Update(CUDRequest updateRequest, int id) throws Exception;
     CUDResponse Delete(int id) throws Exception;
+    boolean IdExists(int id);
 }
