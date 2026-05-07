@@ -1,6 +1,7 @@
 package org.ood.application;
 
 import org.ood.domain.*;
+import org.ood.domain.entities.ProductEntity;
 import org.ood.presentation.records.Results.ProductCUDSuccessfully;
 import org.ood.presentation.records.requests.ProductRequest;
 

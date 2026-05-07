@@ -1,12 +1,10 @@
 package org.ood.presentation;
 
 import org.ood.application.CRUDServiceInterface;
-import org.ood.application.MaterialService;
-import org.ood.domain.MaterialEntity;
+import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.RecyclingCategory;
 import org.ood.presentation.records.Results.MaterialCUDSuccessfully;
 import org.ood.presentation.records.requests.MaterialRequest;
-import org.ood.presentation.records.requests.ProductRequest;
 
 import java.util.Arrays;
 import java.util.List;
