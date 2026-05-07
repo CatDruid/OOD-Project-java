@@ -7,6 +7,7 @@ import org.ood.domain.ProductCategory;
 import org.ood.domain.entities.ProductEntity;
 import org.ood.presentation.records.requests.ProductRequest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
