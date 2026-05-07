@@ -1,5 +1,6 @@
 package org.ood.presentation;
 
+import org.ood.application.CRUDServiceInterface;
 import org.ood.domain.RecyclingCategory;
 
 import java.lang.reflect.Constructor;

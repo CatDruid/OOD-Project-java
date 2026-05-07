@@ -2,9 +2,8 @@ package org.ood.presentation.records.requests;
 
 import java.util.List;
 
-import org.ood.domain.MaterialEntity;
+import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.ProductCategory;
-import org.ood.presentation.records.MaterialSelection;
 
 public record ProductRequest(
     String name,

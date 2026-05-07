@@ -1,6 +1,6 @@
 package org.ood.application;
 import org.ood.domain.RepositoryInterface;
-import org.ood.domain.MaterialEntity;
+import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.RegistryInterface;
 import org.ood.presentation.records.Results.MaterialCUDSuccessfully;
 import org.ood.presentation.records.requests.MaterialRequest;

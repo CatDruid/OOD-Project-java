@@ -2,12 +2,11 @@ package org.ood.presentation;
 
 import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
-import org.ood.domain.MaterialEntity;
+import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.ProductCategory;
-import org.ood.domain.ProductEntity;
+import org.ood.domain.entities.ProductEntity;
 import org.ood.presentation.records.requests.ProductRequest;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -101,7 +100,7 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
                 }
                 case 4 -> {if(inputHandler.AskYesNo()) {
                     try {
-                    productService.Update(new ProductRequest(name, category, estimatedLifespan, materials), productEntity.GetProductID());
+                    productService.Update(new ProductRequest(name, category, estimatedLifespan, materials), productEntity.GetID());
                     } catch (Exception e) {outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}
                     loop = false;
                 }}

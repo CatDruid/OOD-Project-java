@@ -1,6 +1,7 @@
 package org.ood.application;
 
 import org.ood.domain.*;
+import org.ood.domain.entities.ProductEntity;
 import org.ood.domain.impactStrategy.ImpactCalculationStrategy;
 import org.ood.domain.impactStrategy.SimpleSumStrategy;
 import org.ood.domain.impactStrategy.WeightedByLifespanStrategy;
@@ -23,7 +24,7 @@ public class EnvironmentalFactory {
     public static List<String> GetStringStrategies() {
 
         // If there are no strategies return null
-        if (strategies == null || strategies.isEmpty()) {return new ArrayList<>();}
+        if (strategies.isEmpty()) {return new ArrayList<>();}
 
         // Get the simple name from all the strategies and add them to the list
         List<String> StringStrategies = new ArrayList<>();

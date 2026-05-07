@@ -1,12 +1,10 @@
 package org.ood.presentation;
 
 import org.ood.application.CRUDServiceInterface;
-import org.ood.application.MaterialService;
-import org.ood.domain.MaterialEntity;
+import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.RecyclingCategory;
 import org.ood.presentation.records.Results.MaterialCUDSuccessfully;
 import org.ood.presentation.records.requests.MaterialRequest;
-import org.ood.presentation.records.requests.ProductRequest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +25,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     private final InputHandler inputHandler;
     private final OutputFormatter outputFormatter;
     private final CRUDServiceInterface<MaterialEntity, MaterialRequest, MaterialCUDSuccessfully> materialService;
-    private final List<String> menuOptions = Arrays.asList(new String[]{"Get all materials", "Get a material by ID", "Create New Material", "Update Material", "Delete Material", "Exit"});
+    private final List<String> menuOptions = Arrays.asList("Get all materials", "Get a material by ID", "Create New Material", "Update Material", "Delete Material", "Exit");
     private boolean looping = true;
 
 
