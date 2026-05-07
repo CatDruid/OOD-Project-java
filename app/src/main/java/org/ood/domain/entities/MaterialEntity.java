@@ -1,6 +1,8 @@
-package org.ood.domain;
+package org.ood.domain.entities;
 
-public class MaterialEntity {
+import org.ood.domain.RecyclingCategory;
+
+public class MaterialEntity implements Entity{
     private int materialID;
     private String name;
 
@@ -27,8 +29,15 @@ public class MaterialEntity {
         this.emissionFactor = emissionFactor;
     }
 
+    // Set Methods
+    public void SetName(String name) {this.name = name;}
+    public void SetEnvironmentalImpactValue(float environmentalImpactValue) {this.environmentalImpactValue = environmentalImpactValue;}
+    public void SetRecyclingCategory(RecyclingCategory recyclingCategory) {this.recyclingCategory = recyclingCategory;}
+    public void SetMass(float mass) {this.mass = mass;}
+    public void SetEmissionFactor(float emissionFactor) {this.emissionFactor = emissionFactor;}
+
     // Get Methods
-    public int GetMaterialID() {return materialID;}
+    public int GetID() {return materialID;}
     public String GetName() {return name;}
     public float GetEnvironmentalImpactValue() {return environmentalImpactValue;}
     public RecyclingCategory GetRecyclingCategory() {return recyclingCategory;}

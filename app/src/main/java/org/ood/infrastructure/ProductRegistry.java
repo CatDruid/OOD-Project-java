@@ -1,6 +1,6 @@
 package org.ood.infrastructure;
 
-import org.ood.domain.ProductEntity;
+import org.ood.domain.entities.ProductEntity;
 
 import java.util.List;
 

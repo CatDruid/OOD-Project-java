@@ -1,17 +1,10 @@
 package org.ood.domain.impactStrategy;
 
-import org.ood.domain.MaterialEntity;
-import org.ood.domain.ProductEntity;
+import org.ood.domain.entities.ProductEntity;
 
-public class WeightedByLifespanStrategy implements ImpactCalculationStrategy {
+public class WeightedByLifespanStrategy extends AbstractImpactStrategy{
     @Override
     public float CalculateImpact(ProductEntity product) {
-        float sum = 0.0f;
-
-        for(MaterialEntity material : product.getMaterial()) {
-            sum += (material.GetMass() * material.GetEmissionFactor());
-        }
-
-        return sum/ product.GetEstimatedLifeSpan();
+        return CalculateRawPCF(product) / product.GetEstimatedLifeSpan();
     }
 }

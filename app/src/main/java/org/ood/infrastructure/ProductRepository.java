@@ -1,6 +1,8 @@
 package org.ood.infrastructure;
 
 import org.ood.domain.*;
+import org.ood.domain.entities.MaterialEntity;
+import org.ood.domain.entities.ProductEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;

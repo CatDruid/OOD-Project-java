@@ -1,6 +1,6 @@
 package org.ood.infrastructure;
 
-import org.ood.domain.MaterialEntity;
+import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.RecyclingCategory;
 import org.ood.domain.RepositoryInterface;
 
