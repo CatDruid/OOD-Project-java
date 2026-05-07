@@ -114,27 +114,6 @@ public class InputHandler {
         }
     }
 
-    public <T> T GetInput(Class<T> t, String question) {
-        while (true) {
-            outputFormatter.DisplayMessage(question);
-            try {
-                String line = scanner.nextLine().trim();
-
-                // Try constructor with String
-                try {
-                    Constructor<T> ctor = t.getConstructor(String.class);
-                    return ctor.newInstance(line);
-                } catch (NoSuchMethodException e) {
-                    // Fallback: try valueOf / parse static method, etc. (more code)
-                    throw new IllegalArgumentException("Class " + t.getName() +
-                            " does not have a public String constructor");
-                }
-            } catch (Exception e) {
-                outputFormatter.DisplayErrorMessage("Failed to create " + t.getSimpleName() + ": " + e.getMessage(), e.hashCode());
-            }
-        }
-    }
-
     public <T extends Enum<T>> T categoryPicker(Class<T> enumClass) {
         T[] values = enumClass.getEnumConstants();
         this.outputFormatter.DisplayMessage("What is the category?");
