@@ -1,7 +1,7 @@
 package org.ood.domain.impactStrategy;
 
-import org.ood.domain.MaterialEntity;
-import org.ood.domain.ProductEntity;
+import org.ood.domain.entities.MaterialEntity;
+import org.ood.domain.entities.ProductEntity;
 
 public abstract class AbstractImpactStrategy implements ImpactCalculationStrategy{
 
@@ -13,7 +13,5 @@ public abstract class AbstractImpactStrategy implements ImpactCalculationStrateg
         return sum;
     }
 
-    public float CalculateImpact(ProductEntity product) {
-        return 0.0f;
-    }
+    public abstract float CalculateImpact(ProductEntity product);
 }
