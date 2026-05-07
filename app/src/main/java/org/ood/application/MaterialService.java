@@ -22,7 +22,8 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Create(MaterialRequest createRequest) throws Exception {
-        MaterialEntity createdEntity = new MaterialEntity(createRequest.name(), createRequest.environmentalImpactValue(), createRequest.category());
+        // TODO change record and stuff
+        MaterialEntity createdEntity = new MaterialEntity(createRequest.name(), createRequest.category(), 0.0f, 0.0f);
         if(this.materialRepository.Add(createdEntity))
             return new MaterialCUDSuccessfully(1, "Create worked!!");
         else
@@ -41,7 +42,8 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Update(MaterialRequest material, int id) throws Exception {
-        MaterialEntity updatedEntity = new MaterialEntity(material.name(), material.environmentalImpactValue(), material.category(), id);
+        // TODO Replace placeholder
+        MaterialEntity updatedEntity = new MaterialEntity(id, material.name(), material.category(), 0.0f, 0.0f);
         if(this.materialRepository.Update(updatedEntity))
             return new MaterialCUDSuccessfully(id, "Update worked!");
         else
