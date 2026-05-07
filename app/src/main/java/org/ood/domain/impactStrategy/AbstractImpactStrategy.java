@@ -10,7 +10,7 @@ public abstract class AbstractImpactStrategy implements ImpactCalculationStrateg
         for(MaterialEntity material : product.getMaterial()) {
             sum += material.GetMass() * material.GetEmissionFactor();
         }
-        return  sum;
+        return sum;
     }
 
     public float CalculateImpact(ProductEntity product) {
