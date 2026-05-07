@@ -14,6 +14,10 @@ public abstract class RegistryAbstract<T extends Entity> implements RegistryInte
         items = new ArrayList<>();
     }
 
+    public RegistryAbstract(RepositoryInterface<T> repo) {
+        items = repo.RetrieveAll();
+    }
+
     public void Load(RepositoryInterface<T> repo) {
         // TODO error handling if already something inside registry?
         items = repo.RetrieveAll();
@@ -33,6 +37,7 @@ public abstract class RegistryAbstract<T extends Entity> implements RegistryInte
     public List<T> RetrieveAll() {
         return items;
     }
+
     public T RetrieveByID(int id) {
         for (T item : items) {
             if (item.GetID() == id) {
