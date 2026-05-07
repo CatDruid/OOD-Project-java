@@ -2,11 +2,12 @@ package org.ood.infrastructure;
 
 import org.ood.domain.RegistryInterface;
 import org.ood.domain.RepositoryInterface;
+import org.ood.domain.entities.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class RegistryAbstract<T> implements RegistryInterface<T> {
+public abstract class RegistryAbstract<T extends Entity> implements RegistryInterface<T> {
     private List<T> items;
 
     public RegistryAbstract() {
@@ -14,7 +15,7 @@ public abstract class RegistryAbstract<T> implements RegistryInterface<T> {
     }
 
     public void Load(RepositoryInterface<T> repo) {
-        // TODO error handling if already something inside registry
+        // TODO error handling if already something inside registry?
         items = repo.RetrieveAll();
     }
 
@@ -34,9 +35,45 @@ public abstract class RegistryAbstract<T> implements RegistryInterface<T> {
     }
     public T RetrieveByID(int id) {
         for (T item : items) {
-            //if (item.)
+            if (item.GetID() == id) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public boolean Update(T newItem) {
+        if(newItem == null || !IDExists(newItem.GetID())) {return false;}
+        int id = newItem.GetID();
+        T oldItem = RetrieveByID(id);
+        if(Delete(id)) {
+            if(Add(newItem)) {
+                return true;
+            } else {
+                Add(oldItem);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean Delete(int id) {
+        T item = RetrieveByID(id);
+        if(item == null) {return false;}
+        try {
+            items.remove(item);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
-    public boolean Update(List<T> parameters) {return false;}
-    public boolean Delete(int id) {return false;}
+
+    public boolean IDExists(int id) {
+        for (T item : items) {
+            if (id == item.GetID()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
