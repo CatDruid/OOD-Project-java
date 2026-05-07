@@ -88,7 +88,7 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
                 }
                 case 4 -> {if(inputHandler.AskYesNo()) {
                     try {
-                    productService.Update(new ProductRequest(name, category, estimatedLifespan, materials), productEntity.GetProductID());
+                    productService.Update(new ProductRequest(name, category, estimatedLifespan, materials), productEntity.GetID());
                     } catch (Exception e) {outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}
                     loop = false;
                 }}
