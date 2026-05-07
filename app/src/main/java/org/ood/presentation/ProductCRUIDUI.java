@@ -31,9 +31,9 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
         if(inputHandler.AskYesNo("Do you want to print the IDs before choosing?")) {RetrieveAll();}
         if(inputHandler.AskYesNo("Are you sure the product is not present?")) {
             outputFormatter.DisplayMessage("You are about to be asked questions about the product. \n If you mistype anything just go though the rest and say no to the last question.");
-            String name = inputHandler.GetInput(String.class, "What's the products name?");
+            String name = inputHandler.GetInput(String.class, "What's the product's name?");
             ProductCategory productCategory = inputHandler.categoryPicker(ProductCategory.class);
-            float estimatedLifespan = inputHandler.GetInput(Float.class, "What is the estimated lifepan of the product?");
+            float estimatedLifespan = inputHandler.GetInput(Float.class, "What is the estimated lifespan of the product?");
             List<MaterialEntity> materialEntities = new ArrayList<>();
             outputFormatter.DisplayMessage("Choose the ID of the desired products materials. Choose again to remove. Type -1 to exit");
             List<MaterialEntity> allMaterial = materialService.RetrieveAll();
