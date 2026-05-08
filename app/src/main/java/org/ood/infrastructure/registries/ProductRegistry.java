@@ -1,4 +1,4 @@
-package org.ood.infrastructure;
+package org.ood.infrastructure.registries;
 
 import org.ood.domain.RepositoryInterface;
 import org.ood.domain.entities.ProductEntity;

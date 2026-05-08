@@ -1,4 +1,4 @@
-package org.ood.infrastructure;
+package org.ood.infrastructure.registries;
 
 import org.ood.domain.RegistryInterface;
 import org.ood.domain.RepositoryInterface;
@@ -34,6 +34,7 @@ public abstract class RegistryAbstract<T extends Entity> implements RegistryInte
             return false;
         }
     }
+
     public List<T> RetrieveAll() {
         return items;
     }
