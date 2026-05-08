@@ -19,6 +19,8 @@ Shared - Recycling / Repo management / Docs / UI / Design
 ## Project structure
 The project is structured into 4 layers. The presentation layer, the application layer, the domain layer and the infrastructure layer. The presentation layer is responsible for formatting outputs and getting inputs from the user in the form of a menu. Where as the services inside the application layer function as a manager for the domain entities and a bridge between the presentation and business logic inside the domain. The domain will be the host for the core logic of the project such as the materials and products as well as the impact calculation strategies. Lastly, the infrastructure layer is responsible for mainly saving and loading data to and from a database or files for example.
 
+## Strategy patterns
+A strategy pattern is used for the different formulas for environmentalimpact-calculation. The formulas are realized in their own seperate classes which all implement a interface. A factory is used where all the applicable strategies are created. From there the presentation layer can request a dynamic list of all the strategies to display them for the user. The user's choice then goes to the factory which translates it to the correct strategy which is given to the services. Due to the usage of a factory and strategy pattern it is really easy to add new or strategies as the presentation and application layer are not touched at all with exception to the factory, where the change has to be added to a static list.
 
 ## Branch naming
 
