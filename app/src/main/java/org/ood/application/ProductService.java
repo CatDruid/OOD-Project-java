@@ -21,10 +21,11 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
 
     @Override
     public ProductCUDSuccessfully Create(ProductRequest createRequest) throws Exception {
-        //This will probably be different for an update but it is simply for it to work right now until a proper service implementation.
-        ProductEntity createdEntity = new ProductEntity(createRequest.name(), createRequest.category(), createRequest.estimatedLifespan(), createRequest.materials());
-        if(this.productRegistry.Add(createdEntity))
+        ProductEntity createdEntity = new ProductEntity(this.productRegistry.RetrieveAll().size()+1, createRequest.name(), createRequest.category(), createRequest.estimatedLifespan(), createRequest.materials());
+        if(this.productRegistry.Add(createdEntity)) {
+            this.productRepository.Save(this.productRegistry.RetrieveAll());
             return new ProductCUDSuccessfully(1, "Create worked!!");
+        }
         else
             throw new Exception("Ooops, something went wrong");
     }
@@ -46,17 +47,21 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
     @Override
     public ProductCUDSuccessfully Update(ProductRequest updateRequest, int id)  throws Exception {
         //This will probably be different for an update but it is simply for it to work right now until a proper service implementation.
-        ProductEntity updatedEntity = new ProductEntity(updateRequest.name(), updateRequest.category(), updateRequest.estimatedLifespan(), updateRequest.materials(), id);
-        if(this.productRegistry.Update(updatedEntity))
-            return new ProductCUDSuccessfully(id, "Update worked!");
+        ProductEntity updatedEntity = new ProductEntity(id, updateRequest.name(), updateRequest.category(), updateRequest.estimatedLifespan(), updateRequest.materials());
+        if(this.productRegistry.Update(updatedEntity)){
+            this.productRepository.Save(this.productRegistry.RetrieveAll());
+            return new ProductCUDSuccessfully(1, "Update worked!!");
+        }
         else
             throw new Exception("Ooops, something went wrong");
     }
 
     @Override
     public ProductCUDSuccessfully Delete(int id)  throws Exception {
-        if(this.productRegistry.Delete(id))
-            return new ProductCUDSuccessfully(id, "Delete worked!");
+        if(this.productRegistry.Delete(id)){
+            this.productRepository.Save(this.productRegistry.RetrieveAll());
+            return new ProductCUDSuccessfully(1, "Delete worked!!");
+        }
         else
             throw new Exception("Ooops, something went wrong");
     }

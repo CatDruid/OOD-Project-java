@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class Main {
     static void main(String[] args) {
-        String JSONFilePath = "C:/OOD-Project";
+        String JSONBasePath = "C:/OOD-Project";
 
         // Helper classes
         Scanner scanner = new Scanner(System.in);
@@ -23,12 +23,12 @@ public class Main {
         InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
 
         // Product repo, registry and service
-        JSONProductRepository productRepository = new JSONProductRepository(JSONFilePath);
+        JSONProductRepository productRepository = new JSONProductRepository(JSONBasePath + "/products.json");
         ProductRegistry productRegistry = new ProductRegistry(productRepository);
         ProductService productService = new ProductService(productRegistry, productRepository);
 
         // Material repo, registry and service
-        JSONMaterialRepository materialRepository = new JSONMaterialRepository(JSONFilePath);
+        JSONMaterialRepository materialRepository = new JSONMaterialRepository(JSONBasePath + "/materials.json");
         MaterialRegistry materialRegistry = new MaterialRegistry(materialRepository);
         MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
         // UI's

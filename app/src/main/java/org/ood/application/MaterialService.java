@@ -22,9 +22,11 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Create(MaterialRequest createRequest) throws Exception {
-        MaterialEntity createdEntity = new MaterialEntity(createRequest.name(), createRequest.category(), createRequest.mass(), createRequest.emissionFactor());
-        if(this.materialRegistry.Add(createdEntity))
+        MaterialEntity createdEntity = new MaterialEntity(materialRegistry.RetrieveAll().size() +1, createRequest.name(), createRequest.category(), createRequest.mass(), createRequest.emissionFactor());
+        if(this.materialRegistry.Add(createdEntity)) {
+            this.materialRepository.Save(this.materialRegistry.RetrieveAll());
             return new MaterialCUDSuccessfully(1, "Create worked!!");
+        }
         else
             throw new Exception("Ooops, something went wrong");
     }
@@ -45,18 +47,20 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Update(MaterialRequest updateRequest, int id) throws Exception {
-        MaterialEntity updatedEntity = new MaterialEntity(id, updateRequest.category(), updateRequest.name(), updateRequest.mass(), updateRequest.emissionFactor());
-        if(this.materialRegistry.Update(updatedEntity))
+        MaterialEntity updatedEntity = new MaterialEntity(id, updateRequest.name(), updateRequest.category(), updateRequest.mass(), updateRequest.emissionFactor());
+        if(this.materialRegistry.Update(updatedEntity)) {
+            this.materialRepository.Save(this.materialRegistry.RetrieveAll());
             return new MaterialCUDSuccessfully(id, "Update worked!");
-        else
+        } else
             throw new Exception("Ooops, something went wrong");
     }
 
     @Override
     public MaterialCUDSuccessfully Delete(int id) throws Exception {
-        if(this.materialRegistry.Delete(id))
+        if(this.materialRegistry.Delete(id)) {
+            this.materialRepository.Save(this.materialRegistry.RetrieveAll());
             return new MaterialCUDSuccessfully(id, "Delete worked!");
-        else
+        } else
             throw new Exception("Ooops, something went wrong");
     }
 
