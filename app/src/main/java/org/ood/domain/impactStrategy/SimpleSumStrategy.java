@@ -1,7 +1,7 @@
 package org.ood.domain.impactStrategy;
 
-import org.ood.domain.MaterialEntity;
-import org.ood.domain.ProductEntity;
+import org.ood.domain.entities.MaterialEntity;
+import org.ood.domain.entities.ProductEntity;
 
 public class SimpleSumStrategy implements ImpactCalculationStrategy {
     @Override
