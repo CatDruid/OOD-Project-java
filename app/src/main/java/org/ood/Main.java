@@ -3,12 +3,32 @@
  */
 package org.ood;
 
-public class Main {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import org.ood.application.MaterialService;
+import org.ood.application.ProductService;
+import org.ood.infrastructure.registries.MaterialRegistry;
+import org.ood.infrastructure.repositories.MaterialRepository;
+import org.ood.infrastructure.registries.ProductRegistry;
+import org.ood.infrastructure.repositories.ProductRepository;
+import org.ood.presentation.*;
 
+import java.util.Scanner;
+
+public class Main {
     public static void main(String[] args) {
-        System.out.println(new Main().getGreeting());
+        Scanner scanner = new Scanner(System.in);
+        OutputFormatter outputFormatter = new OutputFormatter();
+        InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
+        ProductRegistry productRegistry = new ProductRegistry();
+        ProductRepository productRepository = new ProductRepository();
+        ProductService productService = new ProductService(productRegistry, productRepository);
+        MaterialRepository materialRepository = new MaterialRepository();
+        MaterialRegistry materialRegistry = new MaterialRegistry();
+        MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
+        MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
+        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService);
+        UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
+
+        ui.MenuLoop();
     }
 }
