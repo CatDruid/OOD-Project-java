@@ -1,6 +1,5 @@
 package org.ood.application;
 import org.ood.domain.*;
-import org.ood.domain.entities.ProductEntity;
 import org.ood.domain.impactStrategy.ImpactCalculationStrategy;
 import org.ood.presentation.records.Results.ImpactResult;
 
