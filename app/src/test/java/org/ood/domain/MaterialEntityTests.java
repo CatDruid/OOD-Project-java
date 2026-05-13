@@ -15,8 +15,8 @@ public class MaterialEntityTests {
     void InitializeBaseObject() throws Exception {
         material = new MaterialEntity(
                 1,
-                RecyclingCategory.Food,
                 "Test",
+                RecyclingCategory.Food,
                 2.01f,
                 3.01f
         );
@@ -99,8 +99,8 @@ public class MaterialEntityTests {
     void CheckThatValidationErrorWorksWhenEmissionIsLessThanZero(){
         assertThrows(Exception.class, () -> new MaterialEntity(
                 1,
-                RecyclingCategory.Food,
                 "Test",
+                RecyclingCategory.Food,
                 2.01f,
                 -1f
         ));
@@ -110,8 +110,8 @@ public class MaterialEntityTests {
     void CheckThatValidationErrorWorksWhenMassIsLessThanZero(){
         assertThrows(Exception.class, () -> new MaterialEntity(
                 1,
-                RecyclingCategory.Food,
                 "Test",
+                RecyclingCategory.Food,
                 -2.01f,
                 1f
         ));
