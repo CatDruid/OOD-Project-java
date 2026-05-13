@@ -1,8 +1,10 @@
-package org.ood.domain;
+package org.ood.domain.entities;
+
+import org.ood.domain.ProductCategory;
 
 import java.util.List;
 
-public class ProductEntity {
+public class ProductEntity implements Entity{
     private int productID;
     private String name;
     private ProductCategory category;
@@ -32,7 +34,7 @@ public class ProductEntity {
     public void SetMaterials(List<MaterialEntity> material) {this.material = material;}
     
     //Get Methods
-    public int GetProductID() {return productID;}
+    public int GetID() {return productID;}
     public String GetName() {return name;}
     public ProductCategory GetCategory() {return category;}
     public float GetEstimatedLifeSpan() {return estimatedLifespan;}
