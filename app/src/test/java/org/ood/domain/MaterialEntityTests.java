@@ -1,6 +1,7 @@
 package org.ood.domain;
 
 import org.junit.jupiter.api.*;
+import org.ood.domain.entities.MaterialEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,7 +15,6 @@ public class MaterialEntityTests {
     void initializeBaseObject() {
         material = new MaterialEntity(
                 "Test",
-                1.01f,
                 RecyclingCategory.Test,
                 1,
                 2.01f,
@@ -25,17 +25,12 @@ public class MaterialEntityTests {
     @Test
     @DisplayName("GET Id check")
     void CheckThatGetIdReturnsItsValue(){
-        assertEquals(1, material.GetMaterialID());
+        assertEquals(1, material.GetID());
     }
     @Test
     @DisplayName("GET Name check")
     void CheckThatGetNameReturnsItsValue(){
         assertEquals("Test", material.GetName());
-    }
-    @Test
-    @DisplayName("GET Impact Value check")
-    void CheckThatImpactValueReturnsItsValue(){
-        assertEquals(1.01f, material.GetEnvironmentalImpactValue());
     }
     @Test
     @DisplayName("GET Mass check")
@@ -62,7 +57,6 @@ public class MaterialEntityTests {
     void CheckThatValidationErrorWorksWhenEmissionIsLessThanZero(){
         material = new MaterialEntity(
                 "Test",
-                1.01f,
                 RecyclingCategory.Test,
                 1,
                 2.01f,
@@ -75,23 +69,9 @@ public class MaterialEntityTests {
     void CheckThatValidationErrorWorksWhenMassIsLessThanZero(){
         material = new MaterialEntity(
                 "Test",
-                1.01f,
                 RecyclingCategory.Test,
                 1,
                 -2.01f,
-                1f
-        );
-        assertFalse(material.ValidateSelf().isEmpty());
-    }
-    @Test
-    @DisplayName("Validation error exists when Impact Value is below zero")
-    void CheckThatValidationErrorWorksWhenImpactValueIsLessThanZero(){
-        material = new MaterialEntity(
-                "Test",
-                -1.01f,
-                RecyclingCategory.Test,
-                1,
-                2.01f,
                 1f
         );
         assertFalse(material.ValidateSelf().isEmpty());

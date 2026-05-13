@@ -28,9 +28,8 @@ public class Main {
         MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
         ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
-        EnvironmentalImpactService environmentalImpactService = new EnvironmentalImpactService();
         RecyclingGuidanceService recyclingGuidanceService = new RecyclingGuidanceService();
-        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, environmentalImpactService, recyclingGuidanceService);
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, recyclingGuidanceService);
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
         ui.MenuLoop();

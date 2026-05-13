@@ -22,7 +22,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Create(MaterialRequest createRequest) throws Exception {
-        MaterialEntity createdEntity = new MaterialEntity(createRequest.name(), createRequest.environmentalImpactValue(), createRequest.category(), createRequest.mass(), createRequest.emissionFactor());
+        MaterialEntity createdEntity = new MaterialEntity(createRequest.name(), createRequest.category(), createRequest.mass(), createRequest.emissionFactor());
         String validationErrors = createdEntity.ValidateSelf();
         if(validationErrors.isEmpty() == false)
             throw new Exception(validationErrors);
@@ -44,7 +44,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Update(MaterialRequest updateRequest, int id) throws Exception {
-        MaterialEntity updatedEntity = new MaterialEntity(updateRequest.name(), updateRequest.environmentalImpactValue(), updateRequest.category(), id, updateRequest.mass(), updateRequest.emissionFactor());
+        MaterialEntity updatedEntity = new MaterialEntity(updateRequest.name(), updateRequest.category(), id, updateRequest.mass(), updateRequest.emissionFactor());
 
         String validationErrors = updatedEntity.ValidateSelf();
         if(validationErrors.isEmpty() == false)
