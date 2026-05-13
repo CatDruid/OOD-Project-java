@@ -22,6 +22,7 @@ public class MaterialEntityTests {
         );
     }
 
+    //GET tests
     @Test
     @DisplayName("GET Id check")
     void CheckThatGetIdReturnsItsValue(){
@@ -47,10 +48,44 @@ public class MaterialEntityTests {
     void CheckThatEmissionFactorReturnsItsValue(){
         assertEquals(3.01f, material.GetEmissionFactor());
     }
+
+    //SET tests
+    @Test
+    @DisplayName("SET Id check")
+    void CheckThatSetIdChangesWork(){
+        material.SetMaterialID(2);
+        assertEquals(2, material.GetID());
+    }
+    @Test
+    @DisplayName("SET Name check")
+    void CheckThatSetNameChangesWork(){
+        material.SetName("Test2");
+        assertEquals("Test2", material.GetName());
+    }
+    @Test
+    @DisplayName("SET Mass check")
+    void CheckThatSetMassChangesWork(){
+        material.SetMass(0.1f);
+        assertEquals(0.1f, material.GetMass());
+    }
+    @Test
+    @DisplayName("SET Recycling Category check")
+    void CheckThatSetCategoryChangesWork(){
+        material.SetRecyclingCategory(RecyclingCategory.Test2);
+        assertEquals(RecyclingCategory.Test2, material.GetRecyclingCategory());
+    }
+    @Test
+    @DisplayName("SET Emission Factor check")
+    void CheckThatSetEmissionFactorChangesWork(){
+        material.SetEmissionFactor(0.1f);
+        assertEquals(0.1f, material.GetEmissionFactor());
+    }
+
+    //Self-validate tests
     @Test
     @DisplayName("No validation errors when there shouldn't be.")
     void CheckThatValidateSelfDoesNotReturnAnErrorWhenThereShouldNotBe(){
-        assertTrue(material.ValidateSelf().isEmpty());   
+        assertTrue(material.ValidateSelf().isEmpty());
     }
     @Test
     @DisplayName("Validation error exists when Emission Factor is below zero")
