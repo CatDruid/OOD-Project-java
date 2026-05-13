@@ -2,9 +2,9 @@ package org.ood.presentation;
 
 import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
-import org.ood.domain.MaterialEntity;
+import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.ProductCategory;
-import org.ood.domain.ProductEntity;
+import org.ood.domain.entities.ProductEntity;
 import org.ood.presentation.records.requests.ProductRequest;
 
 import java.util.ArrayList;
@@ -34,21 +34,20 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
             String name = inputHandler.GetInput(String.class, "What's the product's name?");
             ProductCategory productCategory = inputHandler.categoryPicker(ProductCategory.class);
             float estimatedLifespan = inputHandler.GetInput(Float.class, "What is the estimated lifespan of the product?");
-            List<MaterialEntity> materialEntities = null;
-            outputFormatter.DisplayMaterials(materialService.RetrieveAll());
+            List<MaterialEntity> materialEntities = new ArrayList<>();
             outputFormatter.DisplayMessage("Choose the ID of the desired products materials. Choose again to remove. Type -1 to exit");
-            while(true) {
-                int choice = inputHandler.GetInput(Integer.class);
-                if(choice == -1){break;} else {
-                    try{
-                        MaterialEntity materialEntity = materialService.RetrieveByID(choice);
-                        if(materialEntity != null) {
-                            if (materialEntities.contains(materialEntity)) {materialEntities.remove(materialEntity);
-                            } else {materialEntities.add(materialEntity);}
-                        } else
-                            outputFormatter.DisplayWarningMessage("No material with that ID exists");
-                    } catch(Exception e){outputFormatter.DisplayWarningMessage("Unknown Material");}
-                }
+            List<MaterialEntity> allMaterial = materialService.RetrieveAll();
+            while(true){
+                outputFormatter.DisplayMaterials(allMaterial, materialEntities);
+                int selectedID = inputHandler.GetInput(Integer.class, "Choose the id to toggle material(-1 to exit)");
+                if(selectedID == -1) {break;}
+                try{
+                    MaterialEntity toggledMaterial = materialService.RetrieveByID(selectedID);
+                    if(materialEntities.contains(toggledMaterial)){materialEntities.remove(toggledMaterial);
+                    } else {
+                        materialEntities.add(toggledMaterial);
+                    }
+                } catch (Exception e) {outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}
             }
             if(inputHandler.AskYesNo("Is everything correct?")) {try {productService.Create(new ProductRequest(name,productCategory,estimatedLifespan,materialEntities));} catch( Exception e) { outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}}
         }
@@ -85,11 +84,24 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
                 case 1 -> category = inputHandler.categoryPicker(productService.GetCategory());
                 case 2 -> estimatedLifespan = inputHandler.GetInput(Float.class);
                 case 3 -> {
-                    outputFormatter.DisplayMessage("Fetching material list.");
+                    List<MaterialEntity> allMaterial = materialService.RetrieveAll();
+                    List<MaterialEntity> currentMaterials = productEntity.getMaterial();
+                    while(true){
+                        outputFormatter.DisplayMaterials(allMaterial, currentMaterials);
+                        int selectedID = inputHandler.GetInput(Integer.class, "Choose the id to toggle material(-1 to exit)");
+                        if(selectedID == -1) {break;}
+                        try{
+                            MaterialEntity toggledMaterial = materialService.RetrieveByID(selectedID);
+                            if(currentMaterials.contains(toggledMaterial)){currentMaterials.remove(toggledMaterial);
+                            } else {
+                                currentMaterials.add(toggledMaterial);
+                            }
+                        } catch (Exception e) {outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}
+                    }
                 }
                 case 4 -> {if(inputHandler.AskYesNo()) {
                     try {
-                    productService.Update(new ProductRequest(name, category, estimatedLifespan, materials), productEntity.GetProductID());
+                    productService.Update(new ProductRequest(name, category, estimatedLifespan, materials), productEntity.GetID());
                     } catch (Exception e) {outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}
                     loop = false;
                 }}

@@ -1,13 +1,7 @@
 package org.ood.presentation;
 
-import org.ood.domain.MaterialEntity;
-import org.ood.domain.ProductCategory;
-import org.ood.domain.ProductEntity;
-import org.ood.presentation.records.MaterialSelection;
-
-import java.util.List;
-
-import org.ood.domain.MaterialEntity;
+import org.ood.domain.entities.MaterialEntity;
+import org.ood.domain.entities.ProductEntity;
 
 import java.util.List;
 
@@ -26,7 +20,7 @@ public class OutputFormatter {
 
     public void PrintProduct(ProductEntity productEntity) {
         System.out.println(productEntity.GetName() + ":\n"
-                + "ID: " + productEntity.GetProductID() + "\n"
+                + "ID: " + productEntity.GetID() + "\n"
                 + "Category: " + productEntity.GetCategory() + "\n"
                 + "Estimated lifespan: " + productEntity.GetEstimatedLifeSpan() + "\n"
         );
@@ -40,14 +34,14 @@ public class OutputFormatter {
     public void PrintProducts(List<ProductEntity>productEntityList) {
         System.out.println("Products:");
         for(ProductEntity productEntity : productEntityList) {
-            System.out.println("(" + productEntity.GetProductID() + ")  " + productEntity.GetName());
+            System.out.println("(" + productEntity.GetID() + ")  " + productEntity.GetName());
         }
     }
 
     public void DisplayMaterials(List<MaterialEntity> materialEntityList){
         System.out.println("Materials:");
         for(MaterialEntity entity : materialEntityList){
-            System.out.println("(" + entity.GetMaterialID() + ")  " + entity.GetName());
+            System.out.println("(" + entity.GetID() + ")  " + entity.GetName());
         }
     }
 
@@ -56,15 +50,14 @@ public class OutputFormatter {
         for(MaterialEntity entity : materialEntityList){
             String brackets;
             if(currentMaterialList.contains(entity)) {brackets = "(x)";} else {brackets = "()";}
-            System.out.println(brackets + "    (" + entity.GetMaterialID() + ")  " + entity.GetName());
+            System.out.println(brackets + "    (" + entity.GetID() + ")  " + entity.GetName());
         }
     }
 
     public void DisplayMaterial(MaterialEntity material){
         System.out.println(material.GetName() + ":\n"
-                + "ID: " + material.GetMaterialID() + "\n"
+                + "ID: " + material.GetID() + "\n"
                 + "Category: " + material.GetRecyclingCategory() + "\n"
-                + "Impact Value: " + material.GetEnvironmentalImpactValue() + "\n"
         );
     }
 }

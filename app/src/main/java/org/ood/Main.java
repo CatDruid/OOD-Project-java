@@ -3,11 +3,14 @@
  */
 package org.ood;
 
-import org.ood.application.*;
-import org.ood.infrastructure.MaterialRegistry;
-import org.ood.infrastructure.MaterialRepository;
-import org.ood.infrastructure.ProductRegistry;
-import org.ood.infrastructure.ProductRepository;
+import org.ood.application.EnvironmentalImpactService;
+import org.ood.application.MaterialService;
+import org.ood.application.ProductService;
+import org.ood.application.RecyclingGuidanceService;
+import org.ood.infrastructure.registries.MaterialRegistry;
+import org.ood.infrastructure.repositories.MaterialRepository;
+import org.ood.infrastructure.registries.ProductRegistry;
+import org.ood.infrastructure.repositories.ProductRepository;
 import org.ood.presentation.*;
 
 import java.util.Scanner;
@@ -18,16 +21,16 @@ public class Main {
         OutputFormatter outputFormatter = new OutputFormatter();
         InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
         ProductRegistry productRegistry = new ProductRegistry();
-        EnvironmentalFactory.productRegistry = productRegistry;
         ProductRepository productRepository = new ProductRepository();
         ProductService productService = new ProductService(productRegistry, productRepository);
         MaterialRepository materialRepository = new MaterialRepository();
         MaterialRegistry materialRegistry = new MaterialRegistry();
         MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
-        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
+        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
+        EnvironmentalImpactService environmentalImpactService = new EnvironmentalImpactService();
         RecyclingGuidanceService recyclingGuidanceService = new RecyclingGuidanceService();
-        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, recyclingGuidanceService);
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, environmentalImpactService, recyclingGuidanceService);
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
         ui.MenuLoop();
