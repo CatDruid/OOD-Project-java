@@ -53,6 +53,9 @@ public class MaterialEntity implements Entity{
     public RecyclingCategory GetRecyclingCategory() {return recyclingCategory;}
     public float GetMass() {return mass;}
     public float GetEmissionFactor() {return emissionFactor;}
+    public String GetGuidance(){
+        return this.name + ": " + this.recyclingCategory.guidance;
+    }
 
     /*Constructs and returns the error message if there are any.
     If the string is empty, however, then there are no errors.
