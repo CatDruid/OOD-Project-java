@@ -15,12 +15,20 @@ public abstract class RegistryAbstract<T extends Entity> implements RegistryInte
     }
 
     public RegistryAbstract(RepositoryInterface<T> repo) {
-        items = repo.RetrieveAll();
+        try {
+            items = repo.Load();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void Load(RepositoryInterface<T> repo) {
         // TODO error handling if already something inside registry?
-        items = repo.RetrieveAll();
+        try {
+            items = repo.Load();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean Add(T obj) {
