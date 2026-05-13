@@ -22,7 +22,10 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Create(MaterialRequest createRequest) throws Exception {
-        MaterialEntity createdEntity = new MaterialEntity(materialRegistry.RetrieveAll().size() +1, createRequest.name(), createRequest.category(), createRequest.mass(), createRequest.emissionFactor());
+        int newId = materialRegistry.RetrieveAll().stream().mapToInt(MaterialEntity::GetID)
+                .max()
+                .orElse(0) + 1;
+        MaterialEntity createdEntity = new MaterialEntity(newId, createRequest.name(), createRequest.category(), createRequest.mass(), createRequest.emissionFactor());
         if(this.materialRegistry.Add(createdEntity)) {
             this.materialRepository.Save(this.materialRegistry.RetrieveAll());
             return new MaterialCUDSuccessfully(1, "Create worked!!");

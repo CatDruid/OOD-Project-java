@@ -21,7 +21,10 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
 
     @Override
     public ProductCUDSuccessfully Create(ProductRequest createRequest) throws Exception {
-        ProductEntity createdEntity = new ProductEntity(this.productRegistry.RetrieveAll().size()+1, createRequest.name(), createRequest.category(), createRequest.estimatedLifespan(), createRequest.materials());
+        int newId = productRegistry.RetrieveAll().stream().mapToInt(ProductEntity::GetID)
+                .max()
+                .orElse(0) + 1;
+        ProductEntity createdEntity = new ProductEntity(newId, createRequest.name(), createRequest.category(), createRequest.estimatedLifespan(), createRequest.materials());
         if(this.productRegistry.Add(createdEntity)) {
             this.productRepository.Save(this.productRegistry.RetrieveAll());
             return new ProductCUDSuccessfully(1, "Create worked!!");
@@ -46,7 +49,6 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
 
     @Override
     public ProductCUDSuccessfully Update(ProductRequest updateRequest, int id)  throws Exception {
-        //This will probably be different for an update but it is simply for it to work right now until a proper service implementation.
         ProductEntity updatedEntity = new ProductEntity(id, updateRequest.name(), updateRequest.category(), updateRequest.estimatedLifespan(), updateRequest.materials());
         if(this.productRegistry.Update(updatedEntity)){
             this.productRepository.Save(this.productRegistry.RetrieveAll());
