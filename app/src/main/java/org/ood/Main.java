@@ -7,10 +7,10 @@ import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
 import org.ood.application.RecyclingGuidanceService;
-import org.ood.infrastructure.MaterialRegistry;
-import org.ood.infrastructure.MaterialRepository;
-import org.ood.infrastructure.ProductRegistry;
-import org.ood.infrastructure.ProductRepository;
+import org.ood.infrastructure.registries.MaterialRegistry;
+import org.ood.infrastructure.repositories.MaterialRepository;
+import org.ood.infrastructure.registries.ProductRegistry;
+import org.ood.infrastructure.repositories.ProductRepository;
 import org.ood.presentation.*;
 
 import java.util.Scanner;

@@ -1,4 +1,4 @@
-package org.ood.infrastructure;
+package org.ood.infrastructure.repositories;
 
 import org.ood.domain.*;
 import org.ood.domain.entities.ProductEntity;

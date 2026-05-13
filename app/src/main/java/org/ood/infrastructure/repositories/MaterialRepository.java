@@ -1,4 +1,4 @@
-package org.ood.infrastructure;
+package org.ood.infrastructure.repositories;
 
 import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.RepositoryInterface;
