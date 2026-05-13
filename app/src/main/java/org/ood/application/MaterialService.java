@@ -45,7 +45,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Update(MaterialRequest updateRequest, int id) throws Exception {
-        MaterialEntity updatedEntity = new MaterialEntity(updateRequest.name(), updateRequest.category(), id, updateRequest.mass(), updateRequest.emissionFactor());
+        MaterialEntity updatedEntity = new MaterialEntity(id, updateRequest.category(), updateRequest.name(), updateRequest.mass(), updateRequest.emissionFactor());
         if(this.materialRegistry.Update(updatedEntity))
             return new MaterialCUDSuccessfully(id, "Update worked!");
         else

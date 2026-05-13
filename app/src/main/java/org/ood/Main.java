@@ -5,7 +5,6 @@ package org.ood;
 
 import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
-import org.ood.application.RecyclingGuidanceService;
 import org.ood.infrastructure.registries.MaterialRegistry;
 import org.ood.infrastructure.repositories.JSONMaterialRepository;
 import org.ood.infrastructure.registries.ProductRegistry;
@@ -32,14 +31,10 @@ public class Main {
         JSONMaterialRepository materialRepository = new JSONMaterialRepository(JSONFilePath);
         MaterialRegistry materialRegistry = new MaterialRegistry(materialRepository);
         MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
-
-        // Recycling service
-        RecyclingGuidanceService recyclingGuidanceService = new RecyclingGuidanceService();
-
         // UI's
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
         ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
-        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, recyclingGuidanceService);
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService);
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
         // Start the application

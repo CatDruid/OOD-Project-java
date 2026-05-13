@@ -66,5 +66,10 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
         return this.productRegistry.RetrieveByID(id) != null;
     }
 
+    public String GetGuidance(int id){
+        ProductEntity product = this.RetrieveByID(id);
+        return product.GetGuidance();
+    }
+
     public Class<ProductCategory> GetCategory() {return ProductCategory.class;}
 }

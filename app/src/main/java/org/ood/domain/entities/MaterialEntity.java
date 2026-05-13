@@ -20,7 +20,7 @@ public class MaterialEntity implements Entity{
             throw new Exception(errors);
     }
 
-    public MaterialEntity(String name, RecyclingCategory recyclingCategory, int materialID, float mass, float emissionFactor)  throws Exception  {
+    public MaterialEntity(int materialID, RecyclingCategory recyclingCategory, String name, float mass, float emissionFactor)  throws Exception  {
         this.materialID = materialID;
         this.name = name;
         this.recyclingCategory = recyclingCategory;
@@ -53,6 +53,9 @@ public class MaterialEntity implements Entity{
     public RecyclingCategory GetRecyclingCategory() {return recyclingCategory;}
     public float GetMass() {return mass;}
     public float GetEmissionFactor() {return emissionFactor;}
+    public String GetGuidance(){
+        return this.name + ": " + this.recyclingCategory.guidance;
+    }
 
     /*Constructs and returns the error message if there are any.
     If the string is empty, however, then there are no errors.
