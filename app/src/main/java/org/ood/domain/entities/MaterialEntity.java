@@ -10,26 +10,41 @@ public class MaterialEntity implements Entity{
     private float emissionFactor;
 
 
-    public MaterialEntity(String name, RecyclingCategory recyclingCategory, float mass, float emissionFactor) {
+    public MaterialEntity(String name, RecyclingCategory recyclingCategory, float mass, float emissionFactor) throws Exception {
         this.name = name;
         this.recyclingCategory = recyclingCategory;
         this.mass = mass;
         this.emissionFactor = emissionFactor;
+        String errors = this.ValidateSelf();
+        if(errors.isEmpty() == false)
+            throw new Exception(errors);
     }
 
-    public MaterialEntity(String name, RecyclingCategory recyclingCategory, int materialID, float mass, float emissionFactor) {
+    public MaterialEntity(String name, RecyclingCategory recyclingCategory, int materialID, float mass, float emissionFactor)  throws Exception  {
         this.materialID = materialID;
         this.name = name;
         this.recyclingCategory = recyclingCategory;
         this.mass = mass;
         this.emissionFactor = emissionFactor;
+        String errors = this.ValidateSelf();
+        if(errors.isEmpty() == false)
+            throw new Exception(errors);
     }
 
     //Set Methods
     public void SetName(String name) {this.name = name;}
     public void SetRecyclingCategory(RecyclingCategory recyclingCategory) {this.recyclingCategory = recyclingCategory;}
-    public void SetMass(float mass) {this.mass = mass;}
-    public void SetEmissionFactor(float emissionFactor) {this.emissionFactor = emissionFactor;
+    public void SetMass(float mass) throws Exception {
+        if(mass >= 0)
+            this.mass = mass;
+        else
+            throw new Exception("Mass cannot be less than zero");
+    }
+    public void SetEmissionFactor(float emissionFactor) throws Exception {
+        if(emissionFactor >= 0)
+            this.emissionFactor = emissionFactor;
+        else
+            throw new Exception("Emission Factor cannot be less than zero");
     }
 
     // Get Methods

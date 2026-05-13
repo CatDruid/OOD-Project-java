@@ -12,7 +12,7 @@ public class MaterialEntityTests {
 
     //Prepares the materialEntity for the tests by initializing the object with a basic set of values.
     @BeforeEach
-    void initializeBaseObject() {
+    void initializeBaseObject() throws Exception {
         material = new MaterialEntity(
                 "Test",
                 RecyclingCategory.Test,
@@ -56,10 +56,15 @@ public class MaterialEntityTests {
         assertEquals("Test2", material.GetName());
     }
     @Test
-    @DisplayName("SET Mass check")
-    void CheckThatSetMassChangesWork(){
+    @DisplayName("SET Mass check (valid)")
+    void CheckThatSetMassChangesWork() throws Exception {
         material.SetMass(0.1f);
         assertEquals(0.1f, material.GetMass());
+    }
+    @Test
+    @DisplayName("SET Mass check (invalid)")
+    void CheckThatSetMassChangesThrowsException() {
+        assertThrows(Exception.class, () -> material.SetMass(-0.1f));
     }
     @Test
     @DisplayName("SET Recycling Category check")
@@ -68,10 +73,15 @@ public class MaterialEntityTests {
         assertEquals(RecyclingCategory.Test2, material.GetRecyclingCategory());
     }
     @Test
-    @DisplayName("SET Emission Factor check")
-    void CheckThatSetEmissionFactorChangesWork(){
-        material.SetEmissionFactor(0.1f);
-        assertEquals(0.1f, material.GetEmissionFactor());
+    @DisplayName("SET Emission Factor check (valid)")
+    void CheckThatSetEmissionFactorChangesWork() throws Exception{
+            material.SetMass(0.1f);
+            assertEquals(0.1f, material.GetMass());
+    }
+    @Test
+    @DisplayName("SET Emission Factor (invalid)")
+    void CheckThatSetEmissionFactorChangesThrowsException() {
+        assertThrows(Exception.class, () -> material.SetEmissionFactor(-0.1f));
     }
 
     //Self-validate tests
@@ -81,27 +91,25 @@ public class MaterialEntityTests {
         assertTrue(material.ValidateSelf().isEmpty());
     }
     @Test
-    @DisplayName("Validation error exists when Emission Factor is below zero")
+    @DisplayName("Validation error in constructor exists when Emission Factor is below zero")
     void CheckThatValidationErrorWorksWhenEmissionIsLessThanZero(){
-        material = new MaterialEntity(
+        assertThrows(Exception.class, () -> new MaterialEntity(
                 "Test",
                 RecyclingCategory.Test,
                 1,
                 2.01f,
                 -1f
-        );
-        assertFalse(material.ValidateSelf().isEmpty());
+        ));
     }
     @Test
-    @DisplayName("Validation error exists when Mass is below zero")
+    @DisplayName("Validation error in constructor exists when Mass is below zero")
     void CheckThatValidationErrorWorksWhenMassIsLessThanZero(){
-        material = new MaterialEntity(
+        assertThrows(Exception.class, () -> new MaterialEntity(
                 "Test",
                 RecyclingCategory.Test,
                 1,
                 -2.01f,
                 1f
-        );
-        assertFalse(material.ValidateSelf().isEmpty());
+        ));
     }
 }
