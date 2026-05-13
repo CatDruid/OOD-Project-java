@@ -49,13 +49,6 @@ public class MaterialEntityTests {
         assertEquals(3.01f, material.GetEmissionFactor());
     }
 
-    //SET tests
-    @Test
-    @DisplayName("SET Id check")
-    void CheckThatSetIdChangesWork(){
-        material.SetMaterialID(2);
-        assertEquals(2, material.GetID());
-    }
     @Test
     @DisplayName("SET Name check")
     void CheckThatSetNameChangesWork(){

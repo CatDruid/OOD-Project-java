@@ -26,7 +26,6 @@ public class MaterialEntity implements Entity{
     }
 
     //Set Methods
-    public void SetMaterialID(int materialID) {this.materialID = materialID;}
     public void SetName(String name) {this.name = name;}
     public void SetRecyclingCategory(RecyclingCategory recyclingCategory) {this.recyclingCategory = recyclingCategory;}
     public void SetMass(float mass) {this.mass = mass;}
