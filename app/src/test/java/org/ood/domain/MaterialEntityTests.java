@@ -14,9 +14,7 @@ public class MaterialEntityTests {
     @BeforeEach
     void initializeBaseObject() throws Exception {
         material = new MaterialEntity(
-                "Test",
-                RecyclingCategory.Test,
-                1,
+                1, RecyclingCategory.Test, "Test",
                 2.01f,
                 3.01f
         );
@@ -94,9 +92,7 @@ public class MaterialEntityTests {
     @DisplayName("Validation error in constructor exists when Emission Factor is below zero")
     void CheckThatValidationErrorWorksWhenEmissionIsLessThanZero(){
         assertThrows(Exception.class, () -> new MaterialEntity(
-                "Test",
-                RecyclingCategory.Test,
-                1,
+                1, RecyclingCategory.Test, "Test",
                 2.01f,
                 -1f
         ));
@@ -105,9 +101,7 @@ public class MaterialEntityTests {
     @DisplayName("Validation error in constructor exists when Mass is below zero")
     void CheckThatValidationErrorWorksWhenMassIsLessThanZero(){
         assertThrows(Exception.class, () -> new MaterialEntity(
-                "Test",
-                RecyclingCategory.Test,
-                1,
+                1, RecyclingCategory.Test, "Test",
                 -2.01f,
                 1f
         ));
