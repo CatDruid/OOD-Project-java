@@ -39,4 +39,10 @@ public class ProductEntity implements Entity{
     public ProductCategory GetCategory() {return category;}
     public float GetEstimatedLifeSpan() {return estimatedLifespan;}
     public List<MaterialEntity> getMaterial() {return material;}
+    public String GetGuidance() {
+        StringBuilder guidance = new StringBuilder();
+        for(MaterialEntity material : this.material)
+            guidance.append(material.GetGuidance()).append("\n");
+        return guidance.toString();
+    }
 }

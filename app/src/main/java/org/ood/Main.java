@@ -3,10 +3,8 @@
  */
 package org.ood;
 
-import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
-import org.ood.application.RecyclingGuidanceService;
 import org.ood.infrastructure.registries.MaterialRegistry;
 import org.ood.infrastructure.repositories.MaterialRepository;
 import org.ood.infrastructure.registries.ProductRegistry;
@@ -28,8 +26,7 @@ public class Main {
         MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
         ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
-        RecyclingGuidanceService recyclingGuidanceService = new RecyclingGuidanceService();
-        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, recyclingGuidanceService);
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService);
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
         ui.MenuLoop();
