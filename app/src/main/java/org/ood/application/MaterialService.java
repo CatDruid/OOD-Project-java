@@ -22,7 +22,10 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
 
     @Override
     public MaterialCUDSuccessfully Create(MaterialRequest createRequest) throws Exception {
-        MaterialEntity createdEntity = new MaterialEntity(createRequest.name(), createRequest.environmentalImpactValue(), createRequest.category());
+        MaterialEntity createdEntity = new MaterialEntity(createRequest.name(), createRequest.environmentalImpactValue(), createRequest.category(), createRequest.mass(), createRequest.emissionFactor());
+        String validationErrors = createdEntity.ValidateSelf();
+        if(validationErrors.isEmpty() == false)
+            throw new Exception(validationErrors);
         if(this.materialRepository.Add(createdEntity))
             return new MaterialCUDSuccessfully(1, "Create worked!!");
         else
@@ -40,8 +43,13 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
     }
 
     @Override
-    public MaterialCUDSuccessfully Update(MaterialRequest material, int id) throws Exception {
-        MaterialEntity updatedEntity = new MaterialEntity(material.name(), material.environmentalImpactValue(), material.category(), id);
+    public MaterialCUDSuccessfully Update(MaterialRequest updateRequest, int id) throws Exception {
+        MaterialEntity updatedEntity = new MaterialEntity(updateRequest.name(), updateRequest.environmentalImpactValue(), updateRequest.category(), id, updateRequest.mass(), updateRequest.emissionFactor());
+
+        String validationErrors = updatedEntity.ValidateSelf();
+        if(validationErrors.isEmpty() == false)
+            throw new Exception(validationErrors);
+
         if(this.materialRepository.Update(updatedEntity))
             return new MaterialCUDSuccessfully(id, "Update worked!");
         else

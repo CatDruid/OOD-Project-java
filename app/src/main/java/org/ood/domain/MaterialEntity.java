@@ -1,13 +1,12 @@
 package org.ood.domain;
-
 public class MaterialEntity {
     private int materialID;
-    private String name;
+    private final String name;
 
-    private float environmentalImpactValue;
-    private RecyclingCategory recyclingCategory;
-    private float mass;
-    private float emissionFactor;
+    private final float environmentalImpactValue;
+    private final RecyclingCategory recyclingCategory;
+    private final float mass;
+    private final float emissionFactor;
 
 
     public MaterialEntity(String name, float environmentalImpactValue, RecyclingCategory recyclingCategory, float mass, float emissionFactor) {
@@ -34,4 +33,18 @@ public class MaterialEntity {
     public RecyclingCategory GetRecyclingCategory() {return recyclingCategory;}
     public float GetMass() {return mass;}
     public float GetEmissionFactor() {return emissionFactor;}
+
+    /*Constructs and returns the error message if there are any.
+    If the string is empty, however, then there are no errors.
+     */
+    public String ValidateSelf(){
+        StringBuilder err = new StringBuilder();
+        if (this.mass < 0)
+            err.append("Mass cannot be less than zero \n");
+        if (this.environmentalImpactValue < 0)
+            err.append("Environmental Impact Value cannot be less than zero \n");
+        if (this.emissionFactor < 0)
+            err.append("Emission Factor cannot be less than zero \n");
+        return err.toString();
+    }
 }

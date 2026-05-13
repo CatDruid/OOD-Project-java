@@ -5,5 +5,7 @@ import org.ood.domain.RecyclingCategory;
 public record MaterialRequest(
     String name,
     float environmentalImpactValue,
-    RecyclingCategory category
+    RecyclingCategory category,
+    float mass,
+    float emissionFactor
 ) {}
