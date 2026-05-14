@@ -22,10 +22,10 @@ public class StrategyTests {
         SimpleSumStrategy simpleSumStrategy = new SimpleSumStrategy();
 
         List<MaterialEntity> materialEntityList = new ArrayList<>(Arrays.asList(
-                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Test2, 3, 3.5f),
-                new MaterialEntity("Concrete", 2, RecyclingCategory.Test2, 100, 1.2f)
+                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Plastic, 3, 3.5f),
+                new MaterialEntity("Concrete", 2, RecyclingCategory.Residual, 100, 1.2f)
         ));
-        ProductEntity productEntity = new ProductEntity("TestProduct", ProductCategory.Test, 2, materialEntityList);
+        ProductEntity productEntity = new ProductEntity("TestProduct", ProductCategory.Other, 2, materialEntityList);
 
         //Act
         float simpleSumResult = simpleSumStrategy.CalculateImpact(productEntity);
@@ -39,10 +39,10 @@ public class StrategyTests {
         WeightedByLifespanStrategy weightedByLifespanStrategy = new WeightedByLifespanStrategy();
 
         List<MaterialEntity> materialEntityList = new ArrayList<>(Arrays.asList(
-                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Test2, 3, 3.5f),
-                new MaterialEntity("Concrete", 2, RecyclingCategory.Test2, 100, 1.2f)
+                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Plastic, 3, 3.5f),
+                new MaterialEntity("Concrete", 2, RecyclingCategory.Residual, 100, 1.2f)
         ));
-        ProductEntity productEntity = new ProductEntity("TestProduct", ProductCategory.Test, 2, materialEntityList);
+        ProductEntity productEntity = new ProductEntity("TestProduct", ProductCategory.Other, 2, materialEntityList);
 
         float weightedResult = weightedByLifespanStrategy.CalculateImpact(productEntity);
 
@@ -54,11 +54,11 @@ public class StrategyTests {
         SimpleSumStrategy strategy = new SimpleSumStrategy();
 
         List<MaterialEntity> materials = List.of(
-                new MaterialEntity("Steel", 4.8f, RecyclingCategory.Test, 50, 2.5f)
+                new MaterialEntity("Steel", 4.8f, RecyclingCategory.Metal, 50, 2.5f)
         );
 
         ProductEntity product = new ProductEntity("SingleMaterialProduct",
-                ProductCategory.Test, 5, materials);
+                ProductCategory.Kitchenware, 5, materials);
 
         float result = strategy.CalculateImpact(product);
         assertEquals(240.0f, result, 0.001f);
@@ -69,11 +69,11 @@ public class StrategyTests {
         WeightedByLifespanStrategy strategy = new WeightedByLifespanStrategy();
 
         List<MaterialEntity> materials = List.of(
-                new MaterialEntity("Steel", 4.8f, RecyclingCategory.Test, 50, 2.5f)
+                new MaterialEntity("Steel", 4.8f, RecyclingCategory.Metal, 50, 2.5f)
         );
 
         ProductEntity product = new ProductEntity("SingleMaterialProduct",
-                ProductCategory.Test, 5, materials);
+                ProductCategory.Kitchenware, 5, materials);
 
         float result = strategy.CalculateImpact(product);
         assertEquals(48.0f, result, 0.001f);
@@ -84,13 +84,13 @@ public class StrategyTests {
         SimpleSumStrategy strategy = new SimpleSumStrategy();
 
         List<MaterialEntity> materials = new ArrayList<>(Arrays.asList(
-                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Test2, 10, 4.0f),
-                new MaterialEntity("Aluminum", 8.2f, RecyclingCategory.Test, 25, 1.8f),
-                new MaterialEntity("Wood", 1.1f, RecyclingCategory.Test, 80, 0.9f)
+                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Plastic, 10, 4.0f),
+                new MaterialEntity("Aluminum", 8.2f, RecyclingCategory.Metal, 25, 1.8f),
+                new MaterialEntity("Wood", 1.1f, RecyclingCategory.Residual, 80, 0.9f)
         ));
 
         ProductEntity product = new ProductEntity("ComplexProduct",
-                ProductCategory.Test, 8, materials);
+                ProductCategory.Electronics, 8, materials);
 
         float result = strategy.CalculateImpact(product);
         assertEquals(327.0f, result, 0.001f);
@@ -101,13 +101,13 @@ public class StrategyTests {
         WeightedByLifespanStrategy strategy = new WeightedByLifespanStrategy();
 
         List<MaterialEntity> materials = new ArrayList<>(Arrays.asList(
-                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Test2, 10, 4.0f),
-                new MaterialEntity("Aluminum", 8.2f, RecyclingCategory.Test, 25, 1.8f),
-                new MaterialEntity("Wood", 1.1f, RecyclingCategory.Test2, 80, 0.9f)
+                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Plastic, 10, 4.0f),
+                new MaterialEntity("Aluminum", 8.2f, RecyclingCategory.Metal, 25, 1.8f),
+                new MaterialEntity("Wood", 1.1f, RecyclingCategory.Residual, 80, 0.9f)
         ));
 
         ProductEntity product = new ProductEntity("ComplexProduct",
-                ProductCategory.Test, 8, materials);
+                ProductCategory.Electronics, 8, materials);
 
         float result = strategy.CalculateImpact(product);
         assertEquals(40.875f, result, 0.001f);
@@ -118,11 +118,11 @@ public class StrategyTests {
         WeightedByLifespanStrategy strategy = new WeightedByLifespanStrategy();
 
         List<MaterialEntity> materials = List.of(
-                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Test2, 4, 3.5f)
+                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Plastic, 4, 3.5f)
         );
 
         ProductEntity product = new ProductEntity("ZeroLifespanProduct",
-                ProductCategory.Test, 0, materials);
+                ProductCategory.Other, 0, materials);
 
         float result = strategy.CalculateImpact(product);
         assertEquals(0.0f, result, 0.001f);
@@ -133,7 +133,7 @@ public class StrategyTests {
         SimpleSumStrategy strategy = new SimpleSumStrategy();
 
         ProductEntity product = new ProductEntity("EmptyProduct",
-                ProductCategory.Test, 10, new ArrayList<>());
+                ProductCategory.Other, 10, new ArrayList<>());
 
         float result = strategy.CalculateImpact(product);
         assertEquals(0.0f, result, 0.001f);
