@@ -2,10 +2,10 @@ package org.ood.presentation;
 
 import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
-import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.ProductCategory;
 import org.ood.domain.entities.ProductEntity;
-import org.ood.presentation.records.requests.ProductRequest;
+import org.ood.presentation.records.EntityRecords.MaterialRecord;
+import org.ood.presentation.records.EntityRecords.ProductRecord;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,27 +34,27 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
             String name = inputHandler.GetInput(String.class, "What's the product's name?");
             ProductCategory productCategory = inputHandler.categoryPicker(ProductCategory.class);
             float estimatedLifespan = inputHandler.GetInput(Float.class, "What is the estimated lifespan of the product?");
-            List<MaterialEntity> materialEntities = new ArrayList<>();
+            List<MaterialRecord> materialEntities = new ArrayList<>();
             outputFormatter.DisplayMessage("Choose the ID of the desired products materials. Choose again to remove. Type -1 to exit");
-            List<MaterialEntity> allMaterial = materialService.RetrieveAll();
+            List<MaterialRecord> allMaterial = materialService.RetrieveAll();
             while(true){
-                outputFormatter.DisplayMaterials(allMaterial, materialEntities);
+                outputFormatter.PrintMaterials(allMaterial, materialEntities);
                 int selectedID = inputHandler.GetInput(Integer.class, "Choose the id to toggle material(-1 to exit)");
                 if(selectedID == -1) {break;}
                 try{
-                    MaterialEntity toggledMaterial = materialService.RetrieveByID(selectedID);
+                    MaterialRecord toggledMaterial = materialService.RetrieveByID(selectedID);
                     if(materialEntities.contains(toggledMaterial)){materialEntities.remove(toggledMaterial);
                     } else {
                         materialEntities.add(toggledMaterial);
                     }
                 } catch (Exception e) {outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}
             }
-            if(inputHandler.AskYesNo("Is everything correct?")) {try {productService.Create(new ProductRequest(name,productCategory,estimatedLifespan,materialEntities));} catch( Exception e) { outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}}
+            if(inputHandler.AskYesNo("Is everything correct?")) {try {productService.Create(new ProductRecord(-1, name,productCategory,estimatedLifespan,materialEntities));} catch(Exception e) { outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}}
         }
     }
 
     public void RetrieveAll() {
-        List<ProductEntity> productList = productService.RetrieveAll();
+        List<ProductRecord> productList = productService.RetrieveAll();
         if(productList != null){
             outputFormatter.PrintProducts(productList);
         } else {
@@ -73,11 +73,11 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
         if(inputHandler.AskYesNo("Do you want to print the IDs before choosing?")) {RetrieveAll();}
         outputFormatter.DisplayMessage("What ID do you want to edit?");
         int id = inputHandler.GetInput(Integer.class);
-        ProductEntity productEntity = productService.RetrieveByID(id);
-        String name = productEntity.GetName();
-        ProductCategory category = productEntity.GetCategory();
-        float estimatedLifespan = productEntity.GetEstimatedLifeSpan();
-        List<MaterialEntity> materials = productEntity.getMaterial();
+        ProductRecord productRecord = productService.RetrieveByID(id);
+        String name = productRecord.name();
+        ProductCategory category = productRecord.category();
+        float estimatedLifespan = productRecord.estimatedLifespan();
+        List<MaterialRecord> materials = productRecord.materials();
         List<String> choices = Arrays.asList("Name", "Category", "EstimatedLifespan","Add Material by ID", "Finish");
         boolean loop = true;
         while(loop){
@@ -86,14 +86,14 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
                 case 1 -> category = inputHandler.categoryPicker(productService.GetCategory());
                 case 2 -> estimatedLifespan = inputHandler.GetInput(Float.class);
                 case 3 -> {
-                    List<MaterialEntity> allMaterial = materialService.RetrieveAll();
-                    List<MaterialEntity> currentMaterials = productEntity.getMaterial();
+                    List<MaterialRecord> allMaterial = materialService.RetrieveAll();
+                    List<MaterialRecord> currentMaterials = productRecord.materials();
                     while(true){
-                        outputFormatter.DisplayMaterials(allMaterial, currentMaterials);
+                        outputFormatter.PrintMaterials(allMaterial, currentMaterials);
                         int selectedID = inputHandler.GetInput(Integer.class, "Choose the id to toggle material(-1 to exit)");
                         if(selectedID == -1) {break;}
                         try{
-                            MaterialEntity toggledMaterial = materialService.RetrieveByID(selectedID);
+                            MaterialRecord toggledMaterial = materialService.RetrieveByID(selectedID);
                             if(currentMaterials.contains(toggledMaterial)){currentMaterials.remove(toggledMaterial);
                             } else {
                                 currentMaterials.add(toggledMaterial);
@@ -103,7 +103,7 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
                 }
                 case 4 -> {if(inputHandler.AskYesNo()) {
                     try {
-                    productService.Update(new ProductRequest(name, category, estimatedLifespan, materials), productEntity.GetID());
+                    productService.Update(new ProductRecord(productRecord.id(), name, category, estimatedLifespan, materials));
                     } catch (Exception e) {outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());}
                     loop = false;
                 }}
@@ -117,7 +117,7 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
         if(inputHandler.AskYesNo("Do you want to print the IDs before choosing?")) {RetrieveAll();}
         outputFormatter.DisplayMessage("What product would you like to delete(ID):");
         int id = inputHandler.GetInput(Integer.class);
-        outputFormatter.DisplayMessage("You are about to delete " + productService.RetrieveByID(id).GetName());
+        outputFormatter.DisplayMessage("You are about to delete " + productService.RetrieveByID(id).name());
         outputFormatter.DisplayWarningMessage("This action is irreversible!");
         if(inputHandler.AskYesNo()) {
             try {

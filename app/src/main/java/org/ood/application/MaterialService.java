@@ -3,11 +3,13 @@ import org.ood.domain.RepositoryInterface;
 import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.RegistryInterface;
 import org.ood.presentation.records.Results.MaterialCUDSuccessfully;
-import org.ood.presentation.records.requests.MaterialRequest;
+import org.ood.presentation.records.EntityRecords.MaterialRecord;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class MaterialService extends CRUDServiceAbstract<MaterialEntity, MaterialRequest, MaterialCUDSuccessfully> {
+public class MaterialService extends CRUDServiceAbstract<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> {
     /**Dependency injections for initialization.
      * @param materialRegistry Registry of materials in memory.
      * @param materialRepository Repository for long-term storage.
@@ -21,7 +23,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
     private final RepositoryInterface<MaterialEntity> materialRepository;
 
     @Override
-    public MaterialCUDSuccessfully Create(MaterialRequest createRequest) throws Exception {
+    public MaterialCUDSuccessfully Create(MaterialRecord createRequest) throws Exception {
         int newId = materialRegistry.RetrieveAll().stream().mapToInt(MaterialEntity::GetID)
                 .max()
                 .orElse(0) + 1;
@@ -35,25 +37,32 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
     }
 
     @Override
-    public List<MaterialEntity> RetrieveAll() {
+    public List<MaterialRecord> RetrieveAll() {
         try {
-            return this.materialRegistry.RetrieveAll();
+            return this.materialRegistry.RetrieveAll().stream()
+                    .map(MaterialRecord::fromEntity)
+                    .sorted(Comparator.comparingInt(MaterialRecord::id))
+                    .toList();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public MaterialEntity RetrieveByID(int id) {
-        return this.materialRegistry.RetrieveByID(id);
+    public MaterialRecord RetrieveByID(int id) {
+        MaterialEntity entity = this.materialRegistry.RetrieveByID(id);
+        if(entity != null)
+            return MaterialRecord.fromEntity(entity);
+        else
+            return null;
     }
 
     @Override
-    public MaterialCUDSuccessfully Update(MaterialRequest updateRequest, int id) throws Exception {
-        MaterialEntity updatedEntity = new MaterialEntity(id, updateRequest.name(), updateRequest.category(), updateRequest.mass(), updateRequest.emissionFactor());
+    public MaterialCUDSuccessfully Update(MaterialRecord updateRequest) throws Exception {
+        MaterialEntity updatedEntity = new MaterialEntity(updateRequest.id(), updateRequest.name(), updateRequest.category(), updateRequest.mass(), updateRequest.emissionFactor());
         if(this.materialRegistry.Update(updatedEntity)) {
             this.materialRepository.Save(this.materialRegistry.RetrieveAll());
-            return new MaterialCUDSuccessfully(id, "Update worked!");
+            return new MaterialCUDSuccessfully(updateRequest.id(), "Update worked!");
         } else
             throw new Exception("Ooops, something went wrong");
     }
