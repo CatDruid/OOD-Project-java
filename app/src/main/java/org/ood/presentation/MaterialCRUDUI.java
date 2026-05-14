@@ -4,7 +4,7 @@ import org.ood.application.CRUDServiceInterface;
 import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.RecyclingCategory;
 import org.ood.presentation.records.Results.MaterialCUDSuccessfully;
-import org.ood.presentation.records.requests.MaterialRequest;
+import org.ood.presentation.records.EntityRecords.MaterialRecord;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +16,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
      * @param outputFormatter Formatter for Output operations.
      * @param materialService Service for operations.
      * */
-    public MaterialCRUDUI(InputHandler inputHandler, OutputFormatter outputFormatter, CRUDServiceInterface<MaterialEntity, MaterialRequest, MaterialCUDSuccessfully> materialService){
+    public MaterialCRUDUI(InputHandler inputHandler, OutputFormatter outputFormatter, CRUDServiceInterface<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> materialService){
         this.inputHandler = inputHandler;
         this.outputFormatter = outputFormatter;
         this.materialService = materialService;
@@ -24,7 +24,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
 
     private final InputHandler inputHandler;
     private final OutputFormatter outputFormatter;
-    private final CRUDServiceInterface<MaterialEntity, MaterialRequest, MaterialCUDSuccessfully> materialService;
+    private final CRUDServiceInterface<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> materialService;
     private final List<String> menuOptions = Arrays.asList("Get all materials", "Get a material by ID", "Create New Material", "Update Material", "Delete Material", "Exit");
     private boolean looping = true;
 
@@ -32,8 +32,8 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     protected void RetrieveAll() {
         this.outputFormatter.DisplayMessage("Displaying all materials");
         try {
-            List<MaterialEntity> materials = this.materialService.RetrieveAll();
-            outputFormatter.DisplayMaterials(materials);
+            List<MaterialRecord> materials = this.materialService.RetrieveAll();
+            outputFormatter.PrintMaterials(materials);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -42,8 +42,8 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         this.outputFormatter.DisplayMessage("Which ID does the material have?");
         int id = inputHandler.GetInput(Integer.class);
         try {
-            MaterialEntity material = this.materialService.RetrieveByID(id);
-            outputFormatter.DisplayMaterial(material);
+            MaterialRecord material = this.materialService.RetrieveByID(id);
+            outputFormatter.PrintMaterial(material);
         } catch (Exception e) {
             outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
         }
@@ -62,7 +62,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
                         .collect(Collectors.toList()));
         RecyclingCategory category = RecyclingCategory.values()[categoryIndex];
         try {
-            MaterialCUDSuccessfully successMessage = this.materialService.Create(new MaterialRequest(name, category, mass, emissionFactor));
+            MaterialCUDSuccessfully successMessage = this.materialService.Create(new MaterialRecord(null, name, category, mass, emissionFactor));
             outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
         } catch (Exception e) {
             outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
@@ -76,11 +76,11 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         this.outputFormatter.DisplayMessage("Which ID do you want to edit?");
         int id = inputHandler.GetInput(Integer.class);
         try{
-            MaterialEntity material = this.materialService.RetrieveByID(id);
-            String name = material.GetName();
-            RecyclingCategory category = material.GetRecyclingCategory();
-            Float mass = material.GetMass();
-            Float emissionFactor = material.GetEmissionFactor();
+            MaterialRecord material = this.materialService.RetrieveByID(id);
+            String name = material.name();
+            RecyclingCategory category = material.category();
+            Float mass = material.mass();
+            Float emissionFactor = material.emissionFactor();
             List<String> choices = Arrays.asList("Name", "Category", "Mass", "Emission Factor", "Finish");
             boolean loop = true;
             while(loop){
@@ -108,7 +108,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
                     case 4: {
                         if(inputHandler.AskYesNo()){
                             loop = false;
-                            MaterialCUDSuccessfully successMessage = materialService.Update(new MaterialRequest(name, category, mass, emissionFactor), id);
+                            MaterialCUDSuccessfully successMessage = materialService.Update(new MaterialRecord(id, name, category, mass, emissionFactor));
                             outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
                         }
                     }
@@ -124,7 +124,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
             RetrieveAll();
         this.outputFormatter.DisplayMessage("Which material do you want to delete?");
         int id = inputHandler.GetInput(Integer.class);
-        outputFormatter.DisplayMessage("You are about to delete " + materialService.RetrieveByID(id).GetName());
+        outputFormatter.DisplayMessage("You are about to delete " + materialService.RetrieveByID(id).name());
         outputFormatter.DisplayWarningMessage("This action is irreversible!");
         if(inputHandler.AskYesNo()) {
             try {

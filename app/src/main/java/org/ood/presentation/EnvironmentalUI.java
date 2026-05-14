@@ -6,7 +6,7 @@ import java.util.List;
 import org.ood.application.EnvironmentalFactory;
 import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.ProductService;
-import org.ood.domain.entities.ProductEntity;
+import org.ood.presentation.records.EntityRecords.ProductRecord;
 import org.ood.presentation.records.Results.ImpactResult;
 
 public class EnvironmentalUI implements UIInterface {
@@ -67,7 +67,7 @@ public class EnvironmentalUI implements UIInterface {
 
     public void RequestGuidance() {
         try{
-            List<ProductEntity> productList = productService.RetrieveAll();
+            List<ProductRecord> productList = productService.RetrieveAll();
             if(productList != null){
                 outputFormatter.PrintProducts(productList);
                 // Get the product's id

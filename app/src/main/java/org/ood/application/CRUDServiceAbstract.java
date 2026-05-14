@@ -5,15 +5,15 @@ import org.ood.domain.RegistryInterface;
 
 import java.util.List;
 
-public abstract class CRUDServiceAbstract<T, CUDRequest extends Record, CUDResponse extends Record> implements CRUDServiceInterface<T, CUDRequest, CUDResponse> {
+public abstract class CRUDServiceAbstract<T, TRecord extends Record, CUDResponse extends Record> implements CRUDServiceInterface<T, TRecord, CUDResponse> {
     protected RepositoryInterface<T> repository;
     protected RegistryInterface<T> registry;
 
     @Override
-    public abstract CUDResponse Create(CUDRequest createRequest) throws Exception;
-    public List<T> RetrieveAll() {return null;}
-    public T RetrieveByID(int id) { return null;}
-    public abstract CUDResponse Update(CUDRequest updateRequest, int id) throws Exception;
+    public abstract CUDResponse Create(TRecord createRequest) throws Exception;
+    public List<TRecord> RetrieveAll() {return null;}
+    public TRecord RetrieveByID(int id) { return null;}
+    public abstract CUDResponse Update(TRecord updateRequest) throws Exception;
     public abstract CUDResponse Delete(int id) throws Exception;
     public abstract boolean IdExists(int id);
 }

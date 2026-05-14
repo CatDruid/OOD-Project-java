@@ -1,7 +1,7 @@
 package org.ood.presentation;
 
-import org.ood.domain.entities.MaterialEntity;
-import org.ood.domain.entities.ProductEntity;
+import org.ood.presentation.records.EntityRecords.MaterialRecord;
+import org.ood.presentation.records.EntityRecords.ProductRecord;
 
 import java.util.List;
 
@@ -18,46 +18,46 @@ public class OutputFormatter {
         System.out.println("\u001B[31m" + "ERROR " + errorcode + ": " + message + "\u001B[0m");
     }
 
-    public void PrintProduct(ProductEntity productEntity) {
-        System.out.println(productEntity.GetName() + ":\n"
-                + "ID: " + productEntity.GetID() + "\n"
-                + "Category: " + productEntity.GetCategory() + "\n"
-                + "Estimated lifespan: " + productEntity.GetEstimatedLifeSpan() + "\n"
+    public void PrintProduct(ProductRecord productEntity) {
+        System.out.println(productEntity.name() + ":\n"
+                + "ID: " + productEntity.id() + "\n"
+                + "Category: " + productEntity.category() + "\n"
+                + "Estimated lifespan: " + productEntity.estimatedLifespan() + "\n"
         );
         System.out.println("Materials:");
-        List<MaterialEntity> materials = productEntity.getMaterial();
-        for (MaterialEntity material : materials) {
-            System.out.println(material.GetName());
+        List<MaterialRecord> materials = productEntity.materials();
+        for (MaterialRecord material : materials) {
+            System.out.println(material.name());
         }
     }
 
-    public void PrintProducts(List<ProductEntity>productEntityList) {
+    public void PrintProducts(List<ProductRecord>productEntityList) {
         System.out.println("Products:");
-        for(ProductEntity productEntity : productEntityList) {
-            System.out.println("(" + productEntity.GetID() + ")  " + productEntity.GetName());
+        for(ProductRecord productEntity : productEntityList) {
+            System.out.println("(" + productEntity.id() + ")  " + productEntity.name());
         }
     }
 
-    public void DisplayMaterials(List<MaterialEntity> materialEntityList){
+    public void PrintMaterials(List<MaterialRecord> materialEntityList){
         System.out.println("Materials:");
-        for(MaterialEntity entity : materialEntityList){
-            System.out.println("(" + entity.GetID() + ")  " + entity.GetName());
+        for(MaterialRecord entity : materialEntityList){
+            System.out.println("(" + entity.id() + ")  " + entity.name());
         }
     }
 
-    public void DisplayMaterials(List<MaterialEntity> materialEntityList, List<MaterialEntity> currentMaterialList){
+    public void PrintMaterials(List<MaterialRecord> materialEntityList, List<MaterialRecord> currentMaterialList){
         System.out.println("Materials(x means selected.):");
-        for(MaterialEntity entity : materialEntityList){
+        for(MaterialRecord entity : materialEntityList){
             String brackets;
             if(currentMaterialList.contains(entity)) {brackets = "(x)";} else {brackets = "()";}
-            System.out.println(brackets + "    (" + entity.GetID() + ")  " + entity.GetName());
+            System.out.println(brackets + "    (" + entity.id() + ")  " + entity.name());
         }
     }
 
-    public void DisplayMaterial(MaterialEntity material){
-        System.out.println(material.GetName() + ":\n"
-                + "ID: " + material.GetID() + "\n"
-                + "Category: " + material.GetRecyclingCategory() + "\n"
+    public void PrintMaterial(MaterialRecord material){
+        System.out.println(material.name() + ":\n"
+                + "ID: " + material.id() + "\n"
+                + "Category: " + material.category() + "\n"
         );
     }
 }
