@@ -1,5 +1,6 @@
 package org.ood.domain.impactStrategy;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,120 +10,74 @@ import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.entities.ProductEntity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 
 
 public class StrategyTests {
-    @Test
-    void testRawPCFCalculationFromAbstract() {
-        // SimpleSumStrategy is just the RawPCF without modification so it will be used to test the RawPCF.
 
-        //Arrange
-        SimpleSumStrategy simpleSumStrategy = new SimpleSumStrategy();
+    private List<MaterialEntity> dualMaterial;
+    private List<MaterialEntity> singleMaterial;
 
-        List<MaterialEntity> materialEntityList = new ArrayList<>(Arrays.asList(
-                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Plastic, 3, 3.5f),
-                new MaterialEntity("Concrete", 2, RecyclingCategory.Residual, 100, 1.2f)
+    @BeforeEach
+     void prepareTests() throws Exception {
+         dualMaterial = new ArrayList<>(List.of(
+                new MaterialEntity("Plastic", RecyclingCategory.Plastic, 3.0f, 3.5f),
+                new MaterialEntity("Concrete", RecyclingCategory.Residual, 100.0f, 1.2f)
         ));
-        ProductEntity productEntity = new ProductEntity("TestProduct", ProductCategory.Other, 2, materialEntityList);
-
-        //Act
-        float simpleSumResult = simpleSumStrategy.CalculateImpact(productEntity);
-
-        //Assert
-        assertEquals(10.5f , simpleSumResult, 0.001f);
-    }
-
-    @Test
-    void weightedByLifespanStrategy() {
-        WeightedByLifespanStrategy weightedByLifespanStrategy = new WeightedByLifespanStrategy();
-
-        List<MaterialEntity> materialEntityList = new ArrayList<>(Arrays.asList(
-                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Plastic, 3, 3.5f),
-                new MaterialEntity("Concrete", 2, RecyclingCategory.Residual, 100, 1.2f)
-        ));
-        ProductEntity productEntity = new ProductEntity("TestProduct", ProductCategory.Other, 2, materialEntityList);
-
-        float weightedResult = weightedByLifespanStrategy.CalculateImpact(productEntity);
-
-        assertEquals(5.25f, weightedResult, 0.001f);
+         singleMaterial = new ArrayList<>(List.of(new MaterialEntity("Steel", RecyclingCategory.Metal, 50, 2.5f)));
     }
 
     @Test
     void testRawPCF_SingleMaterial() {
         SimpleSumStrategy strategy = new SimpleSumStrategy();
 
-        List<MaterialEntity> materials = List.of(
-                new MaterialEntity("Steel", 4.8f, RecyclingCategory.Metal, 50, 2.5f)
-        );
-
         ProductEntity product = new ProductEntity("SingleMaterialProduct",
-                ProductCategory.Kitchenware, 5, materials);
+                ProductCategory.Kitchenware, 5, singleMaterial);
 
         float result = strategy.CalculateImpact(product);
-        assertEquals(240.0f, result, 0.001f);
+        assertEquals(125.0f, result, 0.001f);
     }
 
     @Test
     void testWeightedByLifespan_SingleMaterial() {
         WeightedByLifespanStrategy strategy = new WeightedByLifespanStrategy();
 
-        List<MaterialEntity> materials = List.of(
-                new MaterialEntity("Steel", 4.8f, RecyclingCategory.Metal, 50, 2.5f)
-        );
-
         ProductEntity product = new ProductEntity("SingleMaterialProduct",
-                ProductCategory.Kitchenware, 5, materials);
+                ProductCategory.Kitchenware, 5, singleMaterial);
 
         float result = strategy.CalculateImpact(product);
-        assertEquals(48.0f, result, 0.001f);
+        assertEquals(25.0f, result, 0.001f);
     }
 
     @Test
     void testRawPCF_MultipleMaterials() {
         SimpleSumStrategy strategy = new SimpleSumStrategy();
 
-        List<MaterialEntity> materials = new ArrayList<>(Arrays.asList(
-                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Plastic, 10, 4.0f),
-                new MaterialEntity("Aluminum", 8.2f, RecyclingCategory.Metal, 25, 1.8f),
-                new MaterialEntity("Wood", 1.1f, RecyclingCategory.Residual, 80, 0.9f)
-        ));
-
         ProductEntity product = new ProductEntity("ComplexProduct",
-                ProductCategory.Electronics, 8, materials);
+                ProductCategory.Electronics, 8, dualMaterial);
 
         float result = strategy.CalculateImpact(product);
-        assertEquals(327.0f, result, 0.001f);
+        assertEquals(130.5f, result, 0.001f);
     }
 
     @Test
     void testWeightedByLifespan_MultipleMaterials() {
         WeightedByLifespanStrategy strategy = new WeightedByLifespanStrategy();
 
-        List<MaterialEntity> materials = new ArrayList<>(Arrays.asList(
-                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Plastic, 10, 4.0f),
-                new MaterialEntity("Aluminum", 8.2f, RecyclingCategory.Metal, 25, 1.8f),
-                new MaterialEntity("Wood", 1.1f, RecyclingCategory.Residual, 80, 0.9f)
-        ));
-
         ProductEntity product = new ProductEntity("ComplexProduct",
-                ProductCategory.Electronics, 8, materials);
+                ProductCategory.Electronics, 8, dualMaterial);
 
         float result = strategy.CalculateImpact(product);
-        assertEquals(40.875f, result, 0.001f);
+        assertEquals(16.3125f, result, 0.001f);
     }
 
     @Test
     void testWeightedByLifespan_ZeroLifespan() {
         WeightedByLifespanStrategy strategy = new WeightedByLifespanStrategy();
 
-        List<MaterialEntity> materials = List.of(
-                new MaterialEntity("Plastic", 3.5f, RecyclingCategory.Plastic, 4, 3.5f)
-        );
-
         ProductEntity product = new ProductEntity("ZeroLifespanProduct",
-                ProductCategory.Other, 0, materials);
+                ProductCategory.Other, 0, singleMaterial);
 
         float result = strategy.CalculateImpact(product);
         assertEquals(0.0f, result, 0.001f);
