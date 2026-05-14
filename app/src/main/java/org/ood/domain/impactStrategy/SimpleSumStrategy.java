@@ -1,6 +1,5 @@
 package org.ood.domain.impactStrategy;
 
-import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.entities.ProductEntity;
 
 public class SimpleSumStrategy extends AbstractImpactStrategy {
