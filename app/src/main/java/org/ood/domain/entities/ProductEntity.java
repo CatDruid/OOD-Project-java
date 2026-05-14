@@ -18,7 +18,7 @@ public class ProductEntity implements Entity{
         this.material = material;
     }
 
-    public ProductEntity(String name, ProductCategory category, float estimatedLifespan, List<MaterialEntity> material, int productID) {
+    public ProductEntity(int productID, String name, ProductCategory category, float estimatedLifespan, List<MaterialEntity> material) {
         this.productID = productID;
         this.name = name;
         this.category = category;
