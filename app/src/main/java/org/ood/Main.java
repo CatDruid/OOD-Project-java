@@ -11,8 +11,6 @@ import org.ood.infrastructure.registries.ProductRegistry;
 import org.ood.infrastructure.repositories.JSONProductRepository;
 import org.ood.presentation.*;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Main {
