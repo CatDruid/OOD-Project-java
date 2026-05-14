@@ -11,11 +11,21 @@ import org.ood.infrastructure.registries.ProductRegistry;
 import org.ood.infrastructure.repositories.JSONProductRepository;
 import org.ood.presentation.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Main {
     static void main(String[] args) {
-        String JSONBasePath = "C:/OOD-Project";
+        String os = System.getProperty("os.name").toLowerCase();
+        String JSONBasePath;
+
+        if (os.contains("win")) {
+            JSONBasePath = "C:/OOD-Project";
+        } else {
+            // Linux /home/user/OOD-Project
+            JSONBasePath = "~/OOD-Project";
+        }
 
         // Helper classes
         Scanner scanner = new Scanner(System.in);
