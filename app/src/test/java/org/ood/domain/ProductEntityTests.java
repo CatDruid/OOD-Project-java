@@ -56,7 +56,7 @@ class ProductEntityTests {
     @Test
     void constructor_withID_storesAllFieldsIncludingID() {
         ProductEntity product = new ProductEntity(
-                "Solar Panel", ProductCategory.Electronics, 20.0f, twoMaterials, 42);
+                42, "Solar Panel", ProductCategory.Electronics, 20.0f, twoMaterials);
 
         assertEquals(42,                          product.GetID());
         assertEquals("Solar Panel",               product.GetName());
@@ -199,7 +199,7 @@ class ProductEntityTests {
     @Test
     void constructorWithID_assignsCorrectIDWhenZero() {
         ProductEntity product = new ProductEntity(
-                "Free Sample", ProductCategory.Other, 0.5f, twoMaterials, 0);
+                0, "Free Sample", ProductCategory.Other, 0.5f, twoMaterials);
 
         assertEquals(0, product.GetID());
     }
