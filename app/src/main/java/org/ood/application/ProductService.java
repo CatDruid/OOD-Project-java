@@ -23,7 +23,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
     public ProductCUDSuccessfully Create(ProductRequest createRequest) throws Exception {
         //This will probably be different for an update but it is simply for it to work right now until a proper service implementation.
         ProductEntity createdEntity = new ProductEntity(createRequest.name(), createRequest.category(), createRequest.estimatedLifespan(), createRequest.materials());
-        if(this.productRepository.Add(createdEntity))
+        if(this.productRegistry.Add(createdEntity))
             return new ProductCUDSuccessfully(1, "Create worked!!");
         else
             throw new Exception("Ooops, something went wrong");
@@ -31,19 +31,23 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
 
     @Override
     public List<ProductEntity> RetrieveAll() {
-        return this.productRepository.RetrieveAll();
+        try {
+            return this.productRegistry.RetrieveAll();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public ProductEntity RetrieveByID(int id) {
-        return this.productRepository.RetrieveByID(id);
+        return this.productRegistry.RetrieveByID(id);
     }
 
     @Override
     public ProductCUDSuccessfully Update(ProductRequest updateRequest, int id)  throws Exception {
         //This will probably be different for an update but it is simply for it to work right now until a proper service implementation.
         ProductEntity updatedEntity = new ProductEntity(updateRequest.name(), updateRequest.category(), updateRequest.estimatedLifespan(), updateRequest.materials(), id);
-        if(this.productRepository.Update(updatedEntity))
+        if(this.productRegistry.Update(updatedEntity))
             return new ProductCUDSuccessfully(id, "Update worked!");
         else
             throw new Exception("Ooops, something went wrong");
@@ -51,7 +55,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
 
     @Override
     public ProductCUDSuccessfully Delete(int id)  throws Exception {
-        if(this.productRepository.Delete(id))
+        if(this.productRegistry.Delete(id))
             return new ProductCUDSuccessfully(id, "Delete worked!");
         else
             throw new Exception("Ooops, something went wrong");
@@ -59,7 +63,12 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
 
     @Override
     public boolean IdExists(int id) {
-        return this.productRepository.RetrieveByID(id) != null;
+        return this.productRegistry.RetrieveByID(id) != null;
+    }
+
+    public String GetGuidance(int id){
+        ProductEntity product = this.RetrieveByID(id);
+        return product.GetGuidance();
     }
 
     public Class<ProductCategory> GetCategory() {return ProductCategory.class;}

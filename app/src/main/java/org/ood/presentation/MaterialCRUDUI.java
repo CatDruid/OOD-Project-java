@@ -51,8 +51,10 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     protected void Create() {
         this.outputFormatter.DisplayMessage("What is the material's name?");
         String name = inputHandler.GetInput(String.class);
-        this.outputFormatter.DisplayMessage("What is the material's impact value?");
-        Float value = inputHandler.GetInput(Float.class);
+        this.outputFormatter.DisplayMessage("What is the material's mass?");
+        Float mass = inputHandler.GetInput(Float.class);
+        this.outputFormatter.DisplayMessage("What is the material's emission factor?");
+        Float emissionFactor = inputHandler.GetInput(Float.class);
         this.outputFormatter.DisplayMessage("What is the material's category?");
         int categoryIndex = this.inputHandler.SelectfromRange(
                 Arrays.stream(RecyclingCategory.values())
@@ -60,7 +62,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
                         .collect(Collectors.toList()));
         RecyclingCategory category = RecyclingCategory.values()[categoryIndex];
         try {
-            MaterialCUDSuccessfully successMessage = this.materialService.Create(new MaterialRequest(name, value, category));
+            MaterialCUDSuccessfully successMessage = this.materialService.Create(new MaterialRequest(name, category, mass, emissionFactor));
             outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
         } catch (Exception e) {
             outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
@@ -76,9 +78,10 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         try{
             MaterialEntity material = this.materialService.RetrieveByID(id);
             String name = material.GetName();
-            Float impactValue = material.GetEnvironmentalImpactValue();
             RecyclingCategory category = material.GetRecyclingCategory();
-            List<String> choices = Arrays.asList("Name", "Category", "Impact Value", "Finish");
+            Float mass = material.GetMass();
+            Float emissionFactor = material.GetEmissionFactor();
+            List<String> choices = Arrays.asList("Name", "Category", "Mass", "Emission Factor", "Finish");
             boolean loop = true;
             while(loop){
                 switch (inputHandler.SelectfromRange(choices)){
@@ -95,13 +98,17 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
                         category = RecyclingCategory.values()[categoryIndex];
                         break;
                     case 2:
-                        this.outputFormatter.DisplayMessage("What is the material's new impact value?");
-                        impactValue = inputHandler.GetInput(Float.class);
+                        this.outputFormatter.DisplayMessage("What is the material's new mass?");
+                        mass = inputHandler.GetInput(Float.class);
                         break;
-                    case 3: {
+                    case 3:
+                        this.outputFormatter.DisplayMessage("What is the material's new emission factor?");
+                        emissionFactor = inputHandler.GetInput(Float.class);
+                        break;
+                    case 4: {
                         if(inputHandler.AskYesNo()){
                             loop = false;
-                            MaterialCUDSuccessfully successMessage = materialService.Update(new MaterialRequest(name, impactValue, category), id);
+                            MaterialCUDSuccessfully successMessage = materialService.Update(new MaterialRequest(name, category, mass, emissionFactor), id);
                             outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
                         }
                     }

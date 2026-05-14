@@ -56,8 +56,10 @@ public class ProductCRUIDUI extends UICRUDAbstract<ProductEntity> {
     public void RetrieveAll() {
         List<ProductEntity> productList = productService.RetrieveAll();
         if(productList != null){
-        outputFormatter.PrintProducts(productList);
-        } else {outputFormatter.DisplayWarningMessage("The productlist is empty.");}
+            outputFormatter.PrintProducts(productList);
+        } else {
+            outputFormatter.DisplayWarningMessage("The Product list is empty.");
+        }
     }
 
     public void RetrieveByID() {

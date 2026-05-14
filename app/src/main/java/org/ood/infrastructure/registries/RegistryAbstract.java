@@ -1,0 +1,93 @@
+package org.ood.infrastructure.registries;
+
+import org.ood.domain.RegistryInterface;
+import org.ood.domain.RepositoryInterface;
+import org.ood.domain.entities.Entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class RegistryAbstract<T extends Entity> implements RegistryInterface<T> {
+    private List<T> items;
+
+    public RegistryAbstract() {
+        items = new ArrayList<>();
+    }
+
+    public RegistryAbstract(RepositoryInterface<T> repo) {
+        try {
+            items = repo.Load();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void Load(RepositoryInterface<T> repo) {
+        // TODO error handling if already something inside registry?
+        try {
+            items = repo.Load();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean Add(T obj) {
+        if(obj == null) {return false;}
+        try {
+            if(!items.contains(obj)) {
+                items.add(obj);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public List<T> RetrieveAll() {
+        return items;
+    }
+
+    public T RetrieveByID(int id) {
+        for (T item : items) {
+            if (item.GetID() == id) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public boolean Update(T newItem) {
+        if(newItem == null || !IDExists(newItem.GetID())) {return false;}
+        int id = newItem.GetID();
+        T oldItem = RetrieveByID(id);
+        if(Delete(id)) {
+            if(Add(newItem)) {
+                return true;
+            } else {
+                Add(oldItem);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean Delete(int id) {
+        T item = RetrieveByID(id);
+        if(item == null) {return false;}
+        try {
+            items.remove(item);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean IDExists(int id) {
+        for (T item : items) {
+            if (id == item.GetID()) {
+                return true;
+            }
+        }
+        return false;
+    }
+}

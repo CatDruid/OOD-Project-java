@@ -58,7 +58,6 @@ public class OutputFormatter {
         System.out.println(material.GetName() + ":\n"
                 + "ID: " + material.GetID() + "\n"
                 + "Category: " + material.GetRecyclingCategory() + "\n"
-                + "Impact Value: " + material.GetEnvironmentalImpactValue() + "\n"
         );
     }
 }

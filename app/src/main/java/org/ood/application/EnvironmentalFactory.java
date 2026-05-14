@@ -24,7 +24,7 @@ public class EnvironmentalFactory {
     public static List<String> GetStringStrategies() {
 
         // If there are no strategies return null
-        if (strategies.isEmpty()) {return new ArrayList<>();}
+        if (strategies == null || strategies.isEmpty()) {return new ArrayList<>();}
 
         // Get the simple name from all the strategies and add them to the list
         List<String> StringStrategies = new ArrayList<>();

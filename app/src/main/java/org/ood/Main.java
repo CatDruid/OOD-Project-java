@@ -3,36 +3,41 @@
  */
 package org.ood;
 
-import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
-import org.ood.application.RecyclingGuidanceService;
-import org.ood.infrastructure.MaterialRegistry;
-import org.ood.infrastructure.MaterialRepository;
-import org.ood.infrastructure.ProductRegistry;
-import org.ood.infrastructure.ProductRepository;
+import org.ood.infrastructure.registries.MaterialRegistry;
+import org.ood.infrastructure.repositories.JSONMaterialRepository;
+import org.ood.infrastructure.registries.ProductRegistry;
+import org.ood.infrastructure.repositories.JSONProductRepository;
 import org.ood.presentation.*;
 
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    static void main(String[] args) {
+        String JSONFilePath = "C:/OOD-Project";
+
+        // Helper classes
         Scanner scanner = new Scanner(System.in);
         OutputFormatter outputFormatter = new OutputFormatter();
         InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
-        ProductRegistry productRegistry = new ProductRegistry();
-        ProductRepository productRepository = new ProductRepository();
+
+        // Product repo, registry and service
+        JSONProductRepository productRepository = new JSONProductRepository(JSONFilePath);
+        ProductRegistry productRegistry = new ProductRegistry(productRepository);
         ProductService productService = new ProductService(productRegistry, productRepository);
-        MaterialRepository materialRepository = new MaterialRepository();
-        MaterialRegistry materialRegistry = new MaterialRegistry();
+
+        // Material repo, registry and service
+        JSONMaterialRepository materialRepository = new JSONMaterialRepository(JSONFilePath);
+        MaterialRegistry materialRegistry = new MaterialRegistry(materialRepository);
         MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
+        // UI's
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
         ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
-        EnvironmentalImpactService environmentalImpactService = new EnvironmentalImpactService();
-        RecyclingGuidanceService recyclingGuidanceService = new RecyclingGuidanceService();
-        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, environmentalImpactService, recyclingGuidanceService);
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService);
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
+        // Start the application
         ui.MenuLoop();
     }
 }
