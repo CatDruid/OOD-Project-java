@@ -15,7 +15,7 @@ import java.util.List;
 
 public class StrategyTests {
     @Test
-    public void testRawPCFCalculationFromAbstract() {
+    void testRawPCFCalculationFromAbstract() {
         // SimpleSumStrategy is just the RawPCF without modification so it will be used to test the RawPCF.
 
         //Arrange
@@ -28,13 +28,14 @@ public class StrategyTests {
         ProductEntity productEntity = new ProductEntity("TestProduct", ProductCategory.Test, 2, materialEntityList);
 
         //Act
-        Float simpleSumResult = simpleSumStrategy.CalculateImpact(productEntity);
+        float simpleSumResult = simpleSumStrategy.CalculateImpact(productEntity);
 
         //Assert
         assertEquals(10.5f , simpleSumResult, 0.001f);
     }
 
-    public void weightedByLifespanStrategy() {
+    @Test
+    void weightedByLifespanStrategy() {
         WeightedByLifespanStrategy weightedByLifespanStrategy = new WeightedByLifespanStrategy();
 
         List<MaterialEntity> materialEntityList = new ArrayList<>(Arrays.asList(
@@ -48,7 +49,8 @@ public class StrategyTests {
         assertEquals(5.25f, weightedResult, 0.001f);
     }
 
-    public void testRawPCF_SingleMaterial() {
+    @Test
+    void testRawPCF_SingleMaterial() {
         SimpleSumStrategy strategy = new SimpleSumStrategy();
 
         List<MaterialEntity> materials = List.of(
@@ -62,7 +64,8 @@ public class StrategyTests {
         assertEquals(240.0f, result, 0.001f);
     }
 
-    public void testWeightedByLifespan_SingleMaterial() {
+    @Test
+    void testWeightedByLifespan_SingleMaterial() {
         WeightedByLifespanStrategy strategy = new WeightedByLifespanStrategy();
 
         List<MaterialEntity> materials = List.of(
@@ -76,7 +79,8 @@ public class StrategyTests {
         assertEquals(48.0f, result, 0.001f);
     }
 
-    public void testRawPCF_MultipleMaterials() {
+    @Test
+    void testRawPCF_MultipleMaterials() {
         SimpleSumStrategy strategy = new SimpleSumStrategy();
 
         List<MaterialEntity> materials = new ArrayList<>(Arrays.asList(
@@ -92,7 +96,8 @@ public class StrategyTests {
         assertEquals(327.0f, result, 0.001f);
     }
 
-    public void testWeightedByLifespan_MultipleMaterials() {
+    @Test
+    void testWeightedByLifespan_MultipleMaterials() {
         WeightedByLifespanStrategy strategy = new WeightedByLifespanStrategy();
 
         List<MaterialEntity> materials = new ArrayList<>(Arrays.asList(
@@ -108,7 +113,8 @@ public class StrategyTests {
         assertEquals(40.875f, result, 0.001f);
     }
 
-    public void testWeightedByLifespan_ZeroLifespan() {
+    @Test
+    void testWeightedByLifespan_ZeroLifespan() {
         WeightedByLifespanStrategy strategy = new WeightedByLifespanStrategy();
 
         List<MaterialEntity> materials = List.of(
@@ -122,7 +128,8 @@ public class StrategyTests {
         assertEquals(0.0f, result, 0.001f);
     }
 
-    public void testRawPCF_EmptyMaterials() {
+    @Test
+    void testRawPCF_EmptyMaterials() {
         SimpleSumStrategy strategy = new SimpleSumStrategy();
 
         ProductEntity product = new ProductEntity("EmptyProduct",
