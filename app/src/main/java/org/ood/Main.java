@@ -15,15 +15,8 @@ import java.util.Scanner;
 
 public class Main {
     static void main(String[] args) {
-        String os = System.getProperty("os.name").toLowerCase();
-        String JSONBasePath;
-
-        if (os.contains("win")) {
-            JSONBasePath = "C:/OOD-Project";
-        } else {
-            // Linux /home/user/OOD-Project
-            JSONBasePath = "~/OOD-Project";
-        }
+        // Gets current directory and saves it there
+        String JSONBasePath = System.getProperty("user.dir");
 
         // Helper classes
         Scanner scanner = new Scanner(System.in);
