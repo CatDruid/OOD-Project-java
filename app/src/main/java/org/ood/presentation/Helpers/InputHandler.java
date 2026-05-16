@@ -88,7 +88,7 @@ public class InputHandler {
     }
 
     private <T> T GetInputLogic(Class<T> clazz) {
-        Class<T> resolvedClazz = (Class<T>) Primitives.wrap(clazz);
+        Class<T> resolvedClazz = Primitives.wrap(clazz);
 
         try {
             // Get input
