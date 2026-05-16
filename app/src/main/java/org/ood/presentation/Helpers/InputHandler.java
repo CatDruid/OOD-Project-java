@@ -1,29 +1,17 @@
 package org.ood.presentation.Helpers;
 
+import com.google.common.primitives.Primitives;
 import org.ood.application.CRUDServiceInterface;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class InputHandler {
     private final Scanner scanner;
     private final OutputFormatter outputFormatter;
-
-    // A map linking a primitive type to its wrapper class
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = Map.of(
-            byte.class,    Byte.class,
-            short.class,   Short.class,
-            int.class,     Integer.class,
-            long.class,    Long.class,
-            float.class,   Float.class,
-            double.class,  Double.class,
-            boolean.class, Boolean.class,
-            char.class,    Character.class
-    );
 
     public InputHandler(Scanner scanner, OutputFormatter outputFormatter) {
         this.scanner = scanner;
@@ -100,10 +88,7 @@ public class InputHandler {
     }
 
     private <T> T GetInputLogic(Class<T> clazz) {
-        @SuppressWarnings("unchecked")
-        Class<T> resolvedClazz = (Class<T>) PrimitiveToWrapper(clazz);
-
-
+        Class<T> resolvedClazz = (Class<T>) Primitives.wrap(clazz);
 
         try {
             // Get input
@@ -149,10 +134,5 @@ public class InputHandler {
                         .map(Enum::name)
                         .collect(Collectors.toList()));
         return values[categoryIndex];
-    }
-
-    // Converts a primitive class to its wrapper class, if no wrapper is found return clazz
-    private Class<?> PrimitiveToWrapper(Class<?> clazz) {
-        return PRIMITIVE_TO_WRAPPER.getOrDefault(clazz, clazz);
     }
 }
