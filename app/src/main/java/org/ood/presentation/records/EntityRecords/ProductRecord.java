@@ -15,10 +15,10 @@ public record ProductRecord(
     List<MaterialRecord> materials
 ) implements Introspectable {
     /** Converts a {@link ProductEntity} into a {@link ProductRecord}. */
-    public static ProductRecord fromEntity(ProductEntity entity) {
+    public static ProductRecord FromEntity(ProductEntity entity) {
         return new ProductRecord(entity.GetID(), entity.GetName(), entity.GetCategory(), entity.GetEstimatedLifeSpan(),
                 entity.getMaterial().stream()
-                .map(MaterialRecord::fromEntity)
+                .map(MaterialRecord::FromEntity)
                 .collect(Collectors.toList()));
     }
 }

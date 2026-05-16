@@ -40,7 +40,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
     public List<MaterialRecord> RetrieveAll() {
         try {
             return this.materialRegistry.RetrieveAll().stream()
-                    .map(MaterialRecord::fromEntity)
+                    .map(MaterialRecord::FromEntity)
                     .sorted(Comparator.comparingInt(MaterialRecord::id))
                     .toList();
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
     public MaterialRecord RetrieveByID(int id) {
         MaterialEntity entity = this.materialRegistry.RetrieveByID(id);
         if(entity != null)
-            return MaterialRecord.fromEntity(entity);
+            return MaterialRecord.FromEntity(entity);
         else
             return null;
     }

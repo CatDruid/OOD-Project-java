@@ -31,7 +31,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
                 createRequest.materials().stream()
                         .map(r -> {
                             try {
-                                return r.toEntity();
+                                return r.ToEntity();
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
@@ -50,7 +50,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
     public List<ProductRecord> RetrieveAll() {
         try {
             return this.productRegistry.RetrieveAll().stream()
-                    .map(ProductRecord::fromEntity)
+                    .map(ProductRecord::FromEntity)
                     .sorted(Comparator.comparingInt(ProductRecord::id))
                     .toList();
         } catch (Exception e) {
@@ -62,7 +62,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
     public ProductRecord RetrieveByID(int id) {
         ProductEntity entity = this.productRegistry.RetrieveByID(id);
         if(entity != null)
-            return ProductRecord.fromEntity(entity);
+            return ProductRecord.FromEntity(entity);
         else
             return null;
     }
@@ -73,7 +73,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
                 updateRequest.materials().stream()
                         .map(r -> {
                             try {
-                                return r.toEntity();
+                                return r.ToEntity();
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
