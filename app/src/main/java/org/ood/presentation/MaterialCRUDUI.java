@@ -8,6 +8,7 @@ import org.ood.presentation.records.EntityRecords.MaterialRecord;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
@@ -16,16 +17,25 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
      * @param outputFormatter Formatter for Output operations.
      * @param materialService Service for operations.
      * */
-    public MaterialCRUDUI(InputHandler inputHandler, OutputFormatter outputFormatter, CRUDServiceInterface<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> materialService){
+    public MaterialCRUDUI(InputHandler inputHandler,
+                          OutputFormatter outputFormatter,
+                          CRUDServiceInterface<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> materialService,
+                          RequestBuilder requestBuilder
+        ){
         this.inputHandler = inputHandler;
         this.outputFormatter = outputFormatter;
         this.materialService = materialService;
+        this.requestBuilder = requestBuilder;
+        this.fields = materialService.GetFields();
+
     }
 
     private final InputHandler inputHandler;
     private final OutputFormatter outputFormatter;
+    private final RequestBuilder requestBuilder;
     private final CRUDServiceInterface<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> materialService;
     private final List<String> menuOptions = Arrays.asList("Get all materials", "Get a material by ID", "Create New Material", "Update Material", "Delete Material", "Exit");
+    private final Map<String, Class<?>> fields;
     private boolean looping = true;
 
 
@@ -49,24 +59,16 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         }
     }
     protected void Create() {
-        this.outputFormatter.DisplayMessage("What is the material's name?");
-        String name = inputHandler.GetInput(String.class);
-        this.outputFormatter.DisplayMessage("What is the material's mass?");
-        Float mass = inputHandler.GetInput(Float.class);
-        this.outputFormatter.DisplayMessage("What is the material's emission factor?");
-        Float emissionFactor = inputHandler.GetInput(Float.class);
-        this.outputFormatter.DisplayMessage("What is the material's category?");
-        int categoryIndex = this.inputHandler.SelectfromRange(
-                Arrays.stream(RecyclingCategory.values())
-                        .map(Enum::name)
-                        .collect(Collectors.toList()));
-        RecyclingCategory category = RecyclingCategory.values()[categoryIndex];
+        MaterialCUDSuccessfully successfully;
         try {
-            MaterialCUDSuccessfully successMessage = this.materialService.Create(new MaterialRecord(null, name, category, mass, emissionFactor));
-            outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
+            successfully = materialService.Create(requestBuilder.CreateRecord());
         } catch (Exception e) {
-            outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
+            outputFormatter.DisplayErrorMessage("Couldn't create the material : ", e.hashCode());
+            return;
         }
+        outputFormatter.DisplayMessage("Successfully created the material:");
+        outputFormatter.PrintMaterial(materialService.RetrieveByID(successfully.id()));
+
     }
     protected void Update() {
         outputFormatter.DisplayMessage("Do you want to print the IDs before choosing?");

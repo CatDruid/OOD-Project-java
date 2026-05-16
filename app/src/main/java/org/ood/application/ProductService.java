@@ -2,11 +2,13 @@ package org.ood.application;
 
 import org.ood.domain.*;
 import org.ood.domain.entities.ProductEntity;
+import org.ood.presentation.records.EntityRecords.MaterialRecord;
 import org.ood.presentation.records.EntityRecords.ProductRecord;
 import org.ood.presentation.records.Results.ProductCUDSuccessfully;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRecord, ProductCUDSuccessfully> {
@@ -107,4 +109,8 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
     }
 
     public Class<ProductCategory> GetCategory() {return ProductCategory.class;}
+
+    public Map<String, Class<?>> GetFields() {
+        return new ProductRecord(0, "", null, 0, null).GetFields();
+    }
 }
