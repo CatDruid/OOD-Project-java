@@ -15,14 +15,30 @@ public class RequestBuilder {
         this.fields = fields;
     }
 
+    public MaterialRecord UpdateRecord(MaterialRecord toUpdate) {
+        Map<String, Object> newValues = CreateRecordLogic(toUpdate.GetValues()).GetValues();
+        newValues.put("id", toUpdate.id());
+        return ValuesToRecord(newValues);
+    }
+
     public MaterialRecord CreateRecord() {
-        Map<String, Object> valuesMap = new HashMap<>(); for (String field : fields.keySet()) {valuesMap.put(field, null);}
+        return CreateRecordLogic(null);
+    }
+
+    private MaterialRecord CreateRecordLogic(Map<String, Object> initialValues) {
+        Map<String, Object> valuesMap;
+        if (initialValues == null || initialValues.isEmpty()) {
+            valuesMap = new HashMap<>();
+            for (String field : fields.keySet()) {valuesMap.put(field, null);}
+        } else {
+            valuesMap = initialValues;
+        }
         Map<String, String> labels = CreateLabels(fields.keySet());
 
         while(true) {
             ArrayList<String> options = CreateOptions(labels, valuesMap);
             String option = options.get(inputHandler.SelectfromRange(options));
-            if(option.equals("Create")) {
+            if(option.equals("Finish")) {
                 if (inputHandler.AskYesNo("Have you chosen a value for all the attributes?")) {
                     break;
                 }
@@ -67,7 +83,7 @@ public class RequestBuilder {
                                 ""
                                 : String.format(" [%s]", valuesMap.getOrDefault(labels.get(option), null).toString())))
                 .toList());
-        options.addLast("Create"); return options;
+        options.addLast("Finish"); return options;
     }
 
     /**
