@@ -10,7 +10,6 @@ import org.ood.presentation.records.EntityRecords.MaterialRecord;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     /**Dependency injections for initialization.
