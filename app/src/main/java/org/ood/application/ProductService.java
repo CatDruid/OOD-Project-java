@@ -2,7 +2,6 @@ package org.ood.application;
 
 import org.ood.domain.*;
 import org.ood.domain.entities.ProductEntity;
-import org.ood.presentation.records.EntityRecords.MaterialRecord;
 import org.ood.presentation.records.EntityRecords.ProductRecord;
 import org.ood.presentation.records.Results.ProductCUDSuccessfully;
 

@@ -3,7 +3,6 @@ package org.ood.presentation.records.EntityRecords;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.ProductCategory;
 import org.ood.domain.entities.ProductEntity;
 import org.ood.presentation.records.Introspectable;

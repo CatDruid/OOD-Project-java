@@ -8,7 +8,6 @@ import org.ood.presentation.records.EntityRecords.MaterialRecord;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MaterialService extends CRUDServiceAbstract<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> {
     /**Dependency injections for initialization.
