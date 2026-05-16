@@ -1,4 +1,4 @@
-package org.ood.presentation;
+package org.ood.presentation.Helpers;
 
 import org.ood.domain.RecyclingCategory;
 import org.ood.presentation.records.EntityRecords.MaterialRecord;

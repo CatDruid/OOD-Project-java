@@ -10,6 +10,9 @@ import org.ood.infrastructure.repositories.JSONMaterialRepository;
 import org.ood.infrastructure.registries.ProductRegistry;
 import org.ood.infrastructure.repositories.JSONProductRepository;
 import org.ood.presentation.*;
+import org.ood.presentation.Helpers.InputHandler;
+import org.ood.presentation.Helpers.OutputFormatter;
+import org.ood.presentation.Helpers.RequestBuilder;
 
 import java.util.Scanner;
 

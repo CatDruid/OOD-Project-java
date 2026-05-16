@@ -3,6 +3,9 @@ package org.ood.presentation;
 import org.ood.application.CRUDServiceInterface;
 import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.RecyclingCategory;
+import org.ood.presentation.Helpers.InputHandler;
+import org.ood.presentation.Helpers.OutputFormatter;
+import org.ood.presentation.Helpers.RequestBuilder;
 import org.ood.presentation.records.Results.MaterialCUDSuccessfully;
 import org.ood.presentation.records.EntityRecords.MaterialRecord;
 
