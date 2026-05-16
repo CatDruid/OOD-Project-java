@@ -1,17 +1,29 @@
 package org.ood.presentation;
 
 import org.ood.application.CRUDServiceInterface;
-import org.ood.domain.RecyclingCategory;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class InputHandler {
     private final Scanner scanner;
     private final OutputFormatter outputFormatter;
+
+    // A map linking a primitive type to its wrapper class
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = Map.of(
+            byte.class,    Byte.class,
+            short.class,   Short.class,
+            int.class,     Integer.class,
+            long.class,    Long.class,
+            float.class,   Float.class,
+            double.class,  Double.class,
+            boolean.class, Boolean.class,
+            char.class,    Character.class
+    );
 
     public InputHandler(Scanner scanner, OutputFormatter outputFormatter) {
         this.scanner = scanner;
@@ -59,6 +71,7 @@ public class InputHandler {
     }
 
     public <T> T GetInput(Class<T> clazz) {
+        if (clazz == null) {return null;}
         while (true) {
             // Get the input with the right class
             T input = GetInputLogic(clazz);
@@ -71,6 +84,7 @@ public class InputHandler {
     }
 
     public <T> T GetInput(Class<T> clazz, String prompt) {
+        if(clazz == null) {return null;}
         while (true) {
             // Display the prompt
             outputFormatter.DisplayMessage(prompt);
@@ -86,20 +100,32 @@ public class InputHandler {
     }
 
     private <T> T GetInputLogic(Class<T> clazz) {
+        @SuppressWarnings("unchecked")
+        Class<T> resolvedClazz = (Class<T>) PrimitiveToWrapper(clazz);
+
+
+
         try {
+            // Get input
             String line = scanner.nextLine().trim();
+
+            // If the input is not a text, replace ',' with '.' so it is parseable
+            if (clazz != Character.class && clazz != String.class) {
+                line = line.replaceAll(",", ".");
+            }
 
             // Try constructor with String
             try {
-                Constructor<T> ctor = clazz.getConstructor(String.class);
+                Constructor<T> ctor = resolvedClazz.getConstructor(String.class);
                 return ctor.newInstance(line);
+
             } catch (NoSuchMethodException e) {
                 // Fallback: try valueOf / parse static method, etc. (more code)
-                throw new IllegalArgumentException("Class " + clazz.getName() +
+                throw new IllegalArgumentException("Class " + resolvedClazz.getName() +
                         " does not have a public String constructor");
             }
         } catch (Exception e) {
-            outputFormatter.DisplayErrorMessage("Failed to create " + clazz.getSimpleName() + ": " + e.getMessage(), e.hashCode());
+            outputFormatter.DisplayErrorMessage("Failed to create " + resolvedClazz.getSimpleName() + ": " + e.getMessage(), e.hashCode());
             return null;
         }
     }
@@ -123,5 +149,10 @@ public class InputHandler {
                         .map(Enum::name)
                         .collect(Collectors.toList()));
         return values[categoryIndex];
+    }
+
+    // Converts a primitive class to its wrapper class, if no wrapper is found return clazz
+    private Class<?> PrimitiveToWrapper(Class<?> clazz) {
+        return PRIMITIVE_TO_WRAPPER.getOrDefault(clazz, clazz);
     }
 }
