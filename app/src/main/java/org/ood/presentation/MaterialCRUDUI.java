@@ -2,7 +2,6 @@ package org.ood.presentation;
 
 import org.ood.application.CRUDServiceInterface;
 import org.ood.domain.entities.MaterialEntity;
-import org.ood.domain.RecyclingCategory;
 import org.ood.presentation.Helpers.InputHandler;
 import org.ood.presentation.Helpers.OutputFormatter;
 import org.ood.presentation.Helpers.RequestBuilder;
@@ -12,7 +11,6 @@ import org.ood.presentation.records.EntityRecords.MaterialRecord;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     /**Dependency injections for initialization.
@@ -24,13 +22,11 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
                           OutputFormatter outputFormatter,
                           CRUDServiceInterface<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> materialService,
                           RequestBuilder requestBuilder
-        ){
+        ) {
         this.inputHandler = inputHandler;
         this.outputFormatter = outputFormatter;
         this.materialService = materialService;
         this.requestBuilder = requestBuilder;
-        this.fields = materialService.GetFields();
-
     }
 
     private final InputHandler inputHandler;
@@ -38,17 +34,17 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     private final RequestBuilder requestBuilder;
     private final CRUDServiceInterface<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> materialService;
     private final List<String> menuOptions = Arrays.asList("Get all materials", "Get a material by ID", "Create New Material", "Update Material", "Delete Material", "Exit");
-    private final Map<String, Class<?>> fields;
     private boolean looping = true;
 
 
     protected void RetrieveAll() {
-        this.outputFormatter.DisplayMessage("Displaying all materials");
         try {
             List<MaterialRecord> materials = this.materialService.RetrieveAll();
+            if (materials.isEmpty()) {outputFormatter.DisplayMessage("There are no materials");}
+            this.outputFormatter.DisplayMessage("Displaying all materials");
             outputFormatter.PrintMaterials(materials);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            outputFormatter.DisplayErrorMessage("Couldn't retrieve materials", e.hashCode());
         }
     }
     protected void RetrieveByID() {
