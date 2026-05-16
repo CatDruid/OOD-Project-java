@@ -47,8 +47,8 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         }
     }
     protected void RetrieveByID() {
-        this.outputFormatter.DisplayMessage("Which ID does the material have?");
-        int id = inputHandler.GetInput(Integer.class);
+        int id = inputHandler.GetId("Which ID does the material have?", materialService);
+        if (id == -1) {return;}
         try {
             MaterialRecord material = this.materialService.RetrieveByID(id);
             outputFormatter.PrintMaterial(material);
@@ -73,7 +73,9 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         if(inputHandler.AskYesNo())
             RetrieveAll();
 
-        MaterialRecord toUpdate = materialService.RetrieveByID(inputHandler.GetInput(Integer.class, "Which ID do you want to edit?"));
+        int id = inputHandler.GetId("Which ID do you want to edit?", materialService);
+        if(id == -1) {return;}
+        MaterialRecord toUpdate = materialService.RetrieveByID(id);
         try{
             materialService.Update(requestBuilder.UpdateRecord(toUpdate));
         } catch (Exception e) {
@@ -84,8 +86,10 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         outputFormatter.DisplayMessage("Do you want to print the IDs before choosing?");
         if(inputHandler.AskYesNo())
             RetrieveAll();
-        this.outputFormatter.DisplayMessage("Which material do you want to delete?");
-        int id = inputHandler.GetInput(Integer.class);
+
+        int id = inputHandler.GetId("Which material do you want to delete?", materialService);
+        if(id == -1) {return;}
+
         outputFormatter.DisplayMessage("You are about to delete " + materialService.RetrieveByID(id).name());
         outputFormatter.DisplayWarningMessage("This action is irreversible!");
         if(inputHandler.AskYesNo()) {
