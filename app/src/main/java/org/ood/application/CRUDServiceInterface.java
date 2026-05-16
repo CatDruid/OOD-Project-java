@@ -10,5 +10,6 @@ public interface CRUDServiceInterface<T, TRecord extends Record, CUDResponse ext
     CUDResponse Update(TRecord updateRequest) throws Exception;
     CUDResponse Delete(int id) throws Exception;
     Map<String, Class<?>> GetFields();
+    Map<String, Object> GetValues(int id);
     boolean IdExists(int id);
 }

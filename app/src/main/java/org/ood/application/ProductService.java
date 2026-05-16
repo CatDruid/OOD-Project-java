@@ -112,4 +112,5 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
     public Map<String, Class<?>> GetFields() {
         return new ProductRecord(0, "", null, 0, null).GetFields();
     }
+    public Map<String, Object> GetValues(int id) {return RetrieveByID(id).GetValues();}
 }
