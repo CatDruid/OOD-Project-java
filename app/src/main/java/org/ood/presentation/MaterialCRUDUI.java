@@ -66,7 +66,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         try {
             successfully = materialService.Create(requestBuilder.CreateRecord());
         } catch (Exception e) {
-            outputFormatter.DisplayErrorMessage("Couldn't create the material : ", e.hashCode());
+            outputFormatter.DisplayErrorMessage("Couldn't create the material : " + e.getMessage(), e.hashCode());
             return;
         }
         outputFormatter.DisplayMessage("Successfully created the material:");
@@ -78,47 +78,9 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         if(inputHandler.AskYesNo())
             RetrieveAll();
 
-        this.outputFormatter.DisplayMessage("Which ID do you want to edit?");
-        int id = inputHandler.GetInput(Integer.class);
+        MaterialRecord toUpdate = materialService.RetrieveByID(inputHandler.GetInput(Integer.class, "Which ID do you want to edit?"));
         try{
-            MaterialRecord material = this.materialService.RetrieveByID(id);
-            String name = material.name();
-            RecyclingCategory category = material.category();
-            Float mass = material.mass();
-            Float emissionFactor = material.emissionFactor();
-            List<String> choices = Arrays.asList("Name", "Category", "Mass", "Emission Factor", "Finish");
-            boolean loop = true;
-            while(loop){
-                switch (inputHandler.SelectfromRange(choices)){
-                    case 0:
-                        this.outputFormatter.DisplayMessage("What is the material's new name?");
-                        name = inputHandler.GetInput(String.class);
-                        break;
-                    case 1:
-                        this.outputFormatter.DisplayMessage("What is the material's new category?");
-                        int categoryIndex = this.inputHandler.SelectfromRange(
-                                Arrays.stream(RecyclingCategory.values())
-                                        .map(Enum::name)
-                                        .collect(Collectors.toList()));
-                        category = RecyclingCategory.values()[categoryIndex];
-                        break;
-                    case 2:
-                        this.outputFormatter.DisplayMessage("What is the material's new mass?");
-                        mass = inputHandler.GetInput(Float.class);
-                        break;
-                    case 3:
-                        this.outputFormatter.DisplayMessage("What is the material's new emission factor?");
-                        emissionFactor = inputHandler.GetInput(Float.class);
-                        break;
-                    case 4: {
-                        if(inputHandler.AskYesNo()){
-                            loop = false;
-                            MaterialCUDSuccessfully successMessage = materialService.Update(new MaterialRecord(id, name, category, mass, emissionFactor));
-                            outputFormatter.DisplayMessage("[" + successMessage.id() + "] " + successMessage.name());
-                        }
-                    }
-                }
-            }
+            materialService.Update(requestBuilder.UpdateRecord(toUpdate));
         } catch (Exception e) {
             outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
         }
