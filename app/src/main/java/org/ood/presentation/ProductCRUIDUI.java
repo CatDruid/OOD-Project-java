@@ -4,6 +4,8 @@ import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
 import org.ood.domain.ProductCategory;
 import org.ood.domain.entities.ProductEntity;
+import org.ood.presentation.Helpers.InputHandler;
+import org.ood.presentation.Helpers.OutputFormatter;
 import org.ood.presentation.records.EntityRecords.MaterialRecord;
 import org.ood.presentation.records.EntityRecords.ProductRecord;
 

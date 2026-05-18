@@ -1,7 +1,7 @@
-package org.ood.presentation;
+package org.ood.presentation.Helpers;
 
+import com.google.common.primitives.Primitives;
 import org.ood.application.CRUDServiceInterface;
-import org.ood.domain.RecyclingCategory;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -59,6 +59,7 @@ public class InputHandler {
     }
 
     public <T> T GetInput(Class<T> clazz) {
+        if (clazz == null) {return null;}
         while (true) {
             // Get the input with the right class
             T input = GetInputLogic(clazz);
@@ -71,6 +72,7 @@ public class InputHandler {
     }
 
     public <T> T GetInput(Class<T> clazz, String prompt) {
+        if(clazz == null) {return null;}
         while (true) {
             // Display the prompt
             outputFormatter.DisplayMessage(prompt);
@@ -86,20 +88,29 @@ public class InputHandler {
     }
 
     private <T> T GetInputLogic(Class<T> clazz) {
+        Class<T> resolvedClazz = Primitives.wrap(clazz);
+
         try {
+            // Get input
             String line = scanner.nextLine().trim();
+
+            // If the input is not a text, replace ',' with '.' so it is parseable
+            if (clazz != Character.class && clazz != String.class) {
+                line = line.replaceAll(",", ".");
+            }
 
             // Try constructor with String
             try {
-                Constructor<T> ctor = clazz.getConstructor(String.class);
+                Constructor<T> ctor = resolvedClazz.getConstructor(String.class);
                 return ctor.newInstance(line);
+
             } catch (NoSuchMethodException e) {
                 // Fallback: try valueOf / parse static method, etc. (more code)
-                throw new IllegalArgumentException("Class " + clazz.getName() +
+                throw new IllegalArgumentException("Class " + resolvedClazz.getName() +
                         " does not have a public String constructor");
             }
         } catch (Exception e) {
-            outputFormatter.DisplayErrorMessage("Failed to create " + clazz.getSimpleName() + ": " + e.getMessage(), e.hashCode());
+            outputFormatter.DisplayErrorMessage("Failed to create " + resolvedClazz.getSimpleName() + ": " + e.getMessage(), e.hashCode());
             return null;
         }
     }

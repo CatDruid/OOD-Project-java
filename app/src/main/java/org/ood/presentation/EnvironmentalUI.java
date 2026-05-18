@@ -6,6 +6,8 @@ import java.util.List;
 import org.ood.application.EnvironmentalFactory;
 import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.ProductService;
+import org.ood.presentation.Helpers.InputHandler;
+import org.ood.presentation.Helpers.OutputFormatter;
 import org.ood.presentation.records.EntityRecords.ProductRecord;
 import org.ood.presentation.records.Results.ImpactResult;
 

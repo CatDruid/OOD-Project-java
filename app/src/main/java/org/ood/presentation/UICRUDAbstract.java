@@ -1,5 +1,8 @@
 package org.ood.presentation;
 
+import org.ood.presentation.Helpers.InputHandler;
+import org.ood.presentation.Helpers.OutputFormatter;
+
 public abstract class UICRUDAbstract<T> implements UIInterface {
     private InputHandler inputHandler;
     private OutputFormatter outputFormatter ;

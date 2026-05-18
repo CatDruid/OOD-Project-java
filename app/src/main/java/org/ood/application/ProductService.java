@@ -7,6 +7,7 @@ import org.ood.presentation.records.Results.ProductCUDSuccessfully;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRecord, ProductCUDSuccessfully> {
@@ -107,4 +108,9 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
     }
 
     public Class<ProductCategory> GetCategory() {return ProductCategory.class;}
+
+    public Map<String, Class<?>> GetFields() {
+        return new ProductRecord(0, "", null, 0, null).GetFields();
+    }
+    public Map<String, Object> GetValues(int id) {return RetrieveByID(id).GetValues();}
 }

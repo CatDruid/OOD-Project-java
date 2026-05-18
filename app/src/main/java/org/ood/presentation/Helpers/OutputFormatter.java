@@ -1,4 +1,4 @@
-package org.ood.presentation;
+package org.ood.presentation.Helpers;
 
 import org.ood.presentation.records.EntityRecords.MaterialRecord;
 import org.ood.presentation.records.EntityRecords.ProductRecord;

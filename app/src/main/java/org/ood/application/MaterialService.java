@@ -7,6 +7,7 @@ import org.ood.presentation.records.EntityRecords.MaterialRecord;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public class MaterialService extends CRUDServiceAbstract<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> {
     /**Dependency injections for initialization.
@@ -29,7 +30,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
         MaterialEntity createdEntity = new MaterialEntity(newId, createRequest.name(), createRequest.category(), createRequest.mass(), createRequest.emissionFactor());
         if(this.materialRegistry.Add(createdEntity)) {
             this.materialRepository.Save(this.materialRegistry.RetrieveAll());
-            return new MaterialCUDSuccessfully(1, "Create worked!!");
+            return new MaterialCUDSuccessfully(createdEntity.GetID(), "Create worked!!");
         }
         else
             throw new Exception("Ooops, something went wrong");
@@ -74,6 +75,11 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
         } else
             throw new Exception("Ooops, something went wrong");
     }
+
+    public Map<String, Class<?>> GetFields() {
+        return new MaterialRecord(0, "", null, 0.0f, 0.0f).GetFields();
+    }
+    public Map<String, Object> GetValues(int id) {return RetrieveByID(id).GetValues();}
 
     @Override
     public boolean IdExists(int id) {
