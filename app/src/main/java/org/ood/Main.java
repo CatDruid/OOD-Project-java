@@ -3,6 +3,7 @@
  */
 package org.ood;
 
+import org.ood.application.EnvironmentalFactory;
 import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
 import org.ood.infrastructure.registries.MaterialRegistry;
@@ -31,6 +32,9 @@ public class Main {
         MaterialRegistry materialRegistry = new MaterialRegistry(materialRepository);
         MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
 
+        // Environmental
+        EnvironmentalFactory environmentalFactory = new EnvironmentalFactory(productRegistry);
+
         // UI's helper classes
         Scanner scanner = new Scanner(System.in);
         OutputFormatter outputFormatter = new OutputFormatter();
@@ -40,7 +44,7 @@ public class Main {
         // UI classes
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService, requestBuilder);
         ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
-        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService);
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService, environmentalFactory);
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 
 
