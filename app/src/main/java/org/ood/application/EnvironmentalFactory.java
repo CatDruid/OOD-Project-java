@@ -15,16 +15,20 @@ public class EnvironmentalFactory {
     private static final List<ImpactCalculationStrategy> strategies = Arrays.asList(
             new SimpleSumStrategy(),
             new WeightedByLifespanStrategy());
-    public static RegistryInterface<ProductEntity> productRegistry;
+    private final RegistryInterface<ProductEntity> productRegistry;
 
-    public static EnvironmentalImpactService create(int strategyIndex){
+    public EnvironmentalFactory(RegistryInterface<ProductEntity> productRegistry) {
+        this.productRegistry = productRegistry;
+    }
+
+    public EnvironmentalImpactService create(int strategyIndex){
         return new EnvironmentalImpactService(productRegistry, strategies.get(strategyIndex));
     }
 
     public static List<String> GetStringStrategies() {
 
         // If there are no strategies return null
-        if (strategies == null || strategies.isEmpty()) {return new ArrayList<>();}
+        if (strategies.isEmpty()) {return new ArrayList<>();}
 
         // Get the simple name from all the strategies and add them to the list
         List<String> StringStrategies = new ArrayList<>();
