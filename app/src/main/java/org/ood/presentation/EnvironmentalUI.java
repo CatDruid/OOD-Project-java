@@ -6,18 +6,22 @@ import java.util.List;
 import org.ood.application.EnvironmentalFactory;
 import org.ood.application.EnvironmentalImpactService;
 import org.ood.application.ProductService;
-import org.ood.domain.entities.ProductEntity;
+import org.ood.presentation.Helpers.InputHandler;
+import org.ood.presentation.Helpers.OutputFormatter;
+import org.ood.presentation.records.EntityRecords.ProductRecord;
 import org.ood.presentation.records.Results.ImpactResult;
 
 public class EnvironmentalUI implements UIInterface {
     private final InputHandler inputHandler;
     private final OutputFormatter outputFormatter;
     private final ProductService productService;
+    private final EnvironmentalFactory environmentalFactory;
 
-    public EnvironmentalUI(InputHandler inputHandler, OutputFormatter outputFormatter, ProductService productService) {
+    public EnvironmentalUI(InputHandler inputHandler, OutputFormatter outputFormatter, ProductService productService, EnvironmentalFactory environmentalFactory) {
         this.inputHandler = inputHandler;
         this.outputFormatter = outputFormatter;
         this.productService = productService;
+        this.environmentalFactory = environmentalFactory;
     }
 
     public void MenuLoop() {
@@ -57,17 +61,17 @@ public class EnvironmentalUI implements UIInterface {
         int strategyIndex = inputHandler.SelectfromRange(strategies);
 
         //Initialize service
-        EnvironmentalImpactService environmentalImpactService = EnvironmentalFactory.create(strategyIndex);
+        EnvironmentalImpactService environmentalImpactService = environmentalFactory.create(strategyIndex);
         // Get result from service
         ImpactResult res = environmentalImpactService.CalculateImpact(productId, strategyIndex);
 
         // Output the result
-        outputFormatter.DisplayMessage(String.format("Product: %s (%d)\nImpact: %f\nStrategy used: %s", res.name(), res.id(), res.impact(), strategies.get(strategyIndex)));
+        outputFormatter.DisplayMessage(String.format("Product: %s (%d)\nImpact: %.3f\nStrategy used: %s", res.name(), res.id(), res.impact(), strategies.get(strategyIndex)));
     }
 
     public void RequestGuidance() {
         try{
-            List<ProductEntity> productList = productService.RetrieveAll();
+            List<ProductRecord> productList = productService.RetrieveAll();
             if(productList != null){
                 outputFormatter.PrintProducts(productList);
                 // Get the product's id

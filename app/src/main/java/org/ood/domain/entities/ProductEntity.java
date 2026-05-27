@@ -2,7 +2,9 @@ package org.ood.domain.entities;
 
 import org.ood.domain.ProductCategory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProductEntity implements Entity{
     private int productID;
@@ -12,26 +14,34 @@ public class ProductEntity implements Entity{
     private List<MaterialEntity> material;
 
     public ProductEntity(String name, ProductCategory category, float estimatedLifespan, List<MaterialEntity> material) {
-        this.name = name;
-        this.category = category;
-        this.estimatedLifespan = estimatedLifespan;
-        this.material = material;
+        SetName(name);
+        SetProductCategory(category);
+        SetEstimatedLifeSpan(estimatedLifespan);
+        SetMaterials(material);
     }
 
-    public ProductEntity(String name, ProductCategory category, float estimatedLifespan, List<MaterialEntity> material, int productID) {
-        this.productID = productID;
-        this.name = name;
-        this.category = category;
-        this.estimatedLifespan = estimatedLifespan;
-        this.material = material;
+    public ProductEntity(int productID, String name, ProductCategory category, float estimatedLifespan, List<MaterialEntity> material) {
+        SetProductID(productID);
+        SetName(name);
+        SetProductCategory(category);
+        SetEstimatedLifeSpan(estimatedLifespan);
+        SetMaterials(material);
     }
 
     //Set Methods
     public void SetProductID(int productID) {this.productID = productID;}
-    public void SetName(String name) {this.name = name;}
-    public void SetProductCategory(ProductCategory category) {this.category = category;}
+    public void SetName(String name) {
+        this.name = name.isEmpty() ? "NoName" : name;
+    }
+
+    public void SetProductCategory(ProductCategory category) {
+        this.category = Objects.requireNonNullElse(category, ProductCategory.Other);
+    }
+
     public void SetEstimatedLifeSpan(float estimatedLifespan) {this.estimatedLifespan = estimatedLifespan;}
-    public void SetMaterials(List<MaterialEntity> material) {this.material = material;}
+    public void SetMaterials(List<MaterialEntity> material) {
+        this.material = Objects.requireNonNullElse(material, new ArrayList<>());
+    }
     
     //Get Methods
     public int GetID() {return productID;}

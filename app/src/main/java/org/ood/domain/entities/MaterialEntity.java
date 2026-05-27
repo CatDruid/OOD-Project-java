@@ -20,7 +20,7 @@ public class MaterialEntity implements Entity{
             throw new Exception(errors);
     }
 
-    public MaterialEntity(int materialID, RecyclingCategory recyclingCategory, String name, float mass, float emissionFactor)  throws Exception  {
+    public MaterialEntity(int materialID, String name, RecyclingCategory recyclingCategory, float mass, float emissionFactor)  throws Exception  {
         this.materialID = materialID;
         this.name = name;
         this.recyclingCategory = recyclingCategory;

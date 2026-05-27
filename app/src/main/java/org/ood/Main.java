@@ -3,6 +3,7 @@
  */
 package org.ood;
 
+import org.ood.application.EnvironmentalFactory;
 import org.ood.application.MaterialService;
 import org.ood.application.ProductService;
 import org.ood.infrastructure.registries.MaterialRegistry;
@@ -10,32 +11,42 @@ import org.ood.infrastructure.repositories.JSONMaterialRepository;
 import org.ood.infrastructure.registries.ProductRegistry;
 import org.ood.infrastructure.repositories.JSONProductRepository;
 import org.ood.presentation.*;
+import org.ood.presentation.Helpers.InputHandler;
+import org.ood.presentation.Helpers.OutputFormatter;
+import org.ood.presentation.Helpers.RequestBuilder;
 
 import java.util.Scanner;
 
 public class Main {
     static void main(String[] args) {
-        String JSONFilePath = "C:/OOD-Project";
-
-        // Helper classes
-        Scanner scanner = new Scanner(System.in);
-        OutputFormatter outputFormatter = new OutputFormatter();
-        InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
+        // Gets current directory and saves it there
+        String JSONBasePath = System.getProperty("user.dir");
 
         // Product repo, registry and service
-        JSONProductRepository productRepository = new JSONProductRepository(JSONFilePath);
+        JSONProductRepository productRepository = new JSONProductRepository(JSONBasePath + "/products.json");
         ProductRegistry productRegistry = new ProductRegistry(productRepository);
         ProductService productService = new ProductService(productRegistry, productRepository);
 
         // Material repo, registry and service
-        JSONMaterialRepository materialRepository = new JSONMaterialRepository(JSONFilePath);
+        JSONMaterialRepository materialRepository = new JSONMaterialRepository(JSONBasePath + "/materials.json");
         MaterialRegistry materialRegistry = new MaterialRegistry(materialRepository);
         MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
-        // UI's
-        MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService);
+
+        // Environmental
+        EnvironmentalFactory environmentalFactory = new EnvironmentalFactory(productRegistry);
+
+        // UI's helper classes
+        Scanner scanner = new Scanner(System.in);
+        OutputFormatter outputFormatter = new OutputFormatter();
+        InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
+        RequestBuilder requestBuilder = new RequestBuilder(inputHandler, materialService.GetFields());
+
+        // UI classes
+        MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService, requestBuilder);
         ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
-        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService);
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService, environmentalFactory);
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
+
 
         // Start the application
         ui.MenuLoop();
