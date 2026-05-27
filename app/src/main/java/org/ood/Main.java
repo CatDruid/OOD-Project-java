@@ -3,12 +3,52 @@
  */
 package org.ood;
 
-public class Main {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import org.ood.application.EnvironmentalFactory;
+import org.ood.application.MaterialService;
+import org.ood.application.ProductService;
+import org.ood.infrastructure.registries.MaterialRegistry;
+import org.ood.infrastructure.repositories.JSONMaterialRepository;
+import org.ood.infrastructure.registries.ProductRegistry;
+import org.ood.infrastructure.repositories.JSONProductRepository;
+import org.ood.presentation.*;
+import org.ood.presentation.Helpers.InputHandler;
+import org.ood.presentation.Helpers.OutputFormatter;
+import org.ood.presentation.Helpers.RequestBuilder;
 
-    public static void main(String[] args) {
-        System.out.println(new Main().getGreeting());
+import java.util.Scanner;
+
+public class Main {
+    static void main(String[] args) {
+        // Gets current directory and saves it there
+        String JSONBasePath = System.getProperty("user.dir");
+
+        // Product repo, registry and service
+        JSONProductRepository productRepository = new JSONProductRepository(JSONBasePath + "/products.json");
+        ProductRegistry productRegistry = new ProductRegistry(productRepository);
+        ProductService productService = new ProductService(productRegistry, productRepository);
+
+        // Material repo, registry and service
+        JSONMaterialRepository materialRepository = new JSONMaterialRepository(JSONBasePath + "/materials.json");
+        MaterialRegistry materialRegistry = new MaterialRegistry(materialRepository);
+        MaterialService materialService = new MaterialService(materialRegistry, materialRepository);
+
+        // Environmental
+        EnvironmentalFactory environmentalFactory = new EnvironmentalFactory(productRegistry);
+
+        // UI's helper classes
+        Scanner scanner = new Scanner(System.in);
+        OutputFormatter outputFormatter = new OutputFormatter();
+        InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
+        RequestBuilder requestBuilder = new RequestBuilder(inputHandler, materialService.GetFields());
+
+        // UI classes
+        MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService, requestBuilder);
+        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
+        EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService, environmentalFactory);
+        UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
+
+
+        // Start the application
+        ui.MenuLoop();
     }
 }
