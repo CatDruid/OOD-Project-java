@@ -20,6 +20,8 @@ It calculates the environmental impact and gives tips on recycling for both sing
       * [Problem](#problem)
       * [Solution](#solution)
       * [Benefits](#benefits)
+  * [UML Diagram](#uml-diagram)
+  * [Sequence Diagram](#sequence-diagram)
   * [Roles](#roles)
   * [Branch naming](#branch-naming)
       * [Features:](#features)
