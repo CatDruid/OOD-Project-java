@@ -1,5 +1,4 @@
 [![Java CI](https://github.com/CatDruid/OOD-Project-java/actions/workflows/ci.yml/badge.svg)](https://github.com/CatDruid/OOD-Project-java/actions/workflows/ci.yml)
-
 # OOD-Project-java
 
 Sustainable Product and Recycling Management System - SPaRMS
@@ -162,6 +161,7 @@ Another aspect that benefits from this is testability as now each strategy can b
 TODO link to UML
 
 ## Sequence Diagram
+![Sequence Diagram - Get Guidance for Product.svg](Docs/Sequence%20Diagram%20-%20Get%20Guidance%20for%20Product.svg)
 
 ## Roles
 Dag Sandström - Product management dev
