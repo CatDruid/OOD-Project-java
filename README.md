@@ -73,58 +73,58 @@ It will give you an index.html file which will display the results of the tests 
 ## Architecture
 For this project we chose a layered architecture consisting of these four layers: Presentation, Application, Domain, and Infrastructure.
 
-The presentation layer is responsible for the input and output of the application. 
+The presentation layer is responsible for the input and output of the application.
 This includes proper formatting as well as forwarding the users requests.
 
-These requests are forwarded to the application layer which coordinates those and calls upon the Domain layer.
-The classes inside the application layer are mostly services which manage their responsible domain entities respectively. 
+These requests are forwarded to the application layer, which coordinates them and calls upon the Domain layer.
+The classes inside the application layer are mostly services that manage their respective domain entities.
 For example, the Material and Product services are used for creating, retrieving, updating, and deleting material and product objects.
 
-Inside the Domain resides the Business logic of this system. E.g. the formulas for calculating the environmental impact are stored here inside of classes.
-Other Entities inside take care of storing states, as 
-containers holding information, and being responsible for invariant states. 
+Inside the Domain resides the business logic of this system. E.g., the formulas for calculating the environmental impact are stored here inside classes.
+Other entities inside take care of storing states, as
+containers holding information and being responsible for invariant states.
 
-The final fourth layer, the infrastructure, is in charge of persistency, 
-meaning the storing and retrieving data long term.
-In concrete terms, this includes repositories, handling JSON files or a database, 
+The final fourth layer, the Infrastructure, is in charge of persistency,
+meaning the storing and retrieving of data long term.
+In concrete terms, this includes repositories, handling JSON files, or a database,
 as well as registries acting as memory, storing data during the runtime of the application.
 
 ### Flow of dependencies
-Due to this layered structure there is a clear direction of dependencies, which is down-/inward. 
+Due to this layered structure, there is a clear direction of dependencies, which is downward/inward. 
 The lower layers know nothing about the layers above them; 
-Application knows about Domain but Domain knows nothing about Application. 
-Responsibilities are also not able to skip layers meaning Presentation doesn't ever directly interact with Domain, but only through Application.
+Application knows about Domain, but Domain knows nothing about Application. 
+Responsibilities also cannot skip layers, meaning Presentation never directly interacts with Domain but only through Application.
 The flow of dependencies looks like this based on the attributes described:
 ```
 Presentation => Application => Domain
 ```
-This, however, does not include infrastructure. 
-If you look at its behavior you can see it interacts with Domain and application.
+This, however, does not include infrastructure.
+If you look at its behavior, you can see it interacts with Domain and application.
 It stores Domain objects and Application interacts with it to retrieve those objects, meaning it exists in between these two layers.
-Therefore, there is an alternative flow of dependency if infrastrucute is included.
+Therefore, there is an alternative flow of dependency if Infrastructure is included.
 ```
 Presentation => Application =====================> Domain                 
                           \\==> infrastructure ==>//
 ```
 
 ### Isolation of Domain
-This flow of dependency makes it so, that Domain is completely isolated 
+This flow of dependency makes it so that Domain is completely isolated 
 and therefore does not depend on any other layer. Resulting in better modularity for expansion 
 and modification, but more importantly, testability.
 
 ### Motivation
 We chose a layered architecture for this project due to its simplicity in contrast to its benefits.
-Layering the application leads to clear flow of dependencies as described above as well as for better testability.
+Layering the application leads to a clear flow of dependencies as described above as well as better testability.
 #### Why 4 layers
-The first layer, presentation comes intuitively , as a split between the UI and logic behind is natural for a clear structure.
-The reason why we split Domain and Application is that we needed services to manage the Entities, i.e, Product and Material.
-These services, however, should be separated from the Domain entities to ensure testability for the Domain entities. 
-Furthermore, the services and entities, have different kinds of responsibilities, so splitting them is the most logical step. \
-We also knew, that we needed some kind of long term storage for the entities, which resulted in the infrastructure layer. \
-Additionally, these layers also make it easier to split the workload among the group as there are clear sections which each person can work on.
+The first layer, Presentation, comes intuitively, as a split between the UI and logic behind it is natural for a clear structure.
+The reason why we split Domain and Application is that we needed services to manage the entities, i.e., Product and Material.
+These services, however, should be separated from the Domain entities to ensure testability for the Domain entities.
+Furthermore, the services and entities have different kinds of responsibilities, so splitting them is the most logical step. \
+We also knew that we needed some kind of long-term storage for the entities, which resulted in the infrastructure layer. \
+Additionally, these layers also make it easier to split the workload among the group, as there are clear sections that each person can work on.
 
 ### Package Structure
-The package structure of the project reflects these layers but also includes sub packages, for better structural integrity.
+The package structure of the project reflects these layers but also includes subpackages for better structural integrity.
 ```
 org.ood
     ├─ presentation
@@ -142,29 +142,29 @@ org.ood
     └ Main
     
 ```
-Classes which do not directly fall under a sub package, simply live inside the package of their respective layer.
-Also note, that interfaces reside closest to where they are used, meaning that, e.g., the Registry- and RepositoryInterface, 
-live inside the application package, even though they belong to the infrastructure.  
+Classes that do not directly fall under a subpackage simply live inside the package of their respective layer.
+Also note that interfaces reside closest to where they are used, meaning that, e.g., the Registry- and RepositoryInterface,
+live inside the application package, even though they belong to the infrastructure.
 
 ## Strategy pattern
-A requirement for this project was, that there should be the option 
-to chose different formulas to calculate the environmental impact. Due to this a problem arose.
+A requirement for this project was that there should be the option
+to choose different formulas to calculate the environmental impact. Due to this, a problem arose.
 
 ### Problem
-When implementing different calculation strategies, you also need to update the options displayed 
-to the user as well as the coordination inside the service mapping the users choice to the correct strategy.
+When implementing different calculation strategies, you also need to update the options displayed
+to the user as well as the coordination inside the service mapping the user's choice to the correct strategy.
 If this is done via a switch statement inside the service and hardcoded inside the UI, it leads to large OCP violations.
 This is because if you now add a new strategy, you need to touch three layers and make many modifications to already existing code.
 
 ### Solution
-To solve this problem a design pattern is needed. Each strategy now lives inside its own 
+To solve this problem, a design pattern is needed. Each strategy now lives inside its own
 class implementing the interface 'ImpactCalculationStrategy'.
-This interface is used inside the 'EnvironmentalImpactService' which holds a strategy inside a private field which gets injected using the constructor.
+This interface is used inside the 'EnvironmentalImpactService,' which holds a strategy inside a private field that gets injected using the constructor.
 
 To create the service and inject it with the correct strategy, a factory is used.
 The 'EnvironmentalFactory' holds a static list of all available strategies.
-A list of the names of the strategies can be retrieved so the UI can display these to the user. 
-The factory can then create a service with the right strategy using the users input 
+A list of the names of the strategies can be retrieved so the UI can display these to the user.
+The factory can then create a service with the right strategy using the users input
 and the service is then available to be called upon by the UI. \
 For the implementation, see the [UML Diagram](#uml-diagram).
 
@@ -172,27 +172,28 @@ For the implementation, see the [UML Diagram](#uml-diagram).
 The design pattern leads to the displaying and choosing of a strategy to be dynamic,
 meaning that only a list inside the factory has to be updated when adding new strategies.
 This resolves the issue of having to modify a lot of code and improves the extensibility of the project greatly.
-Another aspect that benefits from this is testability as now each strategy can be tested individually.
+Another aspect that benefits from this is testability, as now each strategy can be tested individually.
 
 ## Technical Debt                     
-Technical debt describes the future cost of non-optimal and hastily decisions made during development, 
-that can prove to be hindering later on. This can also be found in our project:
+Technical debt describes the future cost of non-optimal 
+and hasty decisions made during development that can prove to be hindering later on. 
+This can also be found in our project:
 
 #### Error Handling
-Error handling should be coherent and follow a certain pattern throughout the whole project, 
+Error handling should be coherent and follow a certain pattern throughout the whole project,
 making it easy to follow errors and crashes. \
 However, in our project we did not decide on a specific contract.
-Therefore, the error handling differs between throwing exceptions, returning null, or just fallbacks to standard values.
-This makes debugging exponentially harder and more time exhaustive. \
-It will only get worse in the future, as long as no standard is present, which can be followed and maintained.
+Therefore, the error handling differs between throwing exceptions, returning null, or just falling back to standard values.
+This makes debugging exponentially harder and more time-consuming. \
+It will only get worse in the future as long as no standard is present that can be followed and maintained.
 
 #### Product UI
-Presentation and Domain should be clearly separated and the one way dependency should be kept to a minimum.
-In the current state, it would be hard to change the attributes of ProductEntity. 
-The reason for that is the sequence of creating or updating a ProductEntity. 
+Presentation and Domain should be clearly separated, and the one-way dependency should be kept to a minimum.
+In the current state, it would be hard to change the attributes of ProductEntity.
+The reason for that is the sequence of creating or updating a ProductEntity.
 It is hardcoded and statically dependent on Product.
-This could later cause heavier workloads as touching Domain would mean you'd have to touch Presentation. \
-To fix this it would require to fetch the list of attributes and their types from ProductEntity dynamically.         
+This could later cause heavier workloads, as touching Domain would mean you'd have to touch Presentation. \
+To fix this, it would require fetching the list of attributes and their types from ProductEntity dynamically.
 
 ## UML Diagram
 TODO link to UML
