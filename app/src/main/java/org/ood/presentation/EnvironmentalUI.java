@@ -63,7 +63,7 @@ public class EnvironmentalUI implements UIInterface {
         //Initialize service
         EnvironmentalImpactService environmentalImpactService = environmentalFactory.create(strategyIndex);
         // Get result from service
-        ImpactResult res = environmentalImpactService.CalculateImpact(productId, strategyIndex);
+        ImpactResult res = environmentalImpactService.CalculateImpact(productId);
 
         // Output the result
         outputFormatter.DisplayMessage(String.format("Product: %s (%d)\nImpact: %.3f\nStrategy used: %s", res.name(), res.id(), res.impact(), strategies.get(strategyIndex)));

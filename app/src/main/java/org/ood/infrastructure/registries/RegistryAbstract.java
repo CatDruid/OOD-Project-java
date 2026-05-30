@@ -32,11 +32,7 @@ public abstract class RegistryAbstract<T extends Entity> implements RegistryInte
         }
     }
 
-    /**
-     * Adds an object to the registry.
-     * @param obj      The object being added to it.
-     * @return         False if nothing could be added: either because the object was null, or because an exception occurred.
-     */
+    /** {@inheritDoc} */
     public boolean Add(T obj) {
         if(obj == null) {return false;}
         try {
@@ -49,15 +45,12 @@ public abstract class RegistryAbstract<T extends Entity> implements RegistryInte
         }
     }
 
+    /** {@inheritDoc} */
     public List<T> RetrieveAll() {
         return items;
     }
 
-    /**
-     * Tries to retrieve a given individual object by its ID.
-     * @param id        ID of the object that is being retrieved.
-     * @return          Either the object of type T, or a null value if no match was found for the ID.
-     */
+    /** {@inheritDoc} */
     public T RetrieveByID(int id) {
         for (T item : items) {
             if (item.GetID() == id) {
@@ -67,12 +60,7 @@ public abstract class RegistryAbstract<T extends Entity> implements RegistryInte
         return null;
     }
 
-
-    /**
-     * Updates a registry object if it exists (and what is provided is not null).
-     * @param newItem   Updated object
-     * @return          True if the object could be added. False otherwise for a variety of reasons.
-     */
+    /** {@inheritDoc} */
     public boolean Update(T newItem) {
         if(newItem == null || !IDExists(newItem.GetID())) {return false;}
         int id = newItem.GetID();
@@ -90,11 +78,7 @@ public abstract class RegistryAbstract<T extends Entity> implements RegistryInte
         return false;
     }
 
-    /**
-     * Deletes an object from the registry.
-     * @param id        ID of the object to delete
-     * @return          False if the operation could not be carried out or the object did not exist. True otherwise.
-     */
+    /** {@inheritDoc} */
     public boolean Delete(int id) {
         T item = RetrieveByID(id);
         if(item == null) {return false;}

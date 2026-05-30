@@ -22,6 +22,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
     private final RegistryInterface<ProductEntity> productRegistry;
     private final RepositoryInterface<ProductEntity> productRepository;
 
+    /** {@inheritDoc} */
     @Override
     public ProductCUDSuccessfully Create(ProductRecord createRequest) throws Exception {
         int newId = productRegistry.RetrieveAll().stream().mapToInt(ProductEntity::GetID)
@@ -46,6 +47,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
             throw new Exception("Ooops, something went wrong");
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<ProductRecord> RetrieveAll() {
         try {
@@ -58,6 +60,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public ProductRecord RetrieveByID(int id) {
         ProductEntity entity = this.productRegistry.RetrieveByID(id);
@@ -67,6 +70,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
             return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ProductCUDSuccessfully Update(ProductRecord updateRequest)  throws Exception {
         ProductEntity updatedEntity = new ProductEntity(updateRequest.id(), updateRequest.name(), updateRequest.category(), updateRequest.estimatedLifespan(),
@@ -87,6 +91,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
             throw new Exception("Ooops, something went wrong");
     }
 
+    /** {@inheritDoc} */
     @Override
     public ProductCUDSuccessfully Delete(int id)  throws Exception {
         if(this.productRegistry.Delete(id)){
@@ -97,6 +102,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
             throw new Exception("Ooops, something went wrong");
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean IdExists(int id) {
         return this.productRegistry.RetrieveByID(id) != null;
@@ -107,10 +113,15 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
         return product.GetGuidance();
     }
 
+    /**
+     * Gets the product category class.
+     * @return          An {@link ProductCategory} object.
+     */
     public Class<ProductCategory> GetCategory() {return ProductCategory.class;}
-
+    /** {@inheritDoc} */
     public Map<String, Class<?>> GetFields() {
         return new ProductRecord(0, "", null, 0, null).GetFields();
     }
+    /** {@inheritDoc} */
     public Map<String, Object> GetValues(int id) {return RetrieveByID(id).GetValues();}
 }
