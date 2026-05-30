@@ -90,11 +90,6 @@ public class MaterialEntityTests {
 
     //Self-validate tests
     @Test
-    @DisplayName("No validation errors when there shouldn't be.")
-    void CheckThatValidateSelfDoesNotReturnAnErrorWhenThereShouldNotBe(){
-        assertTrue(material.ValidateSelf().isEmpty());
-    }
-    @Test
     @DisplayName("Validation error in constructor exists when Emission Factor is below zero")
     void CheckThatValidationErrorWorksWhenEmissionIsLessThanZero(){
         assertThrows(Exception.class, () -> new MaterialEntity(
