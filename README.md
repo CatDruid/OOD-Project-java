@@ -148,8 +148,6 @@ org.ood
     
 ```
 Classes that do not directly fall under a subpackage simply live inside the package of their respective layer.
-Also note that interfaces reside closest to where they are used, meaning that, e.g., the Registry- and RepositoryInterface,
-live inside the application package, even though they belong to the infrastructure.
 
 ## Strategy pattern
 A requirement for this project was that there should be the option
