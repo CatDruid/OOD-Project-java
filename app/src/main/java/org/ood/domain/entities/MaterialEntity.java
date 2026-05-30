@@ -20,8 +20,8 @@ public class MaterialEntity implements Entity{
      *
      * @param name               The material's name.
      * @param recyclingCategory  The recycling category this material belongs to.
-     * @param mass               The mass of the material in kilograms, must be non-negative.
-     * @param emissionFactor     The CO₂e emission factor per kilogram, must be non-negative.
+     * @param mass               The mass of the material, must be non-negative.
+     * @param emissionFactor     The emission factor, must be non-negative.
      * @throws Exception         If any of the provided values violate domain constraints.
      */
     public MaterialEntity(String name, RecyclingCategory recyclingCategory, float mass, float emissionFactor) throws Exception {
@@ -33,7 +33,7 @@ public class MaterialEntity implements Entity{
 
     /**
      * Constructs a {@link MaterialEntity} with a pre-assigned ID.
-     * Intended for materials being loaded from a repository.
+     * Intended for Update operations wherein an ID already exists.
      *
      * @param materialID         The unique identifier assigned to this material.
      * @param name               The material's name.
@@ -51,6 +51,12 @@ public class MaterialEntity implements Entity{
     }
 
     //Set Methods
+
+    /**
+     * Sets the ID and validates it.
+     * @param materialID         The material's ID. Sets it to NoName if an empty string is provided.
+     * @throws Exception         If the ID is a negative number.
+     */
     private void SetID(int materialID) throws Exception{
         if (materialID >= 0) {
             this.materialID = materialID;
@@ -58,9 +64,19 @@ public class MaterialEntity implements Entity{
             throw new Exception("ID cannot be negative");
         }
     }
+
+    /**
+     * Sets the name and handles the empty case.
+     * @param name The material's name. Sets it to NoName if an empty string is provided.
+     */
     public void SetName(String name) {
         this.name = name.isEmpty() ? "NoName" : name;
     }
+
+    /**
+     * Sets the recycling category and handles the null case.
+     * @param recyclingCategory The material's category. Residual if null value is provided.
+     */
     public void SetRecyclingCategory(RecyclingCategory recyclingCategory) {
         this.recyclingCategory = Objects.requireNonNullElse(recyclingCategory, RecyclingCategory.Residual);
     }
