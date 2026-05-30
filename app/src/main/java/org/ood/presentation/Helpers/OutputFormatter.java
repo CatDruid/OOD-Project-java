@@ -5,6 +5,9 @@ import org.ood.presentation.records.EntityRecords.ProductRecord;
 
 import java.util.List;
 
+/**
+ * The class centralizing UI displaying responsibilities to the console throughout the presentation layer.
+ */
 public class OutputFormatter {
     public void DisplayMessage(String message) {
         System.out.println(message);
