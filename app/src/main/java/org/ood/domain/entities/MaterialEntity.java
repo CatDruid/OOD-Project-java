@@ -2,6 +2,8 @@ package org.ood.domain.entities;
 
 import org.ood.domain.RecyclingCategory;
 
+import java.util.Objects;
+
 public class MaterialEntity implements Entity{
     private int materialID;
     private String name;
@@ -11,29 +13,34 @@ public class MaterialEntity implements Entity{
 
 
     public MaterialEntity(String name, RecyclingCategory recyclingCategory, float mass, float emissionFactor) throws Exception {
-        this.name = name;
-        this.recyclingCategory = recyclingCategory;
-        this.mass = mass;
-        this.emissionFactor = emissionFactor;
-        String errors = this.ValidateSelf();
-        if(errors.isEmpty() == false)
-            throw new Exception(errors);
+        SetName(name);
+        SetRecyclingCategory(recyclingCategory);
+        SetMass(mass);
+        SetEmissionFactor(emissionFactor);
     }
 
     public MaterialEntity(int materialID, String name, RecyclingCategory recyclingCategory, float mass, float emissionFactor)  throws Exception  {
-        this.materialID = materialID;
-        this.name = name;
-        this.recyclingCategory = recyclingCategory;
-        this.mass = mass;
-        this.emissionFactor = emissionFactor;
-        String errors = this.ValidateSelf();
-        if(errors.isEmpty() == false)
-            throw new Exception(errors);
+        SetID(materialID);
+        SetName(name);
+        SetRecyclingCategory(recyclingCategory);
+        SetMass(mass);
+        SetEmissionFactor(emissionFactor);
     }
 
     //Set Methods
-    public void SetName(String name) {this.name = name;}
-    public void SetRecyclingCategory(RecyclingCategory recyclingCategory) {this.recyclingCategory = recyclingCategory;}
+    private void SetID(int materialID) throws Exception{
+        if (materialID >= 0) {
+            this.materialID = materialID;
+        } else {
+            throw new Exception("ID cannot be negative");
+        }
+    }
+    public void SetName(String name) {
+        this.name = name.isEmpty() ? "NoName" : name;
+    }
+    public void SetRecyclingCategory(RecyclingCategory recyclingCategory) {
+        this.recyclingCategory = Objects.requireNonNullElse(recyclingCategory, RecyclingCategory.Residual);
+    }
     public void SetMass(float mass) throws Exception {
         if(mass >= 0)
             this.mass = mass;
