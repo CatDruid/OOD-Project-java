@@ -88,12 +88,7 @@ public class MaterialEntityTests {
         assertThrows(Exception.class, () -> material.SetEmissionFactor(-0.1f));
     }
 
-    //Self-validate tests
-    @Test
-    @DisplayName("No validation errors when there shouldn't be.")
-    void CheckThatValidateSelfDoesNotReturnAnErrorWhenThereShouldNotBe(){
-        assertTrue(material.ValidateSelf().isEmpty());
-    }
+    //Setter logic tests
     @Test
     @DisplayName("Validation error in constructor exists when Emission Factor is below zero")
     void CheckThatValidationErrorWorksWhenEmissionIsLessThanZero(){
@@ -105,6 +100,39 @@ public class MaterialEntityTests {
                 -1f
         ));
     }
+    @Test
+    @DisplayName("Recycling category defaults to Residual when null is provided")
+    void CheckThatRecyclingCategoryDefaultsToResidualWhenNull() throws Exception {
+        MaterialEntity entity = new MaterialEntity(
+                1,
+                "Test",
+                null,
+                2.01f,
+                1f);
+        assertEquals(RecyclingCategory.Residual, entity.GetRecyclingCategory());
+    }
+    @Test
+    @DisplayName("Name defaults to NoName when an empty string is provided")
+    void CheckThatNameDefaultsToNoNameWhenEmpty() throws Exception {
+        MaterialEntity entity = new MaterialEntity(
+                1,
+                "",
+                RecyclingCategory.Food,
+                2.01f,
+                1f);
+        assertEquals("NoName", entity.GetName());
+    }
+    @Test
+    @DisplayName("Validation error thrown in constructor when ID is negative")
+    void CheckThatIDThrowsWhenNegative() {
+        assertThrows(Exception.class, () -> new MaterialEntity(
+                -1,
+                "Test",
+                RecyclingCategory.Food,
+                2.01f,
+                1f));
+    }
+
     @Test
     @DisplayName("Validation error in constructor exists when Mass is below zero")
     void CheckThatValidationErrorWorksWhenMassIsLessThanZero(){

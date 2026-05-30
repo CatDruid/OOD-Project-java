@@ -64,15 +64,4 @@ public class MaterialEntity implements Entity{
         return this.name + ": " + this.recyclingCategory.guidance;
     }
 
-    /*Constructs and returns the error message if there are any.
-    If the string is empty, however, then there are no errors.
-     */
-    public String ValidateSelf(){
-        StringBuilder err = new StringBuilder();
-        if (this.mass < 0)
-            err.append("Mass cannot be less than zero \n");
-        if (this.emissionFactor < 0)
-            err.append("Emission Factor cannot be less than zero \n");
-        return err.toString();
-    }
 }
