@@ -3,8 +3,10 @@
 
 Sustainable Product and Recycling Management System - SPaRMS
 
-SPaRMS gives users the ability to manage products with a focus on environmental sustainability.
-It calculates the environmental impact and gives tips on recycling for both single and mixed material products.
+SPaRMS gives users the ability to manage products with a focus on environmental sustainability. \
+It can calculate the environmental impact on a product, taking every material used into consideration, 
+as well as being able to utilize different calculation strategies e.g., simple sum or weighted by lifespan. \
+Recycling guidance can also be given in accordance with the Swedish Waste Management.
 
 <!-- TOC -->
 * [OOD-Project-java](#ood-project-java)
@@ -23,9 +25,12 @@ It calculates the environmental impact and gives tips on recycling for both sing
   * [Technical Debt](#technical-debt-)
       * [Error Handling](#error-handling)
       * [Product UI](#product-ui)
-  * [UML Diagram](#uml-diagram)
-  * [Sequence Diagram](#sequence-diagram)
-  * [Roles](#roles)
+  * [Doc references and Diagrams](#doc-references-and-diagrams)
+    * [Refactoring Week 9](#refactoring-week-9)
+    * [UML Diagram](#uml-diagram)
+    * [Sequence Diagram](#sequence-diagram)
+    * [Other documentation files](#other-documentation-files)
+  * [Team](#team)
   * [Branch naming](#branch-naming)
       * [Features](#features)
       * [Fixes, rewrites and refactors](#fixes-rewrites-and-refactors)
@@ -195,13 +200,19 @@ It is hardcoded and statically dependent on Product.
 This could later cause heavier workloads, as touching Domain would mean you'd have to touch Presentation. \
 To fix this, it would require fetching the list of attributes and their types from ProductEntity dynamically.
 
-## UML Diagram
+## Doc references and Diagrams
+
+### [Refactoring Week 9](Docs/refactoring-week9.md)
+
+### UML Diagram
 TODO link to UML
 
-## Sequence Diagram
+### [Sequence Diagram](Docs/Sequence%20Diagram%20-%20Get%20Guidance%20for%20Product.svg)
 ![Sequence Diagram - Get Guidance for Product.svg](Docs/Sequence%20Diagram%20-%20Get%20Guidance%20for%20Product.svg)
 
-## Roles
+### [Other documentation files](Docs)
+
+## Team
 Dag Sandström - Product management dev
 
 David Charlier - Environmental impact dev
