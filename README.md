@@ -201,11 +201,11 @@ To fix this, it would require fetching the list of attributes and their types fr
 #### Persistency Layer issues
 Currently, the data is being stored in two files: materials.json and products.json. These, in turn, follow the same structure as their entities.
 The problem is that the approach of simply transforming the object onto a json produces an issue with the one-to-many relationship
-Between product and material: a product entity has many material entities and it holds them.
-When saved, no further handling is being done to process them, the materials a product has are saved alongside it.
-This means that each material is stored multiple times: first once per material in materials.json, which is correct, but then
-It is duplicated within products.json. An application with 1000 products and 2 materials will thus have at least 1002 materials saved in the best-case scenario.
-Fixing this would require reworking how the products are being saved and then loaded within the Infrastructure layer.
+between product and material: a product entity has many material entities and it holds them. \
+
+When saved, no further handling is being done to process them, the materials a product has are saved alongside it, this means that each material is stored multiple times: first once per material in materials.json, which is correct, but then it is duplicated within products.json. \
+
+So it is that an application with 1000 products and 2 materials will thus have at least 1002 materials saved in the best-case scenario, and fixing this would require reworking how the products are being saved and then loaded within the Infrastructure layer.
 
 ## Doc references and Diagrams
 
