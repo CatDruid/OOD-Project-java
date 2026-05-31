@@ -1,6 +1,7 @@
 package org.ood.presentation.records.EntityRecords;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.ood.domain.ProductCategory;
@@ -20,5 +21,9 @@ public record ProductRecord(
                 entity.getMaterial().stream()
                 .map(MaterialRecord::FromEntity)
                 .collect(Collectors.toList()));
+    }
+
+    public static Map<String, Class<?>> GetFields() {
+        return Introspectable.GetFields(ProductRecord.class);
     }
 }

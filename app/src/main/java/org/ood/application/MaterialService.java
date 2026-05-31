@@ -77,7 +77,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
     }
 
     public Map<String, Class<?>> GetFields() {
-        return new MaterialRecord(0, "", null, 0.0f, 0.0f).GetFields();
+        return MaterialRecord.GetFields();
     }
     public Map<String, Object> GetValues(int id) {return RetrieveByID(id).GetValues();}
 

@@ -4,6 +4,8 @@ import org.ood.domain.RecyclingCategory;
 import org.ood.domain.entities.MaterialEntity;
 import org.ood.presentation.records.Introspectable;
 
+import java.util.Map;
+
 public record MaterialRecord(
     Integer id,
     String name,
@@ -18,6 +20,10 @@ public record MaterialRecord(
     /** Converts this {@link MaterialRecord} into a {@link MaterialEntity}. */
     public MaterialEntity ToEntity() throws Exception {
         return new MaterialEntity(id, name, category, mass, emissionFactor);
+    }
+
+    public static Map<String, Class<?>> GetFields() {
+        return Introspectable.GetFields(MaterialRecord.class);
     }
 
 
