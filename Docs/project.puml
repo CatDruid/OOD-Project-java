@@ -1,4 +1,5 @@
 @startuml
+' Domain
 package Domain {
 
 package entities {
@@ -80,6 +81,7 @@ Load() : List<T>
 }
 }
 
+' Infrastructure
 package infrastructure {
 
 package registries {
@@ -131,6 +133,7 @@ Constructor
 }
 }
 
+' Application
 package application {
 
 interface CRUDServiceInterface {
@@ -201,6 +204,7 @@ class ProductService {
 }
 }
 
+' Presentation
 package presentation {
 package Helpers {
 class InputHandler {
@@ -277,10 +281,6 @@ interface Introspectable {
 GetFields() : Map<String, Class<?>>
 GetValues() : Map<String, Object>
 }
-record MaterialSelection {
-materialID : int
-quantity : double
-}
 }
 interface UIInterface {
 MenuLoop() : void
@@ -347,5 +347,98 @@ class UI {
 -OptionsHandler(int option) : void
 }
 }
+' Arrows
+' inheritance / implementation
+
+AbstractImpactStrategy ..|> ImpactCalculationStrategy
+SimpleSumStrategy --|> AbstractImpactStrategy
+WeightedByLifespanStrategy --|> AbstractImpactStrategy
+
+RegistryAbstract ..|> RegistryInterface
+MaterialRegistry --|> RegistryAbstract
+ProductRegistry --|> RegistryAbstract
+
+AbstractJSONRepository ..|> RepositoryInterface
+JSONMaterialRepository --|> AbstractJSONRepository
+JsonProductRepository --|> AbstractJSONRepository
+
+CRUDServiceAbstract ..|> CRUDServiceInterface
+MaterialService --|> CRUDServiceAbstract
+ProductService --|> CRUDServiceAbstract
+
+MaterialEntity ..|> Entity
+ProductEntity ..|> Entity
+
+MaterialCRUDUI --|> UICRUDAbstract
+ProductCRUIDUI --|> UICRUDAbstract
+EnvironmentalUI ..|> UIInterface
+UICRUDAbstract ..|> UIInterface
+UI ..|> UIInterface
+
+MaterialRecord ..|> Introspectable
+ProductRecord ..|> Introspectable
+
+'  depend / association
+
+ProductEntity "1" *-- "many" MaterialEntity
+
+MaterialService --> RegistryInterface
+MaterialService --> RepositoryInterface
+ProductService --> RegistryInterface
+ProductService --> RepositoryInterface
+
+EnvironmentalImpactService --> ImpactCalculationStrategy
+EnvironmentalImpactService --> RegistryInterface
+
+EnvironmentalFactory --> EnvironmentalImpactService
+EnvironmentalFactory --> RegistryInterface
+EnvironmentalFactory --> ImpactCalculationStrategy
+
+CRUDServiceAbstract --> RepositoryInterface
+CRUDServiceAbstract --> RegistryInterface
+
+MaterialCRUDUI --> MaterialService
+MaterialCRUDUI --> InputHandler
+MaterialCRUDUI --> OutputFormatter
+MaterialCRUDUI --> RequestBuilder
+
+ProductCRUIDUI --> ProductService
+ProductCRUIDUI --> MaterialService
+ProductCRUIDUI --> InputHandler
+ProductCRUIDUI --> OutputFormatter
+
+EnvironmentalUI --> ProductService
+EnvironmentalUI --> EnvironmentalFactory
+EnvironmentalUI --> InputHandler
+EnvironmentalUI --> OutputFormatter
+
+UI --> MaterialCRUDUI
+UI --> ProductCRUIDUI
+UI --> EnvironmentalUI
+UI --> InputHandler
+UI --> OutputFormatter
+
+InputHandler --> OutputFormatter
+
+InputHandler --> CRUDServiceInterface
+
+RequestBuilder --> InputHandler
+
+RegistryAbstract --> RepositoryInterface
+
+EnvironmentalImpactService ..> ImpactResult
+
+MaterialService ..> MaterialRecord
+MaterialService ..> MaterialCUDSuccessfully
+
+ProductService ..> ProductRecord
+ProductService ..> ProductCUDSuccessfully
+
+MaterialRecord ..> MaterialEntity
+ProductRecord ..> ProductEntity
+
+ProductCategory ..> ProductEntity
+recyclingCategory ..> MaterialEntity
+@enduml
 
 @enduml
