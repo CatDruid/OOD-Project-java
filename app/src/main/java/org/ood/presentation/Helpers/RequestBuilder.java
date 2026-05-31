@@ -1,7 +1,6 @@
 package org.ood.presentation.Helpers;
 
 import org.ood.domain.RecyclingCategory;
-import org.ood.presentation.records.EntityRecords.MaterialRecord;
 import org.ood.presentation.records.Introspectable;
 
 import java.util.*;
@@ -92,7 +91,7 @@ public class RequestBuilder<T extends Introspectable> {
     private ArrayList<String> CreateOptions(Map<String, String> labels, Map<String, Object> valuesMap) {
         ArrayList<String> options = new ArrayList<>(labels.keySet().stream()
                 .map(option ->
-                        option += (valuesMap.getOrDefault(labels.get(option), null) == null ?
+                        option + (valuesMap.getOrDefault(labels.get(option), null) == null ?
                                 ""
                                 : String.format(" [%s]", valuesMap.getOrDefault(labels.get(option), null).toString())))
                 .toList());

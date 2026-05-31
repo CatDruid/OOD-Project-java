@@ -77,9 +77,10 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
 
         int id = inputHandler.GetId("Which ID do you want to edit?", materialService);
         if(id == -1) {return;}
+
         MaterialRecord toUpdate = materialService.RetrieveByID(id);
         try{
-            RequestBuilder<MaterialRecord> requestBuilder = (RequestBuilder<MaterialRecord>) requestFactory.Create(MaterialRecord.class);
+            RequestBuilder<MaterialRecord> requestBuilder = requestFactory.Create(MaterialRecord.class);
             materialService.Update(requestBuilder.UpdateRecord(toUpdate));
         } catch (Exception e) {
             outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());

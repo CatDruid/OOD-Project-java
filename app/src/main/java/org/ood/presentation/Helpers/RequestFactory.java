@@ -19,7 +19,7 @@ public class RequestFactory {
     }
 
     public <T extends Introspectable> RequestBuilder<T> Create(Class<T> clazz) {
-        return new RequestBuilder<T> (inputHandler, clazz, GetMapper(clazz));
+        return new RequestBuilder<> (inputHandler, clazz, GetMapper(clazz));
     }
 
 
