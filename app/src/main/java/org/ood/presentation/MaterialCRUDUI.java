@@ -72,20 +72,24 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     }
     protected void Update() {
         outputFormatter.DisplayMessage("Do you want to print the IDs before choosing?");
-        if(inputHandler.AskYesNo())
-            RetrieveAll();
+        if(inputHandler.AskYesNo()) {RetrieveAll();}
 
         int id = inputHandler.GetId("Which ID do you want to edit?", materialService);
         if(id == -1) {return;}
 
+        MaterialCUDSuccessfully successfully;
         MaterialRecord toUpdate = materialService.RetrieveByID(id);
         try{
             RequestBuilder<MaterialRecord> requestBuilder = requestFactory.Create(MaterialRecord.class);
-            materialService.Update(requestBuilder.UpdateRecord(toUpdate));
+            successfully = materialService.Update(requestBuilder.UpdateRecord(toUpdate));
         } catch (Exception e) {
-            outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
+            outputFormatter.DisplayErrorMessage("Couldn't update" + e.getMessage(),e.hashCode());
+            return;
         }
+        outputFormatter.DisplayMessage("Successfully updated");
+        outputFormatter.PrintMaterial(materialService.RetrieveByID(successfully.id()));
     }
+
     protected void Delete() {
         outputFormatter.DisplayMessage("Do you want to print the IDs before choosing?");
         if(inputHandler.AskYesNo())
