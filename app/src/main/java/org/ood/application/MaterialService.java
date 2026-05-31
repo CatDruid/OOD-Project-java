@@ -22,6 +22,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
     private final RegistryInterface<MaterialEntity> materialRegistry;
     private final RepositoryInterface<MaterialEntity> materialRepository;
 
+    /** {@inheritDoc} */
     @Override
     public MaterialCUDSuccessfully Create(MaterialRecord createRequest) throws Exception {
         int newId = materialRegistry.RetrieveAll().stream().mapToInt(MaterialEntity::GetID)
@@ -36,6 +37,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
             throw new Exception("Ooops, something went wrong");
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<MaterialRecord> RetrieveAll() {
         try {
@@ -48,6 +50,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public MaterialRecord RetrieveByID(int id) {
         MaterialEntity entity = this.materialRegistry.RetrieveByID(id);
@@ -57,6 +60,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
             return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public MaterialCUDSuccessfully Update(MaterialRecord updateRequest) throws Exception {
         MaterialEntity updatedEntity = new MaterialEntity(updateRequest.id(), updateRequest.name(), updateRequest.category(), updateRequest.mass(), updateRequest.emissionFactor());
@@ -67,6 +71,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
             throw new Exception("Ooops, something went wrong");
     }
 
+    /** {@inheritDoc} */
     @Override
     public MaterialCUDSuccessfully Delete(int id) throws Exception {
         if(this.materialRegistry.Delete(id)) {
@@ -76,11 +81,14 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
             throw new Exception("Ooops, something went wrong");
     }
 
+    /** {@inheritDoc} */
     public Map<String, Class<?>> GetFields() {
         return MaterialRecord.GetFields();
     }
+    /** {@inheritDoc} */
     public Map<String, Object> GetValues(int id) {return RetrieveByID(id).GetValues();}
 
+    /** {@inheritDoc} */
     @Override
     public boolean IdExists(int id) {
         return this.materialRegistry.RetrieveByID(id) != null;
