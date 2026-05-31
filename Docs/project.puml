@@ -15,7 +15,6 @@ class MaterialEntity {
 -mass : float
 -emissionFactor : float
 
-+ValidateSelf() : String
 +GetGuidance() : String
 }
 
@@ -42,9 +41,6 @@ class SimpleSumStrategy {
 +CalculateImpact(ProductEntity product) : float
 }
 class WeightedByLifespanStrategy {
-+CalculateImpact(ProductEntity product) : float
-}
-class WeightedByRecyclabilityStrategy {
 +CalculateImpact(ProductEntity product) : float
 }
 }
