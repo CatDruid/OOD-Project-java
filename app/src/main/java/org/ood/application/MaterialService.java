@@ -28,7 +28,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
         int newId = materialRegistry.RetrieveAll().stream().mapToInt(MaterialEntity::GetID)
                 .max()
                 .orElse(0) + 1;
-        MaterialEntity createdEntity = new MaterialEntity(newId, createRequest.name(), createRequest.category(), createRequest.mass(), createRequest.emissionFactor());
+        MaterialEntity createdEntity = new MaterialEntity(newId, createRequest.name(), createRequest.recyclingCategory(), createRequest.mass(), createRequest.emissionFactor());
         if(this.materialRegistry.Add(createdEntity)) {
             this.materialRepository.Save(this.materialRegistry.RetrieveAll());
             return new MaterialCUDSuccessfully(createdEntity.GetID(), "Create worked!!");
@@ -63,7 +63,7 @@ public class MaterialService extends CRUDServiceAbstract<MaterialEntity, Materia
     /** {@inheritDoc} */
     @Override
     public MaterialCUDSuccessfully Update(MaterialRecord updateRequest) throws Exception {
-        MaterialEntity updatedEntity = new MaterialEntity(updateRequest.id(), updateRequest.name(), updateRequest.category(), updateRequest.mass(), updateRequest.emissionFactor());
+        MaterialEntity updatedEntity = new MaterialEntity(updateRequest.id(), updateRequest.name(), updateRequest.recyclingCategory(), updateRequest.mass(), updateRequest.emissionFactor());
         if(this.materialRegistry.Update(updatedEntity)) {
             this.materialRepository.Save(this.materialRegistry.RetrieveAll());
             return new MaterialCUDSuccessfully(updateRequest.id(), "Update worked!");

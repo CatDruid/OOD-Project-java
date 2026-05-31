@@ -7,8 +7,6 @@ import org.ood.domain.RecyclingCategory;
 import org.ood.domain.entities.MaterialEntity;
 import org.ood.presentation.records.EntityRecords.MaterialRecord;
 
-import java.util.Objects;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MaterialRecordTests {
@@ -49,9 +47,9 @@ public class MaterialRecordTests {
         assertEquals(MaterialRecord.FromEntity(entity).id(), entity.GetID());
     }
     @Test
-    @DisplayName("Creates material record category is same as generating entity.")
+    @DisplayName("Creates material record productCategory is same as generating entity.")
     void CheckThatRecordCategoryMatchesEntity() {
-        assertEquals(MaterialRecord.FromEntity(entity).category(), entity.GetRecyclingCategory());
+        assertEquals(MaterialRecord.FromEntity(entity).recyclingCategory(), entity.GetRecyclingCategory());
     }
     @Test
     @DisplayName("Creates material record mass is same as generating entity.")
@@ -79,9 +77,9 @@ public class MaterialRecordTests {
         assertEquals(record.ToEntity().GetID(), record.id());
     }
     @Test
-    @DisplayName("Creates material entity category is same as generating record.")
+    @DisplayName("Creates material entity productCategory is same as generating record.")
     void CheckThatEntityCategoryMatchesRecord() throws Exception {
-        assertEquals(record.ToEntity().GetRecyclingCategory(), record.category());
+        assertEquals(record.ToEntity().GetRecyclingCategory(), record.recyclingCategory());
     }
     @Test
     @DisplayName("Creates material entity mass is same as generating record.")

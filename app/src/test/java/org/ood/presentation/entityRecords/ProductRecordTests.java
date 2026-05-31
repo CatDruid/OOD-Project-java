@@ -7,7 +7,6 @@ import org.ood.domain.ProductCategory;
 import org.ood.domain.RecyclingCategory;
 import org.ood.domain.entities.MaterialEntity;
 import org.ood.domain.entities.ProductEntity;
-import org.ood.presentation.records.EntityRecords.MaterialRecord;
 import org.ood.presentation.records.EntityRecords.ProductRecord;
 
 import java.util.Arrays;
@@ -64,7 +63,7 @@ public class ProductRecordTests {
     @Test
     @DisplayName("Creates product record category is same as generating entity.")
     void CheckThatRecordCategoryMatchesEntity() {
-        assertEquals(ProductRecord.FromEntity(entity).category(), entity.GetCategory());
+        assertEquals(ProductRecord.FromEntity(entity).productCategory(), entity.GetCategory());
     }
     @Test
     @DisplayName("Creates product record category is same as generating entity.")

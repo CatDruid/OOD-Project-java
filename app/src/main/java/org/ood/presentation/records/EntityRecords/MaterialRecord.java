@@ -9,7 +9,7 @@ import java.util.Map;
 public record MaterialRecord(
     Integer id,
     String name,
-    RecyclingCategory category,
+    RecyclingCategory recyclingCategory,
     float mass,
     float emissionFactor
 ) implements Introspectable {
@@ -19,7 +19,7 @@ public record MaterialRecord(
     }
     /** Converts this {@link MaterialRecord} into a {@link MaterialEntity}. */
     public MaterialEntity ToEntity() throws Exception {
-        return new MaterialEntity(id, name, category, mass, emissionFactor);
+        return new MaterialEntity(id, name, recyclingCategory, mass, emissionFactor);
     }
 
     public static Map<String, Class<?>> GetFields() {

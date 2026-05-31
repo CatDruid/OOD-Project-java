@@ -12,7 +12,7 @@ import java.util.Objects;
 public class ProductEntity implements Entity{
     private int productID;
     private String name;
-    private ProductCategory category;
+    private ProductCategory productCategory;
     private float estimatedLifespan;
     private List<MaterialEntity> material;
 
@@ -21,13 +21,13 @@ public class ProductEntity implements Entity{
      * Intended for new products.
      *
      * @param name               The material's name.
-     * @param category           The product category this product belongs to.
+     * @param productCategory    The product category this product belongs to.
      * @param estimatedLifespan  The product's estimated lifespan.
      * @param material           The list of materials composing the product.
      */
-    public ProductEntity(String name, ProductCategory category, float estimatedLifespan, List<MaterialEntity> material) {
+    public ProductEntity(String name, ProductCategory productCategory, float estimatedLifespan, List<MaterialEntity> material) {
         SetName(name);
-        SetProductCategory(category);
+        SetProductCategory(productCategory);
         SetEstimatedLifeSpan(estimatedLifespan);
         SetMaterials(material);
     }
@@ -37,14 +37,14 @@ public class ProductEntity implements Entity{
      * Intended for Update operations  wherein an ID already exists.
      *
      * @param name               The material's name.
-     * @param category           The product category this product belongs to.
+     * @param productCategory    The product category this product belongs to.
      * @param estimatedLifespan  The product's estimated lifespan.
      * @param material           The list of materials composing the product.
      */
-    public ProductEntity(int productID, String name, ProductCategory category, float estimatedLifespan, List<MaterialEntity> material) {
+    public ProductEntity(int productID, String name, ProductCategory productCategory, float estimatedLifespan, List<MaterialEntity> material) {
         SetProductID(productID);
         SetName(name);
-        SetProductCategory(category);
+        SetProductCategory(productCategory);
         SetEstimatedLifeSpan(estimatedLifespan);
         SetMaterials(material);
     }
@@ -65,7 +65,7 @@ public class ProductEntity implements Entity{
      * @param category The product's category. Other if null value is provided.
      */
     public void SetProductCategory(ProductCategory category) {
-        this.category = Objects.requireNonNullElse(category, ProductCategory.Other);
+        this.productCategory = Objects.requireNonNullElse(category, ProductCategory.Other);
     }
 
 
@@ -78,7 +78,7 @@ public class ProductEntity implements Entity{
     //Get Methods
     public int GetID() {return productID;}
     public String GetName() {return name;}
-    public ProductCategory GetCategory() {return category;}
+    public ProductCategory GetCategory() {return productCategory;}
     public float GetEstimatedLifeSpan() {return estimatedLifespan;}
     public List<MaterialEntity> getMaterial() {return material;}
 

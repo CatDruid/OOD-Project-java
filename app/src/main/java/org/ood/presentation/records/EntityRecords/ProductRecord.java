@@ -11,7 +11,7 @@ import org.ood.presentation.records.Introspectable;
 public record ProductRecord(
     Integer id,
     String name,
-    ProductCategory category,
+    ProductCategory productCategory,
     float estimatedLifespan,
     List<MaterialRecord> materials
 ) implements Introspectable {
