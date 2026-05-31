@@ -5,6 +5,7 @@ import org.ood.domain.entities.MaterialEntity;
 import org.ood.presentation.Helpers.InputHandler;
 import org.ood.presentation.Helpers.OutputFormatter;
 import org.ood.presentation.Helpers.RequestBuilder;
+import org.ood.presentation.Helpers.RequestFactory;
 import org.ood.presentation.records.Results.MaterialCUDSuccessfully;
 import org.ood.presentation.records.EntityRecords.MaterialRecord;
 
@@ -20,17 +21,17 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     public MaterialCRUDUI(InputHandler inputHandler,
                           OutputFormatter outputFormatter,
                           CRUDServiceInterface<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> materialService,
-                          RequestBuilder requestBuilder
+                          RequestFactory requestFactory
         ) {
         this.inputHandler = inputHandler;
         this.outputFormatter = outputFormatter;
         this.materialService = materialService;
-        this.requestBuilder = requestBuilder;
+        this.requestFactory = requestFactory;
     }
 
     private final InputHandler inputHandler;
     private final OutputFormatter outputFormatter;
-    private final RequestBuilder requestBuilder;
+    private final RequestFactory requestFactory;
     private final CRUDServiceInterface<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully> materialService;
     private final List<String> menuOptions = Arrays.asList("Get all materials", "Get a material by ID", "Create New Material", "Update Material", "Delete Material", "Exit");
     private boolean looping = true;
@@ -59,6 +60,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
     protected void Create() {
         MaterialCUDSuccessfully successfully;
         try {
+            RequestBuilder<MaterialRecord> requestBuilder = requestFactory.Create(MaterialRecord.class);
             successfully = materialService.Create(requestBuilder.CreateRecord());
         } catch (Exception e) {
             outputFormatter.DisplayErrorMessage("Couldn't create the material : " + e.getMessage(), e.hashCode());
@@ -77,6 +79,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
         if(id == -1) {return;}
         MaterialRecord toUpdate = materialService.RetrieveByID(id);
         try{
+            RequestBuilder<MaterialRecord> requestBuilder = (RequestBuilder<MaterialRecord>) requestFactory.Create(MaterialRecord.class);
             materialService.Update(requestBuilder.UpdateRecord(toUpdate));
         } catch (Exception e) {
             outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());

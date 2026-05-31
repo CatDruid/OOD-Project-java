@@ -14,6 +14,7 @@ import org.ood.presentation.*;
 import org.ood.presentation.Helpers.InputHandler;
 import org.ood.presentation.Helpers.OutputFormatter;
 import org.ood.presentation.Helpers.RequestBuilder;
+import org.ood.presentation.Helpers.RequestFactory;
 
 import java.util.Scanner;
 
@@ -39,10 +40,10 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         OutputFormatter outputFormatter = new OutputFormatter();
         InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
-        RequestBuilder requestBuilder = new RequestBuilder(inputHandler, materialService.GetFields());
+        RequestFactory requestFactory = new RequestFactory(inputHandler);
 
         // UI classes
-        MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService, requestBuilder);
+        MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService, requestFactory);
         ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
         EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService, environmentalFactory);
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);

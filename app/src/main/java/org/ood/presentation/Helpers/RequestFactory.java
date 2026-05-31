@@ -11,23 +11,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class RequestFactory<T extends Introspectable> {
+public class RequestFactory {
     private final InputHandler inputHandler;
 
     public RequestFactory(InputHandler inputHandler) {
         this.inputHandler = inputHandler;
     }
 
-    public RequestBuilder<T> Create(Class<T> clazz) {
-        return new RequestBuilder<T>(inputHandler, clazz, GetMapper(clazz));
+    public <T extends Introspectable> RequestBuilder<T> Create(Class<T> clazz) {
+        return new RequestBuilder<T> (inputHandler, clazz, GetMapper(clazz));
     }
 
-    /**
-     * Used to cast the mapper and circumvent the warning given when retrieving it
-     * @param clazz The class the mapper should map to
-     * @return A map to record mapper for the given clazz
-     */
-    private RecordMapper<T> GetMapper(Class<T> clazz) {
+
+    private <T extends Introspectable> RecordMapper<T> GetMapper(Class<T> clazz) {
         @SuppressWarnings("unchecked")
         RecordMapper<T> mapper = (RecordMapper<T>) mappers.get(clazz);
         return mapper;
