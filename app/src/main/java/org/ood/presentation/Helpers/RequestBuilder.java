@@ -2,31 +2,37 @@ package org.ood.presentation.Helpers;
 
 import org.ood.domain.RecyclingCategory;
 import org.ood.presentation.records.EntityRecords.MaterialRecord;
+import org.ood.presentation.records.Introspectable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RequestBuilder {
+public class RequestBuilder<T extends Introspectable> {
     private final InputHandler inputHandler;
     private final Map<String, Class<?>> fields;
+    private final RecordMapper<T> mapper;
 
     /**
      * Creates the Request Builder for a given record.
      * @param inputHandler      The Input Handler, used throughout the construction of a craete/update request.
-     * @param fields            A name-class tuple representing the record's fields.
      */
-    public RequestBuilder(InputHandler inputHandler, Map<String, Class<?>> fields) {
+    public RequestBuilder(InputHandler inputHandler, Class<T> clazz, RecordMapper<T> mapper) {
         this.inputHandler = inputHandler;
-        this.fields = fields;
+        this.fields = Introspectable.GetFields(clazz);
+        this.mapper = mapper;
     }
 
-    public MaterialRecord UpdateRecord(MaterialRecord toUpdate) {
+    public T UpdateRecord(T toUpdate) {
         Map<String, Object> newValues = CreateRecordLogic(toUpdate.GetValues()).GetValues();
         newValues.put("id", toUpdate.id());
-        return ValuesToRecord(newValues);
+        try {
+            return mapper.map(newValues);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public MaterialRecord CreateRecord() {
+    public T CreateRecord() {
         return CreateRecordLogic(null);
     }
 
@@ -36,7 +42,7 @@ public class RequestBuilder {
      * @param initialValues         The initial values to seed the record with,
      * @return                      The finalized record.
      */
-    private MaterialRecord CreateRecordLogic(Map<String, Object> initialValues) {
+    private T CreateRecordLogic(Map<String, Object> initialValues) {
         Map<String, Object> valuesMap;
         if (initialValues == null || initialValues.isEmpty()) {
             valuesMap = new HashMap<>();
@@ -69,21 +75,12 @@ public class RequestBuilder {
 
             valuesMap.put(field, value);
         }
-        return ValuesToRecord(valuesMap);
-    }
-
-    private MaterialRecord ValuesToRecord(Map<String, Object> valuesMap) {
         try {
-            return new MaterialRecord(
-                    (Integer) valuesMap.get("id"),
-                    (String) valuesMap.get("name"),
-                    (RecyclingCategory) valuesMap.get("category"),
-                    (float) valuesMap.get("mass"),
-                    (float) valuesMap.get("emissionFactor")
-            );
+            return mapper.map(valuesMap);
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException(e);
         }
+
     }
 
     /**
@@ -111,7 +108,6 @@ public class RequestBuilder {
         // This delimer is used to separate a string by uppercase letters, allowing consecutive uppercase letters
         String delimiter = "(?<=\\p{Ll})(?=\\p{Lu})|(?=\\p{Lu}\\p{Ll})";
 
-        // Add a finish option
         return fields.stream()
                 // Filters out the id
                 .filter(field -> !field.equals("id"))
