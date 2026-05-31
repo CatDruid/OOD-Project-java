@@ -1,7 +1,13 @@
 package org.ood.presentation.Helpers;
 
-import java.util.Collection;
+import org.ood.presentation.records.Introspectable;
 
-public interface RecordMapper<T> {
-    T map(Collection<String>  values) throws  Exception;
+import java.util.Map;
+
+/**
+ *
+ * @param <T>
+ */
+public interface RecordMapper<T extends Introspectable> {
+    T map(Map<String, Object> values) throws Exception;
 }
