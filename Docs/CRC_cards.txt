@@ -1,0 +1,79 @@
+Domain Entity
+Product
+
+res:
+Knows its name, category and environmental impact
+Holds a list of its Material (1..*)
+Expose composition for Recycling guidance
+
+collab:
+Material
+EnvironmentalImpactStrategy
+RecyclingGuidance
+
+
+Domain Entity
+Material
+
+res:
+Knows its name and RecyclingCategory
+Knows its RecyclingGuidance and instructions
+Compute a result from ImpactCalculationStrategy
+
+collab:
+ImpactCalculationStrategy
+Product (referenced by)
+
+Strategy Role
+ImpactCalculationStrategy
+
+res:
+Define a value for environmental impact
+Be consistent with other strategies
+Compute a result from Material
+
+collab:
+Product (receives as input)
+Material
+
+RecyclingGuidance
+Domain Service
+
+res:
+Derive RecyclingCategory for a product
+Handle special edge cases
+combine rules across Material
+
+collab:
+Material
+RecyclingCategory
+Product (receives as input)
+
+RecyclingCategory
+Value Object / ENUM
+
+Classify a material's RecyclingCategory
+Carry a Category label
+Be stable and coherent across materials
+
+collab:
+Material (owned by)
+RecyclingGuidance (used by)
+
+ProductRegistry
+Repository
+
+res:
+keeping track of the products in current session
+
+collab:
+Product
+
+MaterialRegistry
+Repository
+
+res:
+keeping track of the products in current session
+
+collab:
+Material

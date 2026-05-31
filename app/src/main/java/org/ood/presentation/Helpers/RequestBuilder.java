@@ -10,6 +10,11 @@ public class RequestBuilder {
     private final InputHandler inputHandler;
     private final Map<String, Class<?>> fields;
 
+    /**
+     * Creates the Request Builder for a given record.
+     * @param inputHandler      The Input Handler, used throughout the construction of a craete/update request.
+     * @param fields            A name-class tuple representing the record's fields.
+     */
     public RequestBuilder(InputHandler inputHandler, Map<String, Class<?>> fields) {
         this.inputHandler = inputHandler;
         this.fields = fields;
@@ -25,6 +30,12 @@ public class RequestBuilder {
         return CreateRecordLogic(null);
     }
 
+    /**
+     * The logic for the generic creation and update of a record, thus centralizing the logic for Create and Update requests here.
+     * Currently, it only implements MaterialRecord, but generic types are used throughout in the ambition of expanding further from it if the project were larger.
+     * @param initialValues         The initial values to seed the record with,
+     * @return                      The finalized record.
+     */
     private MaterialRecord CreateRecordLogic(Map<String, Object> initialValues) {
         Map<String, Object> valuesMap;
         if (initialValues == null || initialValues.isEmpty()) {
@@ -61,7 +72,6 @@ public class RequestBuilder {
         return ValuesToRecord(valuesMap);
     }
 
-
     private MaterialRecord ValuesToRecord(Map<String, Object> valuesMap) {
         try {
             return new MaterialRecord(
@@ -76,6 +86,12 @@ public class RequestBuilder {
         }
     }
 
+    /**
+     * Generates the list of options, alongside the visualized of its current values.
+     * @param labels            The labels of each type, as created per CreateLabels
+     * @param valuesMap         A map of the currently-chosen values of the object being created.
+     * @return                  A list of options.
+     */
     private ArrayList<String> CreateOptions(Map<String, String> labels, Map<String, Object> valuesMap) {
         ArrayList<String> options = new ArrayList<>(labels.keySet().stream()
                 .map(option ->
