@@ -39,11 +39,11 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         OutputFormatter outputFormatter = new OutputFormatter();
         InputHandler inputHandler = new InputHandler(scanner, outputFormatter);
-        RequestFactory requestFactory = new RequestFactory(inputHandler);
+        RequestFactory requestFactory = new RequestFactory(inputHandler, outputFormatter);
 
         // UI classes
         MaterialCRUDUI materialCRUDUI = new MaterialCRUDUI(inputHandler, outputFormatter, materialService, requestFactory);
-        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService);
+        ProductCRUIDUI productCRUIDUI = new ProductCRUIDUI(inputHandler, outputFormatter, productService, materialService, requestFactory);
         EnvironmentalUI environmentalUI = new EnvironmentalUI(inputHandler, outputFormatter, productService, environmentalFactory);
         UI ui = new UI(inputHandler, outputFormatter, environmentalUI, materialCRUDUI, productCRUIDUI);
 

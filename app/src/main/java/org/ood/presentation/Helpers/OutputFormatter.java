@@ -24,7 +24,7 @@ public class OutputFormatter {
     public void PrintProduct(ProductRecord productEntity) {
         System.out.println(productEntity.name() + ":\n"
                 + "ID: " + productEntity.id() + "\n"
-                + "Category: " + productEntity.category() + "\n"
+                + "Category: " + productEntity.productCategory() + "\n"
                 + "Estimated lifespan: " + productEntity.estimatedLifespan() + "\n"
         );
         System.out.println("Materials:");
@@ -48,7 +48,7 @@ public class OutputFormatter {
         }
     }
 
-    public void PrintMaterials(List<MaterialRecord> materialEntityList, List<MaterialRecord> currentMaterialList){
+    public void PrintMaterialSelection(List<MaterialRecord> materialEntityList, List<MaterialRecord> currentMaterialList){
         System.out.println("Materials(x means selected.):");
         for(MaterialRecord entity : materialEntityList){
             String brackets;
@@ -60,7 +60,7 @@ public class OutputFormatter {
     public void PrintMaterial(MaterialRecord material){
         System.out.println(material.name() + ":\n"
                 + "ID: " + material.id() + "\n"
-                + "Category: " + material.category() + "\n"
+                + "Category: " + material.recyclingCategory() + "\n"
         );
     }
 }

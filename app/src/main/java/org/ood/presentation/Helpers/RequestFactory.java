@@ -1,5 +1,6 @@
 package org.ood.presentation.Helpers;
 
+import org.ood.application.MaterialService;
 import org.ood.domain.ProductCategory;
 import org.ood.domain.RecyclingCategory;
 import org.ood.presentation.records.EntityRecords.MaterialRecord;
@@ -13,15 +14,21 @@ import java.util.stream.Collectors;
 
 public class RequestFactory {
     private final InputHandler inputHandler;
+    private final OutputFormatter outputFormatter;
 
-    public RequestFactory(InputHandler inputHandler) {
+    public RequestFactory(InputHandler inputHandler, OutputFormatter outputFormatter) {
         this.inputHandler = inputHandler;
+        this.outputFormatter = outputFormatter;
     }
+
 
     public <T extends Introspectable> RequestBuilder<T> Create(Class<T> clazz) {
-        return new RequestBuilder<> (inputHandler, clazz, GetMapper(clazz));
+        return new RequestBuilder<> (inputHandler, clazz, GetMapper(clazz), outputFormatter);
     }
 
+    public <T extends Introspectable> RequestBuilder<T> Create(MaterialService materialService, Class<T> clazz) {
+        return new RequestBuilder<> (inputHandler, clazz, GetMapper(clazz), outputFormatter, materialService);
+    }
 
     private <T extends Introspectable> RecordMapper<T> GetMapper(Class<T> clazz) {
         @SuppressWarnings("unchecked")
@@ -35,18 +42,18 @@ public class RequestFactory {
     private final Map<Class<? extends Introspectable>, RecordMapper<? extends Introspectable>> mappers = Map.of(
             MaterialRecord.class, values ->
                     new MaterialRecord(
-                            (Integer) values.get("id"),
+                            (Integer) values.getOrDefault("id", 0),
                             (String) values.get("name"),
-                            (RecyclingCategory) values.get("category"),
+                            (RecyclingCategory) values.get("productCategory"),
                             (float) values.get("mass"),
                             (float) values.get("emissionFactor")
                     ),
             ProductRecord.class, values ->
                     new ProductRecord(
-                            (Integer) values.get("id"),
+                            (Integer) values.getOrDefault("id", 0),
                             (String) values.get("name"),
-                            (ProductCategory) values.get("category"),
-                            (float) values.get("estimatedLifeSpan"),
+                            (ProductCategory) values.get("productCategory"),
+                            (float) values.get("estimatedLifespan"),
                             ((List<?>) values.get("materials")).stream()
                                     .map(mat -> (MaterialRecord) mat)
                                     .collect(Collectors.toList())

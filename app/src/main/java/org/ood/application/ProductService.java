@@ -28,7 +28,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
         int newId = productRegistry.RetrieveAll().stream().mapToInt(ProductEntity::GetID)
                 .max()
                 .orElse(0) + 1;
-        ProductEntity createdEntity = new ProductEntity(newId, createRequest.name(), createRequest.category(), createRequest.estimatedLifespan(),
+        ProductEntity createdEntity = new ProductEntity(newId, createRequest.name(), createRequest.productCategory(), createRequest.estimatedLifespan(),
                 createRequest.materials().stream()
                         .map(r -> {
                             try {
@@ -73,7 +73,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
     /** {@inheritDoc} */
     @Override
     public ProductCUDSuccessfully Update(ProductRecord updateRequest)  throws Exception {
-        ProductEntity updatedEntity = new ProductEntity(updateRequest.id(), updateRequest.name(), updateRequest.category(), updateRequest.estimatedLifespan(),
+        ProductEntity updatedEntity = new ProductEntity(updateRequest.id(), updateRequest.name(), updateRequest.productCategory(), updateRequest.estimatedLifespan(),
                 updateRequest.materials().stream()
                         .map(r -> {
                             try {
@@ -114,7 +114,7 @@ public class ProductService extends CRUDServiceAbstract<ProductEntity, ProductRe
     }
 
     /**
-     * Gets the product category class.
+     * Gets the product productCategory class.
      * @return          An {@link ProductCategory} object.
      */
     public Class<ProductCategory> GetCategory() {return ProductCategory.class;}

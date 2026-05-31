@@ -1,6 +1,9 @@
 package org.ood.presentation.Helpers;
 
+import org.ood.application.MaterialService;
+import org.ood.domain.ProductCategory;
 import org.ood.domain.RecyclingCategory;
+import org.ood.presentation.records.EntityRecords.MaterialRecord;
 import org.ood.presentation.records.Introspectable;
 
 import java.util.*;
@@ -10,20 +13,46 @@ public class RequestBuilder<T extends Introspectable> {
     private final InputHandler inputHandler;
     private final Map<String, Class<?>> fields;
     private final RecordMapper<T> mapper;
+    private final OutputFormatter outputFormatter;
+    private MaterialService materialService = null;
 
     /**
      * Creates the Request Builder for a given record.
      * @param inputHandler      The Input Handler, used throughout the construction of a craete/update request.
      */
-    public RequestBuilder(InputHandler inputHandler, Class<T> clazz, RecordMapper<T> mapper) {
+    public RequestBuilder(InputHandler inputHandler,
+                          Class<T> clazz,
+                          RecordMapper<T> mapper,
+                          OutputFormatter outputFormatter,
+                          MaterialService materialService) {
         this.inputHandler = inputHandler;
         this.fields = Introspectable.GetFields(clazz);
         this.mapper = mapper;
+        this.outputFormatter = outputFormatter;
+        this.materialService = materialService;
     }
 
+    public RequestBuilder(InputHandler inputHandler,
+                          Class<T> clazz,
+                          RecordMapper<T> mapper,
+                          OutputFormatter outputFormatter) {
+        this.inputHandler = inputHandler;
+        this.fields = Introspectable.GetFields(clazz);
+        this.mapper = mapper;
+        this.outputFormatter = outputFormatter;
+    }
+
+    /**
+     * Makes use of CreateRecordLogic to update a record
+     * @param toUpdate The record to update
+     * @return the updated record
+     */
     public T UpdateRecord(T toUpdate) {
+        // Get the initial values from the record and run the creation logic
         Map<String, Object> newValues = CreateRecordLogic(toUpdate.GetValues()).GetValues();
+        // Add the id again
         newValues.put("id", toUpdate.id());
+        // Return the updated record
         try {
             return mapper.map(newValues);
         } catch (Exception e) {
@@ -43,43 +72,91 @@ public class RequestBuilder<T extends Introspectable> {
      */
     private T CreateRecordLogic(Map<String, Object> initialValues) {
         Map<String, Object> valuesMap;
+
+        // If there are no initial values; Create a new list with the fields and null for the values
         if (initialValues == null || initialValues.isEmpty()) {
             valuesMap = new HashMap<>();
             for (String field : fields.keySet()) {valuesMap.put(field, null);}
         } else {
             valuesMap = initialValues;
         }
+        // Create the labels for the fields
         Map<String, String> labels = CreateLabels(fields.keySet());
 
         while(true) {
+            //Create the options with updated value display
             ArrayList<String> options = CreateOptions(labels, valuesMap);
-            String option = options.get(inputHandler.SelectfromRange(options));
-            if(option.equals("Finish")) {
+            // Get the input from the user
+            String chosenOption = options.get(inputHandler.SelectfromRange(options));
+            // If the choice is to quit; Ask one more time
+            if(chosenOption.equals("Finish")) {
                 if (inputHandler.AskYesNo("Have you chosen a value for all the attributes?")) {
                     break;
                 }
                 continue;
             }
-            String field = !option.contains("[") ?
-                    labels.get(option)
-                    : labels.get(option.substring(0, option.indexOf("[") ).trim());
 
+            // Trim the option from the value, if there is one
+            String trimmedOption = chosenOption;
+            if(chosenOption.contains("[")) {
+                trimmedOption = chosenOption.substring(0, chosenOption.indexOf("[") ).trim();
+            }
+            // Get the fields name from the label
+            String field = labels.get(trimmedOption);
+
+            // Value gathering:
             Object value;
-            if(field.toLowerCase().contains("category")) {
+            // If the field is a productCategory, use the categoryPicker
+            if(field.equals("recyclingCategory")) {
                 value = inputHandler.categoryPicker(RecyclingCategory.class);
-            } else {
+            }
+            else if (field.equals("productCategory")) {
+                value = inputHandler.categoryPicker(ProductCategory.class);
+            }
+            // If the field is the list of materials
+            else if(field.equals("materials") && fields.get(field) == List.class) {
+                @SuppressWarnings("unchecked")
+                List<MaterialRecord> currentMaterials = (List<MaterialRecord>) (valuesMap.get(field) != null ? valuesMap.get(field) : new ArrayList<MaterialRecord>());
+                value = CreateMaterialList(currentMaterials);
+            }
+            // Else get the input from the user and
+            else {
                 System.out.print(">>> ");
                 value = inputHandler.GetInput(fields.get(field));
             }
-
+            // Store the value in a map
             valuesMap.put(field, value);
         }
+        // Return the initialized record with the values
         try {
             return mapper.map(valuesMap);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
 
+    private List<MaterialRecord> CreateMaterialList(List<MaterialRecord> materialSelection) {
+        if (materialService == null) {throw new NullPointerException("Couldn't access materials");}
+
+        List<MaterialRecord> allMaterials = materialService.RetrieveAll();
+        outputFormatter.DisplayMessage("Choose the ID of the desired products materials. Choose again to remove. Type -1 to exit");
+
+        while (true) {
+            outputFormatter.PrintMaterialSelection(allMaterials, materialSelection);
+            int selectedID = inputHandler.GetInput(Integer.class, "Choose the id to toggle material(-1 to exit)");
+            if(selectedID == -1) {break;}
+            try {
+                MaterialRecord toggledMaterial = materialService.RetrieveByID(selectedID);
+                if(materialSelection.contains(toggledMaterial)) {
+                    materialSelection.remove(toggledMaterial);
+                } else {
+                    materialSelection.add(toggledMaterial);
+                }
+            } catch (Exception e) {
+                outputFormatter.DisplayErrorMessage(e.getMessage(),e.hashCode());
+            }
+        }
+        return materialSelection;
     }
 
     /**
