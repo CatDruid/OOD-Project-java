@@ -1,0 +1,355 @@
+@startuml
+package Domain {
+
+package entities {
+
+interface Entity {
+ GetID() : int
+ GetName() : String
+}
+
+class MaterialEntity {
+-materialID : int
+-name : String
+-recyclingCategory : RecyclingCategory
+-mass : float
+-emissionFactor : float
+
++ValidateSelf() : String
++GetGuidance() : String
+}
+
+class ProductEntity {
+-productID : int
+-name : String
+-category : ProductCategory
+-estimatedLifepan : float
+-material : List<MaterialEntity>
+
++GetGuidance() : String
+}
+}
+
+package impactStrategies {
+interface ImpactCalculationStrategy {
+CalculateImpact(ProductEntity product) : float
+}
+abstract AbstractImpactStrategy{
+#CalculateRawPCF(ProductEntity product) : float
++abstract CalculateImpact(ProductEntity product) : float
+}
+class SimpleSumStrategy {
++CalculateImpact(ProductEntity product) : float
+}
+class WeightedByLifespanStrategy {
++CalculateImpact(ProductEntity product) : float
+}
+class WeightedByRecyclabilityStrategy {
++CalculateImpact(ProductEntity product) : float
+}
+}
+
+enum ProductCategory {
+Kitchenware
+Electronics
+Furniture
+Other
+}
+
+enum recyclingCategory {
+Plastic(String)
+Paper(String)
+Metal(String)
+Clear_Glass(String)
+Coloured_Glass(String)
+Newspapers(String)
+Residual(String)
+Food(String)
+Hazardous(String)
+Pant(String)
++guidance : String
+}
+
+interface RegistryInterface<T> {
+Add(T item) : bool
+RetrieveAll() : List<T>
+RetrieveByID(int id) : T
+Update(T newItem) : bool
+Delete(int id) : bool
+}
+
+interface RepositoryInterface<T> {
+Save(List<T> list) : bool
+Load() : List<T>
+}
+}
+
+package infrastructure {
+
+package registries {
+
+abstract RegistryAbstract<T> {
+-items : List<T>
++Load(RepositoryInterface<T> repo) : void
++Add(T obj) : bool
++RetrieveAll() : List<T>
++RetrieveByID(int id) : T
++Update(T newItem) : bool
++Delete(int id) : bool
++IDExists(int id) : boolean
+}
+
+class MaterialRegistry {
+--
+Constructor
+--
++MaterialRegistry(RepositoryInterface<MaterialEntity> repo)
+}
+
+class ProductRegistry {
+--
+Constructor
+--
++ProductRegistry(RepositoryInterface<ProductEntity> repo)
+}
+}
+
+package repositories {
+abstract AbstractJSONRepository<T> {
+#final file : File
++Save(List<T> list) : bool
++Load() : List<T>
+}
+class JSONMaterialRepository {
+--
+Constructor
+--
++JSONMaterialRepository(String path)
+}
+class JsonProductRepository {
+--
+Constructor
+--
++JSONProductRepository(String path)
+}
+}
+}
+
+package application {
+
+interface CRUDServiceInterface {
+Create(TRecord createRequest) : CUDResponse
+RetrieveAll() : List<TRecord>
+RetrieveByID(int id) : TRecord
+Update(TRecord updateRequest) : CUDResponse
+Delete(int id) : CUDResponse
+GetFields() : Map<String, Class<?>>
+GetValues(int id) : Map<String, Object>
+IdExists(int id) : bool
+}
+
+abstract CRUDServiceAbstract {
+#repository : RepositoryInterface<T>
+#registry : RegistryInterfaceInterface<T>
++abstract Create(TRecord createRequest) : CUDResponse
++RetrieveAll() : List<TRecord>
++RetrieveByID(int id) : TRecord
++abstract Update(TRecord updateRequest) : CUDResponse
++abstract Delete(int id) : CUDResponse
++abstract IdExists(int id) : bool
+}
+
+class EnvironmentalFactory {
+-static final strategies : List<ImpactCalculationStrategy>
+-productRegistry : RegistryInterface<ProductEntity>
+
++create(int strategyIndex) : EnvironmentalImpactService
++GetStringStrategies() : List<String>
+}
+
+class EnvironmentalImpactService {
+-final productRegistry : RegistryInterface<ProductEntity>
+-final strategy : ImpactCalculationStrategy
+
++CalculateImpact(int productId, int strategyIndex) : ImpactResult
+}
+
+class MaterialService {
+-final materialRegistry : RegistryInterface<MaterialEntity>
+-final materialRepository : RepositoryInterface<MaterialEntity>
+
++Create(MaterialRecord createRequest) : MaterialCUDSuccessfully
++RetrieveAll() : List<MaterialRecord>
++RetrieveByID(int id) : MaterialRecord
++Update(MaterialRecord updateRequest) : MaterialCUDSuccessfully
++Delete(int id) : MaterialCUDSuccessfully
++GetFields() : Map<String, Class<?>>
++GetValues(int id) : Map<String, Object>
++IdExists(int id) : bool
+}
+
+class ProductService {
+-final productRegistry : RegistryInterface<ProductEntity>
+-final productRepository : RepositoryInterface<ProductEntity>
+
++Create(ProductRecord createRequest) : ProductCUDSuccessfully
++RetrieveAll() : List<ProductRecord>
++RetrieveByID(int id) : ProductRecord
++Update(ProductRecord updateRequest) : ProductCUDSuccessfully
++Delete(int id) : ProductCUDSuccessfully
++IdExists(int id) : bool
++GetGuidance(int id) : String
++GetCategory() : Class<ProductCategory>
++GetFields() : Map<String, Class<?>>
++GetValues(int id) : Map<String, Object>
+}
+}
+
+package presentation {
+package Helpers {
+class InputHandler {
+-final scanner : Scanner
+-final outputFormatter : OutputFormatter
+
++AskYesNo() : bool
++AskYesNo(String message) : bool
++SelectfromRange(List<String> range) : int
++GetInput(Class<T> clazz) : T
++GetInput(Class<T> clazz, String prompt) : T
+-GetInputLogic(Class<T> clazz) : T
++GetId(String prompt, CRUDServiceInterface<?,?,?> service) : int
++categoryPicker(Class<T> enumClass) : T
+}
+class OutputFormatter {
++DisplayMessage(String message) : void
++DisplayWarningMessage(String message) : void
++DisplayErrorMessage(String message, int errorcode) : void
++PrintProduct(ProductRecord productEntity) : void
++PrintProducts(List<ProductRecord> productEntityList) : void
++PrintMaterial(MaterialRecord material) : void
++PrintMaterials(List<MaterialRecord> MaterialEntityList) : void
++PrintMaterials(List<MaterialRecord> materialEntityList, List<MaterialRecord> currentMaterialList) : void
+}
+class RequestBuilder {
+-final inputHandler : InputHandler
+-final fields : Map<String, Class<?>>
+
++UpdateRecord(MaterialRecord toUpdate) : MaterialRecord
++CreateRecord() : MaterialRecord
+-CreateRecordLogic(Map<String, Object> initialValues) : MaterialRecord
+-ValuesToRecord(Map<String, Object> valuesMap) : MaterialRecord
+-CreateOptions(Map<String, String> labels, Map<String, Object> valuesMap) : ArrayList<String>
+-CreateLabels(Collection<String> fields) : Map<String, String>
+}
+}
+package records {
+package EntityRecords {
+record MaterialRecord {
+id : Integer
+name : String
+category : RecyclingCategory
+mass : float
+emissionFactor : float
++FromEntity(MaterialEntity entity) : MaterialRecord
++ToEntity() : MaterialEntity
+}
+record ProductRecord {
+id : Integer
+name : String
+category : ProductCategory
+estimatedLifepan : Float
+materials : List<MaterialRecord>
++FromEntity(ProductEntity entity) : ProductRecord
+}
+}
+package Results {
+record ImpactResult {
+id : int
+name : String
+impact : float
+}
+record MaterialCUDSuccessfully {
+id : int
+name : String
+}
+record ProductCUDSuccessfully {
+id : int
+name : String
+}
+}
+interface Introspectable {
+GetFields() : Map<String, Class<?>>
+GetValues() : Map<String, Object>
+}
+record MaterialSelection {
+materialID : int
+quantity : double
+}
+}
+interface UIInterface {
+MenuLoop() : void
+}
+abstract UICRUDAbstract<T> {
+-inputHandler : InputHandler
+-outputFormatter : OutputFormatter
+#abstract Create() : void
+#abstract RetrieveAll() : void
+#abstract RetrieveByID() : void
+#abstract Update() : void
+#abstract Delete() : void
++abstract MenuLoop() : void
+}
+class EnvironmentalUI {
+-final inputHandler : InputHandler
+-final outputFormatter : OutputFormatter
+-final productService : ProductService
+-final environmentalFactory : EnvironmentalFactory
+
++MenuLoop() : void
++ImpactCalculation() : void
++RequestGuidance() : void
+}
+class MaterialCRUDUI {
+-final inputHandler : InputHandler
+-final outputFormatter : OutputFormatter
+-final requestBuilder : RequestBuilder
+-final materialService : CRUDServiceInterface<MaterialEntity, MaterialRecord, MaterialCUDSuccessfully>
+-final menuOptions : List<String>
+-looping : bool
+
+#RetrieveAll() : void
+#RetrieveByID() : void
+#Create() : void
+#Update() : void
+#Delete() : void
++MenuLoop() : void
+-OptionsHandler(int option) : void
+}
+class ProductCRUIDUI {
+-final inputHandler : InputHandler
+-final outputFormatter : OutputFormatter
+-final productService : ProductService
+-final materialService : MaterialService
+-final menuOptions : List<String>
+
++Create() : void
++RetrieveAll() : void
++Update() : void
++Delete() : void
++MenuLoop() : void
+}
+class UI {
+-final inputHandler : InputHandler
+-final outputFormatter : OutputFormatter
+-final environmentalUI : UIInterface
+-final materialCRUDUI : UIInterface
+-final productCRUDUI : UIInterface
+-final menuOptions : List<String>
+-looping : bool
+
++MenuLoop() : void
+-OptionsHandler(int option) : void
+}
+}
+
+@enduml
