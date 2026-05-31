@@ -120,17 +120,4 @@ public class MaterialEntity implements Entity{
         return this.name + ": " + this.recyclingCategory.guidance;
     }
 
-    /**
-     * Validates an instance's field values against domain constraints.
-     *
-     * @return A string of error messages, or an empty string if valid.
-     */
-    public String ValidateSelf(){
-        StringBuilder err = new StringBuilder();
-        if (this.mass < 0)
-            err.append("Mass cannot be less than zero \n");
-        if (this.emissionFactor < 0)
-            err.append("Emission Factor cannot be less than zero \n");
-        return err.toString();
-    }
 }
