@@ -89,10 +89,16 @@ public class InputHandler {
         if (clazz == null) {return null;}
         while (true) {
             // Get the input with the right class
-            T input = GetInputLogic(clazz);
-
-            // If an error occurred, skip to the next iteration and try again
-            if(input == null) {continue;}
+            T input;
+            try {
+                input = GetInputLogic(clazz);
+            } catch (IllegalArgumentException e) {
+                outputFormatter.DisplayErrorMessage("Couldn't read the input", e.hashCode());
+                return null;
+            } catch (Exception e) {
+                outputFormatter.DisplayErrorMessage("Failed to create " + clazz.getSimpleName() + ": " + e.getMessage(), e.hashCode());
+                continue;
+            }
 
             return input;
         }
@@ -101,7 +107,7 @@ public class InputHandler {
     /**
      * Retrieves a particular input of the user of a generic class, this time with a custom prompt.
      * @param prompt        The message to be displayed to the user.
-     * @param clazz         The class(zz) that is intended to be inputted. Integrer, float, etc.
+     * @param clazz         The class(zz) that is intended to be inputted. Integer, float, etc.
      * @return              An object of the type of said class.
      */
     public <T> T GetInput(Class<T> clazz, String prompt) {
@@ -111,41 +117,43 @@ public class InputHandler {
             outputFormatter.DisplayMessage(prompt);
 
             // Get the input with the right class
-            T input = GetInputLogic(clazz);
-
-            // If an error occurred, skip to the next iteration and try again
-            if (input == null) {continue;}
+            T input;
+            try {
+                input = GetInputLogic(clazz);
+            } catch (IllegalArgumentException e) {
+                outputFormatter.DisplayErrorMessage("Couldn't read the input", e.hashCode());
+                return null;
+            } catch (Exception e) {
+                outputFormatter.DisplayErrorMessage("Failed to create " + clazz.getSimpleName() + ": " + e.getMessage(), e.hashCode());
+                continue;
+            }
 
             return input;
         }
     }
 
-    private <T> T GetInputLogic(Class<T> clazz) {
+    private <T> T GetInputLogic(Class<T> clazz) throws Exception{
         Class<T> resolvedClazz = Primitives.wrap(clazz);
 
-        try {
-            // Get input
-            String line = scanner.nextLine().trim();
 
-            // If the input is not a text, replace ',' with '.' so it is parseable
-            if (clazz != Character.class && clazz != String.class) {
-                line = line.replaceAll(",", ".");
-            }
+        // Get input
+        String line = scanner.nextLine().trim();
 
-            // Try constructor with String
-            try {
-                Constructor<T> ctor = resolvedClazz.getConstructor(String.class);
-                return ctor.newInstance(line);
-
-            } catch (NoSuchMethodException e) {
-                // Fallback: try valueOf / parse static method, etc. (more code)
-                throw new IllegalArgumentException("Class " + resolvedClazz.getName() +
-                        " does not have a public String constructor");
-            }
-        } catch (Exception e) {
-            outputFormatter.DisplayErrorMessage("Failed to create " + resolvedClazz.getSimpleName() + ": " + e.getMessage(), e.hashCode());
-            return null;
+        // If the input is not a text, replace ',' with '.' so it is parseable
+        if (clazz != Character.class && clazz != String.class) {
+            line = line.replaceAll(",", ".");
         }
+
+        // Try constructor with String
+        try {
+            Constructor<T> ctor = resolvedClazz.getConstructor(String.class);
+            return ctor.newInstance(line);
+        } catch (NoSuchMethodException e) {
+            // Fallback: try valueOf / parse static method, etc. (more code)
+            throw new IllegalArgumentException("Class " + resolvedClazz.getName() +
+                    " does not have a public String constructor");
+        }
+
     }
 
     /**
@@ -167,12 +175,12 @@ public class InputHandler {
 
     /**
      * Custom logic for the inputting of an option, specifically in this project, categories.
-     * @param enumClass         The enum class of the category being chosen.
+     * @param enumClass         The enum class of the productCategory being chosen.
      * @return                  The chosen value of the enum.
      */
     public <T extends Enum<T>> T categoryPicker(Class<T> enumClass) {
         T[] values = enumClass.getEnumConstants();
-        this.outputFormatter.DisplayMessage("What is the category?");
+        this.outputFormatter.DisplayMessage("What is the productCategory?");
         int categoryIndex = SelectfromRange(
                 Arrays.stream(values)
                         .map(Enum::name)
