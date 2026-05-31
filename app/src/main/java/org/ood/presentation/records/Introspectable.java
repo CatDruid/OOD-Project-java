@@ -16,7 +16,7 @@ public interface Introspectable {
      * Retrieves the fields of the record implementing Introspectable.
      * @return              A map of tuples of string (name) and class (type) of each field.
      */
-    static Map<String, Class<?>> GetFields(Class<? extends Record> clazz) {
+    static Map<String, Class<?>> GetFields(Class<? extends Introspectable> clazz) {
         Map<String, Class<?>> fields = new HashMap<>();
         for (RecordComponent rc : clazz.getRecordComponents()) {
             fields.put(rc.getName(), rc.getType());
@@ -40,4 +40,6 @@ public interface Introspectable {
                 }
         ));
     }
+
+    Integer id();
 }
