@@ -29,17 +29,20 @@ public interface Introspectable {
      * @return              A map of tuples of type "field" (as string) : value (as whichever object it'd be. String, int, etc.)
      */
     default Map<String, Object> GetValues() {
-        return Arrays.stream(this.getClass().getRecordComponents()).collect(Collectors.toMap(
-                RecordComponent::getName,
-                rc -> {
+        return Arrays.stream(this.getClass().getRecordComponents()).collect(
+                HashMap::new,
+                (map, rc) -> {
                     try {
-                        return rc.getAccessor().invoke(this);
+                        map.put(rc.getName(), rc.getAccessor().invoke(this));
                     } catch (Exception e) {
+                        System.out.println(e);
                         throw new RuntimeException(e);
                     }
-                }
-        ));
+                },
+                HashMap::putAll
+        );
     }
 
     Integer id();
+    //String name();
 }
