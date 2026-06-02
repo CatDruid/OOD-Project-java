@@ -83,7 +83,7 @@ public class MaterialCRUDUI extends UICRUDAbstract<MaterialEntity> {
             RequestBuilder<MaterialRecord> requestBuilder = requestFactory.Create(MaterialRecord.class);
             successfully = materialService.Update(requestBuilder.UpdateRecord(toUpdate));
         } catch (Exception e) {
-            outputFormatter.DisplayErrorMessage("Couldn't update" + e.getMessage(),e.hashCode());
+            outputFormatter.DisplayErrorMessage("Couldn't update : " + e.getMessage(),e.hashCode());
             return;
         }
         outputFormatter.DisplayMessage("Successfully updated");

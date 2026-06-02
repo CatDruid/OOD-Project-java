@@ -106,7 +106,7 @@ public class RequestBuilder<T extends Introspectable> {
 
             // Value gathering:
             Object value;
-            // If the field is a productCategory, use the categoryPicker
+            // If the field is a category, use the categoryPicker
             if(field.equals("recyclingCategory")) {
                 value = inputHandler.categoryPicker(RecyclingCategory.class);
             }
@@ -119,7 +119,7 @@ public class RequestBuilder<T extends Introspectable> {
                 List<MaterialRecord> currentMaterials = (List<MaterialRecord>) (valuesMap.get(field) != null ? valuesMap.get(field) : new ArrayList<MaterialRecord>());
                 value = CreateMaterialList(currentMaterials);
             }
-            // Else get the input from the user and
+            // Else get the input from the user
             else {
                 System.out.print(">>> ");
                 value = inputHandler.GetInput(fields.get(field));
@@ -167,12 +167,35 @@ public class RequestBuilder<T extends Introspectable> {
      */
     private ArrayList<String> CreateOptions(Map<String, String> labels, Map<String, Object> valuesMap) {
         ArrayList<String> options = new ArrayList<>(labels.keySet().stream()
-                .map(option ->
-                        option + (valuesMap.getOrDefault(labels.get(option), null) == null ?
-                                ""
-                                : String.format(" [%s]", valuesMap.getOrDefault(labels.get(option), null).toString())))
+                // Add a display of the value for each option
+                .map(option -> {
+                    Object value = valuesMap.get(labels.get(option));
+                    // Check if the value is null or not there
+                    return option + (value == null
+                            // If not there, don't display anything
+                            ? ""
+                            // If there is a value, put it inside brackets behind the options
+                            : String.format(" [%s]",
+                                // If the value is a list of Introspectable; call a method to format it
+                                value instanceof List<?> list && list.stream().allMatch(item -> item instanceof Introspectable)
+                                ? CreateValueFromList(list)
+                                // Else cast the value to a string
+                                : value.toString()));
+                })
+                // Lastly cast to a list
                 .toList());
+        // Add the option to exit and return
         options.addLast("Finish"); return options;
+    }
+
+    private String CreateValueFromList(List<?> list) {
+        // Cast to a List with interface guaranteed
+        @SuppressWarnings("unchecked")
+        List<Introspectable> typed = (List<Introspectable>) list;
+
+        return typed.stream()
+                .map(rc -> String.format(" %s(%d)", rc.name(), rc.id()))
+                .collect(Collectors.joining(", "));
     }
 
     /**

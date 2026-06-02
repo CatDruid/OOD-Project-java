@@ -4,7 +4,6 @@ import java.lang.reflect.RecordComponent;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * This is an interface for records used for the creation of a generic request builders as per {@link org.ood.presentation.Helpers.RequestBuilder}
@@ -35,7 +34,6 @@ public interface Introspectable {
                     try {
                         map.put(rc.getName(), rc.getAccessor().invoke(this));
                     } catch (Exception e) {
-                        System.out.println(e);
                         throw new RuntimeException(e);
                     }
                 },
@@ -44,5 +42,5 @@ public interface Introspectable {
     }
 
     Integer id();
-    //String name();
+    String name();
 }
