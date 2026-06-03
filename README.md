@@ -210,8 +210,9 @@ So it is that an application with 1000 products and 2 materials will thus have a
 
 ### [Refactoring Week 9](Docs/refactoring-week9.md)
 
-### [UML Diagram](Docs/Project.puml)
-![Project](Docs/project.puml)
+### [UML Diagram](Docs/Project.svg)
+![Project](Docs/project.svg)
+[project.puml file](Docs/prohect.puml)
 
 ### [Sequence Diagram](Docs/Sequence%20Diagram%20-%20Get%20Guidance%20for%20Product.svg)
 ![Sequence Diagram - Get Guidance for Product.svg](Docs/Sequence%20Diagram%20-%20Get%20Guidance%20for%20Product.svg)
