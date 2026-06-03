@@ -48,7 +48,6 @@ public class EnvironmentalUI implements UIInterface {
 
 
     public void ImpactCalculation() {
-        // TODO error handling?
 
         // Get the list of available strategies
         List<String> strategies = EnvironmentalFactory.GetStringStrategies();
@@ -63,16 +62,19 @@ public class EnvironmentalUI implements UIInterface {
         //Initialize service
         EnvironmentalImpactService environmentalImpactService = environmentalFactory.create(strategyIndex);
         // Get result from service
-        ImpactResult res = environmentalImpactService.CalculateImpact(productId);
-
-        // Output the result
-        outputFormatter.DisplayMessage(String.format("Product: %s (%d)\nImpact: %.3f\nStrategy used: %s", res.name(), res.id(), res.impact(), strategies.get(strategyIndex)));
+        try {
+            ImpactResult res = environmentalImpactService.CalculateImpact(productId);
+            // Output the result
+            outputFormatter.DisplayMessage(String.format("Product: %s (%d)\nImpact: %.3f\nStrategy used: %s", res.name(), res.id(), res.impact(), strategies.get(strategyIndex)));
+        } catch (Exception e) {
+            outputFormatter.DisplayErrorMessage("Couldn't calculate impact : " + e.getMessage(), e.hashCode());
+        }
     }
 
     public void RequestGuidance() {
         try{
             List<ProductRecord> productList = productService.RetrieveAll();
-            if(productList != null){
+            if(productList != null && !productList.isEmpty()){
                 outputFormatter.PrintProducts(productList);
                 // Get the product's id
                 outputFormatter.DisplayMessage("Enter the product's id: ");
@@ -85,7 +87,7 @@ public class EnvironmentalUI implements UIInterface {
                 outputFormatter.DisplayWarningMessage("The Product list is empty.");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            outputFormatter.DisplayErrorMessage("Couldn't get guidance : " + e.getMessage(), e.hashCode());
         }
     }
 
