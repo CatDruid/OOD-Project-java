@@ -9,15 +9,27 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+/**
+ * The class centralizing the Input operations and functionality.
+ */
 public class InputHandler {
     private final Scanner scanner;
     private final OutputFormatter outputFormatter;
 
+    /**
+     * Constructs the class with what it requires to function.
+     * @param scanner               The scanner, of which it has a monopoly: none others have access to it.
+     * @param outputFormatter       The output formatter, for the user messages.
+     */
     public InputHandler(Scanner scanner, OutputFormatter outputFormatter) {
         this.scanner = scanner;
         this.outputFormatter = outputFormatter;
     }
 
+    /**
+     * Simple Y/n question handler.
+     * @return              A boolean value, as per chosen by the user.
+     */
     public boolean AskYesNo() {
         outputFormatter.DisplayMessage("Are you sure? (N/y)");
         return switch (GetInput(String.class).toLowerCase()) {
@@ -30,6 +42,11 @@ public class InputHandler {
         };
     }
 
+
+    /**
+     * An overload of the y/n handler, to utilize in tandem with custom messages.
+     * @return              A boolean value, as per chosen by the user.
+     */
     public boolean AskYesNo(String message) {
         outputFormatter.DisplayMessage(message + " (N/y)");
         return switch (GetInput(String.class).toLowerCase()) {
@@ -42,6 +59,11 @@ public class InputHandler {
         };
     }
 
+    /**
+     * This is utilized for the user to select from an array of options.
+     * @param range         A list of strings, each of them representing an option.
+     * @return              the index of which option was chosen.
+     */
     public int SelectfromRange(List<String> range) {
         if (range.isEmpty()) {outputFormatter.DisplayWarningMessage("List has no options."); return 0;}
             outputFormatter.DisplayMessage("Choose from one of the following:");
@@ -58,6 +80,11 @@ public class InputHandler {
             }
     }
 
+    /**
+     * Retrieves a particular input of the user of a generic class.
+     * @param clazz         The class(zz) that is intended to be inputted. Integrer, float, etc.
+     * @return              An object of the type of said class.
+     */
     public <T> T GetInput(Class<T> clazz) {
         if (clazz == null) {return null;}
         while (true) {
@@ -71,6 +98,12 @@ public class InputHandler {
         }
     }
 
+    /**
+     * Retrieves a particular input of the user of a generic class, this time with a custom prompt.
+     * @param prompt        The message to be displayed to the user.
+     * @param clazz         The class(zz) that is intended to be inputted. Integrer, float, etc.
+     * @return              An object of the type of said class.
+     */
     public <T> T GetInput(Class<T> clazz, String prompt) {
         if(clazz == null) {return null;}
         while (true) {
@@ -115,6 +148,12 @@ public class InputHandler {
         }
     }
 
+    /**
+     * Custom logic to select IDs, based on the premise that an ID must be above and equal to zero and that a service stores entities.
+     * @param prompt            The prompting message.
+     * @param service           The interface of a CRUDService, which by contract has an IDExists.
+     * @return                  An ID, if successful. The loop shall continue until a valid and existing one has been inputted.
+     */
     public int GetId(String prompt, CRUDServiceInterface<?,?,?> service) {
         int id;
         while(true) {
@@ -126,6 +165,11 @@ public class InputHandler {
         }
     }
 
+    /**
+     * Custom logic for the inputting of an option, specifically in this project, categories.
+     * @param enumClass         The enum class of the category being chosen.
+     * @return                  The chosen value of the enum.
+     */
     public <T extends Enum<T>> T categoryPicker(Class<T> enumClass) {
         T[] values = enumClass.getEnumConstants();
         this.outputFormatter.DisplayMessage("What is the category?");
